@@ -14,6 +14,8 @@ generate_relations <- function(settings) {
   all_relations <- rbind(
     vertical_relations
   )
+  
+  all_relations %<>% calculate_relations_weight(settings)
 
   return(all_relations)
 
