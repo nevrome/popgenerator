@@ -23,7 +23,12 @@ calculate_weight <- function(x, settings) {
 }
 
 weight_child_of <- function(x, settings) {
-  1
+  get_relation_weight(
+    mean(x$start_time, x$end_time), 
+    1,
+    settings@child_of_weight_distribution_function
+  ) %>% 
+    return()
 }
 
 weight_sexing <- function(x, settings) {

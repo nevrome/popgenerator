@@ -26,7 +26,8 @@ relations_settings <- new(
   start_fertility_age = 15,
   stop_fertility_age = 50,
   same_unit_as_child_probability = 0.9,
-  same_unit_as_partner_probability = 0.9
+  same_unit_as_partner_probability = 0.9,
+  child_of_weight_distribution_function = weight_child_of_distribution
 )
 
 test2 <- relations_settings %>%

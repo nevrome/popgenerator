@@ -18,6 +18,7 @@ setClass(
     start_fertility_age = "numeric",
     stop_fertility_age = "numeric",
     same_unit_as_child_probability = "numeric",
-    same_unit_as_partner_probability = "numeric"
+    same_unit_as_partner_probability = "numeric",
+    child_of_weight_distribution_function = "function"
   )
 )
