@@ -44,10 +44,11 @@ generate_vertical_relations <- function(settings) {
       partner2_df <- get_parent(settings, potential_parents, child, partner1_df)
     }
 
+    # store partner as previous partner
     population$previous_partner[partner1_df$id] <- partner2_df$id
     population$previous_partner[partner2_df$id] <- partner1_df$id
 
-
+    # establish family relationships
     partner1 <- partner1_df$id
     partner2 <- partner2_df$id
 
@@ -72,7 +73,6 @@ generate_vertical_relations <- function(settings) {
         "child_of"
       )
     )
-    #label <- append(label, c("❤", "✌", "✌"))
     start_time <- append(
       start_time, c(
         population$birth_time[child] - 1,
@@ -91,7 +91,7 @@ generate_vertical_relations <- function(settings) {
   }
   close(pb)
 
-  vertical_relations <- tibble::tibble(from, to, type)
+  vertical_relations <- tibble::tibble(from, to, type, start_time, end_time)
 
   return(vertical_relations)
 
