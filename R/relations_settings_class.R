@@ -8,6 +8,7 @@
 #' @slot stop_fertility_age test
 #' @slot same_unit_as_child_probability test
 #' @slot same_unit_as_partner_probability test
+#' @slot child_of_weight_distribution_function test
 #'
 #' @export
 setClass(

@@ -21,5 +21,7 @@ class to store values that should be passed to the relations generator
 \item{\code{same_unit_as_child_probability}}{test}
 
 \item{\code{same_unit_as_partner_probability}}{test}
+
+\item{\code{child_of_weight_distribution_function}}{test}
 }}
 
