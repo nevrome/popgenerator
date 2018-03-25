@@ -20,8 +20,15 @@ generate_horizontal_relations <- function(settings) {
 
     potential_friends <- get_all_humans_alive_in_livetime_of_human(settings, person)
 
+    friends <- potential_friends %>% dplyr::sample_n(settings@amount_friends)
+    
+    from <- append(from, rep(person, settings@amount_friends))
+    to <- append(to, friends$id)
+    type <- append(type, rep("friend", settings@amount_friends))
+    start_time <- append(start_time, rep(1, settings@amount_friends))
+    end_time <- append(end_time, rep(1, settings@amount_friends))
 
-    utils::setTxtProgressBar(pb, child/nrow(population))
+    utils::setTxtProgressBar(pb, person/nrow(population))
   }
   close(pb)
 
