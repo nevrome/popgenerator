@@ -80,6 +80,19 @@ weight_child_of_distribution <- function(t) {
   }
 }
 
+#' friends age distribution at time
+#'
+#' @param t double time
+#'
+#' @return distribution function
+#'
+#' @export
+friendship_age_distribution <- function(t) {
+  function(x) {
+    stats::dt(x, df = 3)
+  }
+}
+
 #### getter for drawing individual attributes ####
 
 #' get n relation weights according to relation type weight distribution at time
@@ -120,6 +133,7 @@ get_attribute <- function(t = NA, n = NA, distribution_function, range) {
     range, 
     size = n, 
     replace = TRUE, 
-    prob = distribution_function(t)(range))
+    prob = distribution_function(t)(range)
+  )
 }
 
