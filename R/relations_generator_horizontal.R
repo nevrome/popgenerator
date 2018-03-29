@@ -18,15 +18,30 @@ generate_horizontal_relations <- function(settings) {
   pb <- utils::txtProgressBar(style = 3)
   for (person in 1:nrow(population)) {
 
-    potential_friends <- get_all_humans_alive_in_livetime_of_human(settings, person)
+    potential_friends <- get_all_humans_alive_in_livetime_of_human(settings, person) %>%
+      dplyr::filter(
+        id != person
+      )
 
-    friends <- potential_friends %>% dplyr::sample_n(settings@amount_friends)
+    potential_friends %<>%
+      dplyr::mutate(
+        age_difference = abs(.data$birth_time - population$birth_time[person]),
+        friend_probability = settings@friendship_age_distribution_function(population$birth_time[person])(.data$age_difference)
+      )
+    
+    friends <- potential_friends %>% dplyr::sample_n(
+      settings@amount_friends,
+      weight = potential_friends$friend_probability
+    )
     
     from <- append(from, rep(person, settings@amount_friends))
     to <- append(to, friends$id)
     type <- append(type, rep("friend", settings@amount_friends))
-    start_time <- append(start_time, rep(1, settings@amount_friends))
-    end_time <- append(end_time, rep(1, settings@amount_friends))
+    
+    for (friend in 1:nrow(friends)) {
+      start_time <- append(start_time, max(population$birth_time[person], friends$birth_time[friend]))
+      end_time <- append(end_time, min(population$death_time[person], friends$death_time[friend]))
+    }
 
     utils::setTxtProgressBar(pb, person/nrow(population))
   }
