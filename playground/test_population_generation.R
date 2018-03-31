@@ -1,6 +1,53 @@
-#### create population ####
+timeframe <- 0:2000
 
-timeframe <- 0:0
+population_size_functions <- c(
+  function(t) {round((cos(0.01 * t) + 3) * 100 + 0.2 * t, 0)},
+  function(t) {1000}
+)
+
+unit_amount_functions <- c(
+  function(t) {round((sin(0.02 * t) + 3) * 2, 0)},
+  function(t) {10}
+)
+
+age_distribution_functions <- c(
+  function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
+  #plot(0:100, age_distribution_functions[[1]](0)(0:100))
+)
+
+sex_distribution_functions <- c(
+  function(t) {function(x) {rep(1/length(x), length(x))}}
+)
+
+unit_distribution_functions <- c(
+  function(t) {function(x) {rep(1/length(x), length(x))}}
+)
+
+hu <- expand.grid(
+  population_size_functions = population_size_functions,
+  unit_amount_functions = unit_amount_functions,
+  age_distribution_functions = age_distribution_functions,
+  sex_distribution_functions = sex_distribution_functions,
+  unit_distribution_functions = unit_distribution_functions
+) %>% tibble::as.tibble()
+
+hu %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    schnu = population_size_functions(timeframe)
+  )
+
+sapply(hu$population_size_functions, mapply, hu$time)
+
+ggplot() +
+  geom_line(
+    aes(
+      x = timeframe,
+      y = population_size_functions[[1]](timeframe)
+    )
+  )
+
+#### create population ####
 
 population_settings <- new(
   "population_settings",
