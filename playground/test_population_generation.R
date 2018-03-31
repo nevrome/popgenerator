@@ -1,9 +1,11 @@
-timeframe <- 0:10
-
 #### setup settings grid ####
 
 all_model_populations <- expand.grid(
   #multiplier = 1:10,
+  # general settings
+  timeframe = list(
+      0:10
+    ),
   # population settings  
   population_size_functions = c(
       function(t) {round((cos(0.01 * t) + 3) * 100 + 0.2 * t, 0)},
@@ -62,7 +64,7 @@ population_settings <- list()
 for (i in 1:nrow(all_model_populations)) {
   population_settings[[i]] <- new(
     "population_settings",
-    time = timeframe,
+    time =                       all_model_populations$timeframe[[i]],
     population_size_function =   all_model_populations$population_size_functions[[i]],
     unit_amount_function =       all_model_populations$unit_amount_functions[[i]],
     age_distribution_function =  all_model_populations$age_distribution_functions[[i]],
