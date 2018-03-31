@@ -23,14 +23,14 @@ simulate_growth <- function(
 
     humans %<>% age()
     humans %<>% find_and_realize_deaths()
-    necessary_births <- humans %>% calculate_amount_of_necessary_births(t)
+    necessary_births <- humans %>% calculate_amount_of_necessary_births(t, settings)
 
     # stop if population is big enough
     if (necessary_births <= 0) next
 
     # units handling
     units <- humans %>% get_currently_alive_units()
-    units_target_amount <- unit_amount(t)
+    units_target_amount <- settings@unit_amount_function(t)
     if (length(units) > units_target_amount) {
       new_unit_vector <- shrink_unit_vector(units, units_target_amount)
       humans %<>% realize_unit_deaths(new_unit_vector)
@@ -89,8 +89,8 @@ get_amount_of_living_humans <- function(humans) {
   sum(!humans$dead)
 }
 
-calculate_amount_of_necessary_births <- function(humans, t) {
-  round(population_size(t) - get_amount_of_living_humans(humans), 0)
+calculate_amount_of_necessary_births <- function(humans, t, settings) {
+  round(settings@population_size_function(t) - get_amount_of_living_humans(humans), 0)
 }
 
 get_currently_alive_units <- function(humans) {
