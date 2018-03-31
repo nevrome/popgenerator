@@ -1,31 +1,3 @@
-#### relations attributes ####
-
-#' weight child_of distribution at time
-#'
-#' @param t double time
-#'
-#' @return distribution function
-#'
-#' @export
-weight_child_of_distribution <- function(t) {
-  function(x) {
-    x
-  }
-}
-
-#' friends age distribution at time
-#'
-#' @param t double time
-#'
-#' @return distribution function
-#'
-#' @export
-friendship_age_distribution <- function(t) {
-  function(x) {
-    stats::dt(x, df = 3)
-  }
-}
-
 #### getter for drawing individual attributes ####
 
 #' get n relation weights according to relation type weight distribution at time
