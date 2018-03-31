@@ -35,6 +35,25 @@ relations_settings <- new(
 test2 <- relations_settings %>%
   generate_relations()
 
+####
+
+test2
+
+g <- igraph::graph_from_data_frame(
+  test2,
+  directed = FALSE,
+  vertices = test
+)
+
+RBioFabric::bioFabric(g)
+
+karate_d3 <- networkD3::igraph_to_networkD3(g, group = test)
+
+# Create force directed network plot
+networkD3::forceNetwork(Links = karate_d3$links, Nodes = karate_d3$nodes, 
+             Source = 'source', Target = 'target', 
+             NodeID = 'name', Group = 'name')
+
 #### analyse result ####
 
 library(ggplot2)
