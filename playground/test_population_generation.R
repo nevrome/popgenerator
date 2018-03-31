@@ -1,95 +1,61 @@
 timeframe <- 0:10
 
-#### population settings ####
-
-population_size_functions <- c(
-  function(t) {round((cos(0.01 * t) + 3) * 100 + 0.2 * t, 0)},
-  function(t) {1000}
-)
-
-unit_amount_functions <- c(
-  function(t) {round((sin(0.02 * t) + 3) * 2, 0)},
-  function(t) {10}
-)
-
-age_distribution_functions <- c(
-  function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
-  #plot(0:100, age_distribution_functions[[1]](0)(0:100))
-)
-
-age_ranges <- list(
-  1:100,
-  1:70
-)
-
-sex_distribution_functions <- c(
-  function(t) {function(x) {rep(1/length(x), length(x))}}
-)
-
-sex_ranges <- list(
-  c("male", "female")
-)
-
-unit_distribution_functions <- c(
-  function(t) {function(x) {rep(1/length(x), length(x))}}
-)
-
-#### relations settings ####
-
-monogamy_probabilities <- list(
-  0.7,
-  0.9
-)
-
-start_fertility_ages <- list(
-  15
-)
-
-stop_fertility_ages <- list(
-  50
-)
-
-same_unit_as_child_probabilities <- list(
-  0.9
-)
-
-same_unit_as_partner_probabilities <- list(
-  0.9
-)
-
-child_of_weight_distribution_functions <- c(
-  function(t) {function(x) {x}}
-)
-
-amounts_friends = list (
-  10
-)
-
-friendship_age_distribution_functions <- c(
-  function(t) {function(x) {stats::dt(x, df = 3)}}
-)
-
 #### setup settings grid ####
 
 all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # population settings  
-  population_size_functions =              population_size_functions,
-  unit_amount_functions =                  unit_amount_functions,
-  age_distribution_functions =             age_distribution_functions,
-  age_ranges =                             age_ranges,
-  sex_distribution_functions =             sex_distribution_functions,
-  sex_ranges =                             sex_ranges,
-  unit_distribution_functions =            unit_distribution_functions,
+  population_size_functions = c(
+      function(t) {round((cos(0.01 * t) + 3) * 100 + 0.2 * t, 0)},
+      function(t) {1000}
+    ),
+  unit_amount_functions = c(
+      function(t) {round((sin(0.02 * t) + 3) * 2, 0)},
+      function(t) {10}
+    ),
+  age_distribution_functions = c(
+      function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
+      #plot(0:100, age_distribution_functions[[1]](0)(0:100))
+    ),
+  age_ranges = list(
+      1:100,
+      1:70
+    ),
+  sex_distribution_functions = c(
+      function(t) {function(x) {rep(1/length(x), length(x))}}
+    ),
+  sex_ranges = list(
+      c("male", "female")
+    ),
+  unit_distribution_functions = c(
+      function(t) {function(x) {rep(1/length(x), length(x))}}
+    ),
   # relations settings
-  monogamy_probabilities =                 monogamy_probabilities,
-  start_fertility_ages =                   start_fertility_ages,
-  stop_fertility_ages =                    stop_fertility_ages,
-  same_unit_as_child_probabilities =       same_unit_as_child_probabilities,
-  same_unit_as_partner_probabilities =     same_unit_as_partner_probabilities,
-  child_of_weight_distribution_functions = child_of_weight_distribution_functions,
-  amounts_friends =                        amounts_friends,
-  friendship_age_distribution_functions =  friendship_age_distribution_functions
+  monogamy_probabilities = list(
+      0.7,
+      0.9
+    ),
+  start_fertility_ages = list(
+      15
+    ),
+  stop_fertility_ages = list(
+      50
+    ),
+  same_unit_as_child_probabilities = list(
+      0.9
+    ),
+  same_unit_as_partner_probabilities = list(
+      0.9
+    ),
+  child_of_weight_distribution_functions = c(
+      function(t) {function(x) {x}}
+    ),
+  amounts_friends = list(
+      10
+    ),
+  friendship_age_distribution_functions = c(
+      function(t) {function(x) {stats::dt(x, df = 3)}}
+    )
 ) %>% tibble::as.tibble()
 
 population_settings <- list() 
@@ -146,7 +112,7 @@ all_model_populations %<>%
 
 all_model_populations %<>%
   dplyr::mutate(
-    populations = lapply(all_model_populations$relations_settings, generate_relations)
+    relations = lapply(all_model_populations$relations_settings, generate_relations)
   )
 
 ####
