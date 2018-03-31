@@ -4,12 +4,12 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:10
+      0:2000
     ),
   # population settings  
   population_size_functions = c(
       function(t) {round((cos(0.01 * t) + 3) * 100 + 0.2 * t, 0)},
-      function(t) {1000}
+      function(t) {500}
     ),
   unit_amount_functions = c(
       function(t) {round((sin(0.02 * t) + 3) * 2, 0)},
@@ -59,6 +59,8 @@ all_model_populations <- expand.grid(
       function(t) {function(x) {stats::dt(x, df = 3)}}
     )
 ) %>% tibble::as.tibble()
+
+plot_prep_grid(all_model_populations, "unit_amount_functions")
 
 population_settings <- list() 
 for (i in 1:nrow(all_model_populations)) {
