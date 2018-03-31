@@ -20,7 +20,7 @@ generate_horizontal_relations <- function(settings) {
 
     potential_friends <- get_all_humans_alive_in_livetime_of_human(settings, person) %>%
       dplyr::filter(
-        id != person
+        .data$id != person
       )
 
     potential_friends %<>%
