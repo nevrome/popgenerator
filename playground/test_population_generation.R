@@ -15,54 +15,56 @@ age_distribution_functions <- c(
   #plot(0:100, age_distribution_functions[[1]](0)(0:100))
 )
 
+age_ranges = list(
+  1:100,
+  1:70
+)
+
 sex_distribution_functions <- c(
   function(t) {function(x) {rep(1/length(x), length(x))}}
+)
+
+sex_ranges = list(
+  c("male", "female")
 )
 
 unit_distribution_functions <- c(
   function(t) {function(x) {rep(1/length(x), length(x))}}
 )
 
-hu <- expand.grid(
+all_model_populations <- expand.grid(
   population_size_functions = population_size_functions,
   unit_amount_functions = unit_amount_functions,
   age_distribution_functions = age_distribution_functions,
+  age_ranges = age_ranges,
   sex_distribution_functions = sex_distribution_functions,
+  sex_ranges = sex_ranges,
   unit_distribution_functions = unit_distribution_functions
 ) %>% tibble::as.tibble()
 
-hu %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    schnu = population_size_functions(timeframe)
+population_settings <- list() 
+for (i in 1:nrow(all_model_populations)) {
+  population_settings[[i]] <- new(
+    "population_settings",
+    time = timeframe,
+    population_size_function =   all_model_populations$population_size_functions[[i]],
+    unit_amount_function =       all_model_populations$unit_amount_functions[[i]],
+    age_distribution_function =  all_model_populations$age_distribution_functions[[i]],
+    age_range =                  all_model_populations$age_ranges[[i]],
+    sex_distribution_function =  all_model_populations$sex_distribution_functions[[i]],
+    sex_range =                  all_model_populations$sex_ranges[[i]],
+    unit_distribution_function = all_model_populations$unit_distribution_functions[[i]]
   )
+}
 
-sapply(hu$population_size_functions, mapply, hu$time)
-
-ggplot() +
-  geom_line(
-    aes(
-      x = timeframe,
-      y = population_size_functions[[1]](timeframe)
-    )
+all_model_populations %<>%
+  dplyr::mutate(
+    population_settings = population_settings
   )
 
 #### create population ####
 
-population_settings <- new(
-  "population_settings",
-  time =  timeframe,
-  population_size_function = population_size,
-  unit_amount_function = unit_amount,
-  age_distribution_function = age_distribution,
-  age_range = 1:100,
-  sex_distribution_function = sex_distribution,
-  sex_range = c("male", "female"),
-  unit_distribution_function = unit_distribution
-)
-
-test <- population_settings %>%
-  generate_population()
+lapply(all_model_populations$population_settings, generate_population)
 
 #### create relations ####
 
