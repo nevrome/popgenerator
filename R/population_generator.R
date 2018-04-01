@@ -34,3 +34,27 @@ generate_population <- function(settings) {
   return(final_population)
 
 }
+
+init_population_settings <- function(x) { 
+
+  population_settings <- list() 
+  for (i in 1:nrow(x)) {
+    population_settings[[i]] <- new(
+      "population_settings",
+      time =                       x$timeframe[[i]],
+      population_size_function =   x$population_size_functions[[i]],
+      unit_amount_function =       x$unit_amount_functions[[i]],
+      age_distribution_function =  x$age_distribution_functions[[i]],
+      age_range =                  x$age_ranges[[i]],
+      sex_distribution_function =  x$sex_distribution_functions[[i]],
+      sex_range =                  x$sex_ranges[[i]],
+      unit_distribution_function = x$unit_distribution_functions[[i]]
+    )
+  }
+  
+  x %>%
+    dplyr::mutate(
+      population_settings = population_settings
+    )
+
+}

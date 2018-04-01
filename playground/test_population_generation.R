@@ -62,25 +62,8 @@ all_model_populations <- expand.grid(
 
 plot_prep_grid(all_model_populations, "unit_amount_functions")
 
-population_settings <- list() 
-for (i in 1:nrow(all_model_populations)) {
-  population_settings[[i]] <- new(
-    "population_settings",
-    time =                       all_model_populations$timeframe[[i]],
-    population_size_function =   all_model_populations$population_size_functions[[i]],
-    unit_amount_function =       all_model_populations$unit_amount_functions[[i]],
-    age_distribution_function =  all_model_populations$age_distribution_functions[[i]],
-    age_range =                  all_model_populations$age_ranges[[i]],
-    sex_distribution_function =  all_model_populations$sex_distribution_functions[[i]],
-    sex_range =                  all_model_populations$sex_ranges[[i]],
-    unit_distribution_function = all_model_populations$unit_distribution_functions[[i]]
-  )
-}
-
-all_model_populations %<>%
-  dplyr::mutate(
-    population_settings = population_settings
-  )
+all_model_populations %>% 
+  init_population_settings()
 
 #### create population ####
 
