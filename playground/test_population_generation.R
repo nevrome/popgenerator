@@ -4,22 +4,22 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:100
+      0:2000
     ),
   # population settings  
   population_size_functions = c(
-      function(t) {200 - 1.9 * t},
-      function(t) {100},
-      function(t) {10 + 1.9 * t},
-      function(t) {0.076 * (t - 50)^2 + 10},
-      function(t) {-0.076 * (t - 50)^2 + 200}
+      function(t) {2000 - 0.95 * t},
+      function(t) {1000},
+      function(t) {100 + 0.95 * t},
+      function(t) {0.0019 * (t - 1000)^2 + 100},
+      function(t) {-0.0019 * (t - 1000)^2 + 2000}
     ),
   unit_amount_functions = c(
-      function(t) {10 - 0.09 * t},
-      function(t) {5},
-      function(t) {1 + 0.09 * t},
-      function(t) {0.0036 * (t - 50)^2 + 1},
-      function(t) {-0.0036 * (t - 50)^2 + 10}
+      function(t) {20 - 0.0095 * t},
+      function(t) {10},
+      function(t) {1 + 0.0095 * t},
+      function(t) {0.000019 * (t - 1000)^2 + 1},
+      function(t) {-0.000019 * (t - 1000)^2 + 20}
     ),
   age_distribution_functions = c(
       function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
@@ -66,7 +66,7 @@ all_model_populations <- expand.grid(
     )
 ) %>% tibble::as.tibble()
 
-plot_prep_grid(all_model_populations, "unit_amount_functions")
+plot_prep_grid(all_model_populations, "population_size_functions")
 
 all_model_populations %>% 
   init_population_settings() %>%
