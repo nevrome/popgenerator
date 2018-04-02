@@ -15,8 +15,11 @@ all_model_populations <- expand.grid(
       function(t) {-0.076 * (t - 50)^2 + 200}
     ),
   unit_amount_functions = c(
-      function(t) {round((sin(0.02 * t) + 3) * 2, 0)},
-      function(t) {10}
+      function(t) {10 - 0.09 * t},
+      function(t) {5},
+      function(t) {1 + 0.09 * t},
+      function(t) {0.0036 * (t - 50)^2 + 1},
+      function(t) {-0.0036 * (t - 50)^2 + 10}
     ),
   age_distribution_functions = c(
       function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
@@ -63,7 +66,7 @@ all_model_populations <- expand.grid(
     )
 ) %>% tibble::as.tibble()
 
-plot_prep_grid(all_model_populations, "population_size_functions")
+plot_prep_grid(all_model_populations, "unit_amount_functions")
 
 all_model_populations %>% 
   init_population_settings() %>%
