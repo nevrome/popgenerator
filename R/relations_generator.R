@@ -49,7 +49,7 @@ generate_all_relations <- function(x) {
 init_relations_settings <- function(x) { 
   
   relations_settings <- list() 
-  for (i in 1:nrow(all_model_populations)) {
+  for (i in 1:nrow(x)) {
     relations_settings[[i]] <- new(
       "relations_settings",
       population =                            x$populations[[i]],
