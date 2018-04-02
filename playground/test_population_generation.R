@@ -23,11 +23,9 @@ all_model_populations <- expand.grid(
     ),
   age_distribution_functions = c(
       function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
-      #plot(0:100, age_distribution_functions[[1]](0)(0:100))
     ),
   age_ranges = list(
-      1:100,
-      1:70
+      1:100
     ),
   sex_distribution_functions = c(
       function(t) {function(x) {rep(1/length(x), length(x))}}
@@ -40,6 +38,7 @@ all_model_populations <- expand.grid(
     ),
   # relations settings
   monogamy_probabilities = list(
+      0,5,
       0.7,
       0.9
     ),
@@ -50,23 +49,29 @@ all_model_populations <- expand.grid(
       50
     ),
   same_unit_as_child_probabilities = list(
+      0,5,
+      0.7,
       0.9
     ),
   same_unit_as_partner_probabilities = list(
+      0,5,
+      0.7,
       0.9
     ),
   child_of_weight_distribution_functions = c(
       function(t) {function(x) {x}}
     ),
   amounts_friends = list(
-      10
+      seq(10, 100, 10)
     ),
   friendship_age_distribution_functions = c(
+      function(t) {function(x) {0.5}},
+      function(t) {function(x) {abs(1 - x * 0.02)}},
       function(t) {function(x) {stats::dt(x, df = 3)}}
     )
 ) %>% tibble::as.tibble()
 
-plot_prep_grid(all_model_populations, "population_size_functions")
+plot_prep_grid(all_model_populations, "unit_amount_functions")
 
 all_model_populations %>% 
   init_population_settings() %>%
