@@ -4,7 +4,7 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:2000
+      0:10
     ),
   # population settings  
   population_size_functions = c(
@@ -63,14 +63,8 @@ all_model_populations <- expand.grid(
 plot_prep_grid(all_model_populations, "unit_amount_functions")
 
 all_model_populations %>% 
-  init_population_settings()
-
-#### create population ####
-
-all_model_populations %<>%
-  dplyr::mutate(
-    populations = lapply(all_model_populations$population_settings, generate_population)
-  )
+  init_population_settings() %>%
+  generate_all_populations
 
 #### create relations ####
 

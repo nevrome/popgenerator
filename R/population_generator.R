@@ -35,6 +35,27 @@ generate_population <- function(settings) {
 
 }
 
+#' generate_all_populations
+#'
+#' @param x all_model_populations
+#'
+#' @return huup
+#'
+#' @export
+generate_all_populations <- function(x) {
+  x %>% 
+    dplyr::mutate(
+      populations = lapply(x$population_settings, generate_population)
+    )
+}
+
+#' init_population_settings
+#'
+#' @param x all_model_populations
+#'
+#' @return huup
+#'
+#' @export
 init_population_settings <- function(x) { 
 
   population_settings <- list() 
