@@ -45,7 +45,7 @@ generate_population <- function(settings) {
 generate_all_populations <- function(x) {
   x %>% 
     dplyr::mutate(
-      populations = lapply(x$population_settings, generate_population)
+      populations = lapply(.data$population_settings, generate_population)
     )
 }
 

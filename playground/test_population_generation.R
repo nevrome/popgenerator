@@ -8,18 +8,18 @@ all_model_populations <- expand.grid(
     ),
   # population settings  
   population_size_functions = c(
-      function(t) {2000 - 0.95 * t},
+      function(t) {round(2000 - 0.95 * t, 0)},
       function(t) {1000},
-      function(t) {100 + 0.95 * t},
-      function(t) {0.0019 * (t - 1000)^2 + 100},
-      function(t) {-0.0019 * (t - 1000)^2 + 2000}
+      function(t) {round(100 + 0.95 * t, 0)},
+      function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
+      function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
     ),
   unit_amount_functions = c(
-      function(t) {20 - 0.0095 * t},
+      function(t) {round(20 - 0.0095 * t, 0)},
       function(t) {10},
-      function(t) {1 + 0.0095 * t},
-      function(t) {0.000019 * (t - 1000)^2 + 1},
-      function(t) {-0.000019 * (t - 1000)^2 + 20}
+      function(t) {round(1 + 0.0095 * t, 0)},
+      function(t) {round(0.000019 * (t - 1000)^2 + 1, 0)},
+      function(t) {round(-0.000019 * (t - 1000)^2 + 20, 0)}
     ),
   age_distribution_functions = c(
       function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
@@ -76,11 +76,11 @@ plot_prep_grid(all_model_populations, "unit_amount_functions")
 plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
-all_model_populations %>% 
-  init_population_settings() %>%
-  generate_all_populations %>%
-  init_relations_settings %>%
-  generate_all_relations
+all_model_populations %<>% init_population_settings()
+all_model_populations %<>% generate_all_populations()
+
+  # init_relations_settings %>%
+  # generate_all_relations
 
 
 ####

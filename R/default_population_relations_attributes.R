@@ -12,7 +12,7 @@
 get_relation_weight <- function(t = NA, n = NA, distribution_function) {
   if (is.na(t) || is.na(n)) stop()
   # draw sample
-  sample(
+  resample(
     1:100, 
     size = n, 
     replace = TRUE, 
@@ -34,7 +34,7 @@ get_relation_weight <- function(t = NA, n = NA, distribution_function) {
 get_attribute <- function(t = NA, n = NA, distribution_function, range) {
   if (is.na(t) || is.na(n)) stop()
   # draw sample
-  sample(
+  resample(
     range, 
     size = n, 
     replace = TRUE, 
