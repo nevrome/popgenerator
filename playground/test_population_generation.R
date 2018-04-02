@@ -4,7 +4,7 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:10
+      0:2
     ),
   # population settings  
   population_size_functions = c(
@@ -64,37 +64,10 @@ plot_prep_grid(all_model_populations, "unit_amount_functions")
 
 all_model_populations %>% 
   init_population_settings() %>%
-  generate_all_populations
+  generate_all_populations %>%
+  init_relations_settings %>%
+  generate_all_relations
 
-#### create relations ####
-
-relations_settings <- list() 
-for (i in 1:nrow(all_model_populations)) {
-  relations_settings[[i]] <- new(
-    "relations_settings",
-    population =                            all_model_populations$populations[[i]],
-    monogamy_probability =                  all_model_populations$monogamy_probabilities[[i]],
-    start_fertility_age =                   all_model_populations$start_fertility_ages[[i]],
-    stop_fertility_age =                    all_model_populations$stop_fertility_ages[[i]],
-    same_unit_as_child_probability =        all_model_populations$same_unit_as_child_probabilities[[i]],
-    same_unit_as_partner_probability =      all_model_populations$same_unit_as_partner_probabilities[[i]],
-    child_of_weight_distribution_function = all_model_populations$child_of_weight_distribution_functions[[i]],
-    amount_friends =                        all_model_populations$amounts_friends[[i]],
-    friendship_age_distribution_function =  all_model_populations$friendship_age_distribution_functions[[i]]
-  )
-}
-
-all_model_populations %<>%
-  dplyr::mutate(
-    relations_settings = relations_settings
-  )
-
-#### create population ####
-
-all_model_populations %<>%
-  dplyr::mutate(
-    relations = lapply(all_model_populations$relations_settings, generate_relations)
-  )
 
 ####
 
