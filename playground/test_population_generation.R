@@ -71,7 +71,10 @@ all_model_populations <- expand.grid(
     )
 ) %>% tibble::as.tibble()
 
+plot_prep_grid(all_model_populations, "population_size_functions")
 plot_prep_grid(all_model_populations, "unit_amount_functions")
+plot_prep_grid(all_model_populations, "age_distribution_functions")
+plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %>% 
   init_population_settings() %>%
