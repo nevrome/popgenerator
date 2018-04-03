@@ -4,7 +4,7 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:0
+      0:2000
     ),
   # population settings  
   population_size_functions = c(
@@ -77,10 +77,10 @@ plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
-all_model_populations %<>% generate_all_populations()
+all_model_populations[1:8,] %>% generate_all_populations() -> test
 
-  # init_relations_settings %>%
-  # generate_all_relations
+test %<>% init_relations_settings()
+test %>% generate_all_relations() -> test2
 
 
 ####

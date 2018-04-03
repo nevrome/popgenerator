@@ -50,7 +50,7 @@ init_relations_settings <- function(x) {
   
   relations_settings <- list() 
   for (i in 1:nrow(x)) {
-    relations_settings[[i]] <- new(
+    relations_settings[[i]] <- methods::new(
       "relations_settings",
       population =                            x$populations[[i]],
       monogamy_probability =                  x$monogamy_probabilities[[i]],

@@ -46,7 +46,7 @@ generate_all_populations <- function(x) {
   x %>% 
     dplyr::mutate(
       populations = pbapply::pblapply(
-        population_settings, 
+        .data$population_settings, 
         generate_population,
         cl = 4
       )
@@ -64,7 +64,7 @@ init_population_settings <- function(x) {
 
   population_settings <- list() 
   for (i in 1:nrow(x)) {
-    population_settings[[i]] <- new(
+    population_settings[[i]] <- methods::new(
       "population_settings",
       time =                       x$timeframe[[i]],
       population_size_function =   x$population_size_functions[[i]],
