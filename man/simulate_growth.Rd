@@ -2,20 +2,18 @@
 % Please edit documentation in R/population_growth_simulator.R
 \name{simulate_growth}
 \alias{simulate_growth}
-\title{simulate growth of a population}
+\title{Simulate growth of a population.}
 \usage{
-simulate_growth(humans, time, settings)
+simulate_growth(humans, settings)
 }
 \arguments{
 \item{humans}{tibble input population}
 
-\item{time}{vector time steps}
-
-\item{settings}{test}
+\item{settings}{population_settings object}
 }
 \value{
-tibble output population
+data.frame with population (one row for each individual)
 }
 \description{
-simulate growth of a population
+Simulate growth of a population.
 }
