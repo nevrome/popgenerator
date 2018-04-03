@@ -33,9 +33,13 @@ generate_relations <- function(settings) {
 #'
 #' @export
 generate_all_relations <- function(x) {
-  x %<>%
+  x %>% 
     dplyr::mutate(
-      relations = lapply(x$relations_settings, generate_relations)
+      relations = pbapply::pblapply(
+        .data$relations_settings, 
+        generate_relations,
+        cl = 4
+      )
     )
 }
 
