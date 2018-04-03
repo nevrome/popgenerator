@@ -4,7 +4,7 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:2000
+      0:0
     ),
   # population settings  
   population_size_functions = c(
