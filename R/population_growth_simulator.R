@@ -43,16 +43,24 @@ simulate_growth <- function(
     }
 
     # generate and add new humans
-    humans %<>% rbind(
-      generate_humans(
-        t = t,
-        n = necessary_births,
-        start_id = max(humans$id + 1),
-        start_age = 0,
-        settings,
-        unit_vector = new_unit_vector
-      )
-    )
+    humans <- data.table::rbindlist(
+        l = list(
+          humans, 
+          generate_humans(
+            t = t,
+            n = necessary_births,
+            start_id = max(humans$id + 1),
+            start_age = 0,
+            settings,
+            unit_vector = new_unit_vector
+          )
+        ),
+        use.names = TRUE,
+        fill = TRUE,
+        idcol = NULL
+      ) %>%
+      data.frame()
+    
   }
   close(pb)
 
