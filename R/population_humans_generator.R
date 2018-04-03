@@ -1,15 +1,15 @@
 #### main function ####
 
-#' generate
+#' generate_humans
 #'
-#' @param t double time
+#' @param t integer time
 #' @param n integer amount of humans to generate
 #' @param start_id integer id of first generated human. default = 1
 #' @param start_age integer current age of humans. default: NA (current ages are generated)
-#' @param settings test
-#' @param unit_vector test
+#' @param settings population_settings object
+#' @param unit_vector integer vector of unit numbers the new humans can be attributed to 
 #'
-#' @return tibble with humans
+#' @return data.frame with population (one row for each individual)
 #'
 #' @export
 generate_humans <- function(
@@ -20,8 +20,11 @@ generate_humans <- function(
   settings,
   unit_vector
   ) {
+  
+  # get death ages of humans
   ages <- get_attribute(t, n, settings@age_distribution_function, settings@age_range)
 
+  # generate humans
   tibble::tibble(
     id =          get_id_range(start_id, n),
     current_age = get_current_age(start_age, ages),
@@ -32,8 +35,7 @@ generate_humans <- function(
     sex =         get_attribute(t, n, settings@sex_distribution_function, settings@sex_range),
     unit =        get_attribute(t, n, settings@unit_distribution_function, unit_vector),
     unit_dead =   FALSE
-  ) %>%
-    return()
+  )
 }
 
 #### helper functions ####

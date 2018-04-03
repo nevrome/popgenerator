@@ -2,12 +2,12 @@
 % Please edit documentation in R/population_humans_generator.R
 \name{generate_humans}
 \alias{generate_humans}
-\title{generate}
+\title{generate_humans}
 \usage{
 generate_humans(t, n, start_id = 1, start_age = NA, settings, unit_vector)
 }
 \arguments{
-\item{t}{double time}
+\item{t}{integer time}
 
 \item{n}{integer amount of humans to generate}
 
@@ -15,13 +15,13 @@ generate_humans(t, n, start_id = 1, start_age = NA, settings, unit_vector)
 
 \item{start_age}{integer current age of humans. default: NA (current ages are generated)}
 
-\item{settings}{test}
+\item{settings}{population_settings object}
 
-\item{unit_vector}{test}
+\item{unit_vector}{integer vector of unit numbers the new humans can be attributed to}
 }
 \value{
-tibble with humans
+data.frame with population (one row for each individual)
 }
 \description{
-generate
+generate_humans
 }
