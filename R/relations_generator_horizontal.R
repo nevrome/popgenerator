@@ -14,6 +14,18 @@ generate_horizontal_relations <- function(settings) {
   type <- c()
   start_time <- c()
   end_time <- c()
+  
+  if (settings@amount_friends <= 0) {
+    return(
+      tibble::tibble(
+        from = integer(), 
+        to = integer(), 
+        type = character(), 
+        start_time = integer(), 
+        end_time = integer()
+      )
+    )
+  }
 
   pb <- utils::txtProgressBar(style = 3)
   for (person in 1:nrow(population)) {
