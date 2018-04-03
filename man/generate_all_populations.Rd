@@ -7,11 +7,13 @@
 generate_all_populations(x)
 }
 \arguments{
-\item{x}{all_model_populations}
+\item{x}{populations_grid data.frame}
 }
 \value{
-huup
+populations_grid data.frame with additional column
+populations
 }
 \description{
-generate_all_populations
+Generate populations in populations_grid data.frame based on
+population_settings objects in column population_settings.
 }

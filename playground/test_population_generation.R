@@ -1,5 +1,6 @@
 #### setup settings grid ####
 
+# create populations_grid data.frame
 all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings

@@ -2,16 +2,19 @@
 % Please edit documentation in R/population_generator.R
 \name{generate_population}
 \alias{generate_population}
-\title{generate population}
+\title{generate_population}
 \usage{
 generate_population(settings)
 }
 \arguments{
-\item{settings}{test}
+\item{settings}{population_settings object}
 }
 \value{
-huup
+data.frame with population (one row for each individual)
 }
 \description{
-generate population
+Generate an initial population based on an populations settings
+object and let it live over the course of the timeframe. That includes
+death and birth of individual humans. Their units die and rise with
+them.
 }

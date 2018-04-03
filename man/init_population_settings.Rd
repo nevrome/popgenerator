@@ -7,11 +7,14 @@
 init_population_settings(x)
 }
 \arguments{
-\item{x}{all_model_populations}
+\item{x}{populations_grid data.frame}
 }
 \value{
-huup
+populations_grid data.frame with additional column 
+population_settings
 }
 \description{
-init_population_settings
+Create population_settings object for every row in the 
+populations_grid data.frame and add it in an additional
+column.
 }
