@@ -34,10 +34,7 @@ generate_population <- function(settings) {
     )
 
   # let the initial population live over the course of the timeframe
-  final_population <- initial_population %>% simulate_growth(
-    time = settings@time,
-    settings = settings
-  )
+  final_population <- simulate_growth(initial_population, settings)
 
   return(final_population)
 

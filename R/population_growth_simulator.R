@@ -1,25 +1,20 @@
 #### main function ####
 
-#' simulate growth of a population
+#' Simulate growth of a population.
 #'
 #' @param humans tibble input population
-#' @param time vector time steps
 #' @param settings test
 #'
 #' @return tibble output population
 #'
 #' @export
-simulate_growth <- function(
-  humans,
-  time,
-  settings
-) {
+simulate_growth <- function(humans, settings) {
 
   unit_counter <- humans %>% get_last_established_unit()
 
   pb <- utils::txtProgressBar(style = 3)
-  for (t in time[-1]) {
-    utils::setTxtProgressBar(pb, t/length(time))
+  for (t in settings@time[-1]) {
+    utils::setTxtProgressBar(pb, t/length(settings@time))
 
     humans %<>% age()
     humans %<>% find_and_realize_deaths()
