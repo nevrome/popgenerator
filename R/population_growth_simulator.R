@@ -77,10 +77,7 @@ simulate_growth <- function(humans, settings) {
 #### helper functions ####
 
 age <- function(humans) {
-  humans[!humans$dead, ] %<>%
-    dplyr::mutate(
-      current_age = as.integer(.data$current_age + 1)
-    )
+  humans[!humans$dead, ]$current_age <- humans[!humans$dead, ]$current_age + 1
   return(humans)
 }
 
