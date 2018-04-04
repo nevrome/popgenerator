@@ -26,15 +26,18 @@ generate_population <- function(settings) {
     settings = settings,
     unit_vector = 1:intitial_unit_size
   ) %>%
+    as.data.frame() %>%
     dplyr::arrange(
       .data$birth_time
     ) %>%
     dplyr::mutate(
       id = 1:intitial_population_size
-    )
+    ) %>%
+    data.table::as.data.table()
 
   # let the initial population live over the course of the timeframe
-  final_population <- simulate_growth(initial_population, settings)
+  final_population <- simulate_growth(initial_population, settings) %>%
+    as.data.frame()
 
   return(final_population)
 

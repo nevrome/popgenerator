@@ -11,7 +11,7 @@
 simulate_growth <- function(humans, settings) {
 
   # get number of last unit (to allow incrementing this number) 
-  unit_counter <- humans %>% get_last_established_unit()
+  unit_counter <- get_last_established_unit(humans)
 
   pb <- utils::txtProgressBar(style = 3)
   # loop through all timesteps except the initial one
@@ -19,20 +19,21 @@ simulate_growth <- function(humans, settings) {
     utils::setTxtProgressBar(pb, t/length(settings@time))
 
     # let all humans age and die accordingly
-    humans %<>% age()
-    humans %<>% find_and_realize_deaths()
+    humans <- age(humans)
+    humans <- find_and_realize_deaths(humans)
     
     # calculate necessary amount of births to adjust the population 
     # size to the defined population development
-    necessary_births <- humans %>% 
-      calculate_amount_of_necessary_births(t, settings)
+    necessary_births <- calculate_amount_of_necessary_births(
+      humans, t, settings
+    )
 
     # stop if population is big enough and no new humans have to 
     # be generated
     if (necessary_births <= 0) next
 
     # determine amount of units and how many units should exist
-    units <- humans %>% get_currently_alive_units()
+    units <- get_currently_alive_units(humans)
     units_target_amount <- settings@unit_amount_function(t)
     
     # if too many units exist: get rid of some random units
@@ -62,38 +63,32 @@ simulate_growth <- function(humans, settings) {
     # add new humans to general humans list
     humans <- data.table::rbindlist(
         l = list(humans, new_humans),
-        use.names = TRUE,
-        fill = TRUE,
+        use.names = FALSE,
+        fill = FALSE,
         idcol = NULL
-      ) %>%
-      data.frame()
+      )
     
   }
   close(pb)
 
-  return(humans)
+  return(as.data.frame(humans))
 }
 
 #### helper functions ####
 
 age <- function(humans) {
-  humans[!humans$dead, ]$current_age <- humans[!humans$dead, ]$current_age + 1
+  data.table::set(humans, j = 2L, value = humans$current_age + 1)
   return(humans)
 }
 
 find_and_realize_deaths <- function(humans) {
-  humans[!humans$dead, ] %<>%
-    dplyr::mutate(
-      dead = .data$current_age >= .data$death_age
-    )
+  data.table::set(humans, j = "dead", value = humans$current_age >= humans$death_age)
   return(humans)
 }
 
 realize_unit_deaths <- function(humans, new_unit_vector) {
-  humans[!humans$unit_dead, ] %<>%
-    dplyr::mutate(
-      unit_dead = ifelse(.data$unit %in% new_unit_vector, FALSE, TRUE)
-    )
+  humans[!humans$unit_dead, ]$unit_dead <- 
+    !(humans[!humans$unit_dead, ]$unit %in% new_unit_vector)
   return(humans)
 }
 

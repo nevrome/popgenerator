@@ -23,17 +23,24 @@ generate_humans <- function(
   
   # get death ages of humans
   ages <- get_attribute(t, n, settings@age_distribution_function, settings@age_range)
+  id <-           get_id_range(start_id, n)
+  current_age <-  get_current_age(start_age, ages)
+  death_age <-    get_death_age(ages)
+  birth_time <-   get_birth_time(t, current_age)
+  death_time <-   get_death_time(t, death_age, current_age)
+  sex <-          get_attribute(t, n, settings@sex_distribution_function, settings@sex_range)
+  unit <-         get_attribute(t, n, settings@unit_distribution_function, unit_vector)
 
   # generate humans
-  tibble::tibble(
-    id =          get_id_range(start_id, n),
-    current_age = get_current_age(start_age, ages),
-    death_age =   get_death_age(ages),
+  data.table::data.table(
+    id =          id,
+    current_age = current_age,
+    death_age =   death_age,
     dead =        FALSE,
-    birth_time =  get_birth_time(t, .data$current_age),
-    death_time =  get_death_time(t, .data$death_age, .data$current_age),
-    sex =         get_attribute(t, n, settings@sex_distribution_function, settings@sex_range),
-    unit =        get_attribute(t, n, settings@unit_distribution_function, unit_vector),
+    birth_time =  birth_time,
+    death_time =  death_time,
+    sex =         sex,
+    unit =        unit,
     unit_dead =   FALSE
   )
 }
@@ -41,7 +48,7 @@ generate_humans <- function(
 #### helper functions ####
 
 get_id_range <- function(start_id, n) {
-  start_id:(start_id + n - 1)
+  seq.int(start_id, start_id + n - 1)
 }
 
 get_current_age <- function(start_age, ages) {
@@ -53,9 +60,9 @@ get_death_age <- function(ages) {
 }
 
 get_birth_time <- function(t, current_age) {
-  as.integer(t - current_age)
+  t - current_age
 }
 
 get_death_time <- function(t, death_age, current_age) {
-  as.integer(t + (death_age - current_age))
+  t + (death_age - current_age)
 }
