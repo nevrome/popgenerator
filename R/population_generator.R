@@ -57,8 +57,8 @@ generate_all_populations <- function(x) {
       # generate all populations defined in the grid
       populations = pbapply::pblapply(
         .data$population_settings, 
-        generate_population,
-        cl = 4
+        generate_population#,
+        #cl = 4
       )
     )
 }

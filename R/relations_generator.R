@@ -47,8 +47,8 @@ generate_all_relations <- function(x) {
     dplyr::mutate(
       relations = pbapply::pblapply(
         .data$relations_settings, 
-        generate_relations,
-        cl = 4
+        generate_relations#,
+        #cl = 4
       )
     )
 }
