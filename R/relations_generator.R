@@ -1,6 +1,12 @@
 #' generate relations
 #'
-#' @param settings test
+#' Generate horizontal and vertical relations for a population
+#' based on a relations_settings object. Vertical and horizontal
+#' relations are created independently and get merged later.
+#' Double connections get removed. Every relationtype has a specific
+#' weight. 
+#'
+#' @param settings relations_settings object
 #'
 #' @return huup
 #'
@@ -27,9 +33,13 @@ generate_relations <- function(settings) {
 
 #' generate_all_relations
 #'
-#' @param x all_model_populations
+#' Generate relations in a populations_grid data.frame based on
+#' relations_settings objects in column relations_settings. 
 #'
-#' @return huup
+#' @param x populations_grid data.frame
+#'
+#' @return populations_grid data.frame with additional column
+#' relations
 #'
 #' @export
 generate_all_relations <- function(x) {
@@ -45,9 +55,14 @@ generate_all_relations <- function(x) {
 
 #' init_relations_settings
 #'
-#' @param x all_model_populations
+#' Create relations_settings object for every row in the 
+#' populations_grid data.frame and add it in an additional
+#' column.
 #'
-#' @return huup
+#' @param x populations_grid data.frame
+#'
+#' @return populations_grid data.frame with additional column 
+#' relations_settings
 #'
 #' @export
 init_relations_settings <- function(x) { 

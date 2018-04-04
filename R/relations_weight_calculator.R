@@ -1,9 +1,13 @@
-#' calculate relations weight
+#### main function ####
+
+#' calculate_relations_weight
 #'
-#' @param x a relations table
+#' Add a weight for every relation.
+#'
+#' @param x a relations data.frame
 #' @param settings relations_settings object
 #'
-#' @return huup
+#' @return a relations data.frame with the additional column weight
 #'
 #' @export
 calculate_relations_weight <- function(x, settings) {

@@ -7,11 +7,13 @@
 generate_all_relations(x)
 }
 \arguments{
-\item{x}{all_model_populations}
+\item{x}{populations_grid data.frame}
 }
 \value{
-huup
+populations_grid data.frame with additional column
+relations
 }
 \description{
-generate_all_relations
+Generate relations in a populations_grid data.frame based on
+relations_settings objects in column relations_settings.
 }

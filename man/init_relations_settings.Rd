@@ -7,11 +7,14 @@
 init_relations_settings(x)
 }
 \arguments{
-\item{x}{all_model_populations}
+\item{x}{populations_grid data.frame}
 }
 \value{
-huup
+populations_grid data.frame with additional column 
+relations_settings
 }
 \description{
-init_relations_settings
+Create relations_settings object for every row in the 
+populations_grid data.frame and add it in an additional
+column.
 }

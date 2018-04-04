@@ -2,18 +2,18 @@
 % Please edit documentation in R/relations_weight_calculator.R
 \name{calculate_relations_weight}
 \alias{calculate_relations_weight}
-\title{calculate relations weight}
+\title{calculate_relations_weight}
 \usage{
 calculate_relations_weight(x, settings)
 }
 \arguments{
-\item{x}{a relations table}
+\item{x}{a relations data.frame}
 
 \item{settings}{relations_settings object}
 }
 \value{
-huup
+a relations data.frame with the additional column weight
 }
 \description{
-calculate relations weight
+Add a weight for every relation.
 }

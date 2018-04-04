@@ -2,16 +2,16 @@
 % Please edit documentation in R/relations_generator_horizontal.R
 \name{generate_horizontal_relations}
 \alias{generate_horizontal_relations}
-\title{generate horizontal relations}
+\title{generate_horizontal_relations}
 \usage{
 generate_horizontal_relations(settings)
 }
 \arguments{
-\item{settings}{test}
+\item{settings}{relations_settings object}
 }
 \value{
-huup
+relations data.frame (every row contains one relation)
 }
 \description{
-generate horizontal relations
+Generate relations between random individuals.
 }

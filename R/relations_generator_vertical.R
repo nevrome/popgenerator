@@ -1,15 +1,20 @@
-#' generate vertical relations
+#' generate_vertical_relations
+#' 
+#' Generate relations between parents and children.
 #'
-#' @param settings test
+#' @param settings relations_settings object
 #'
-#' @return huup
+#' @return relations data.frame (every row contains one relation)
 #'
 #' @export
 generate_vertical_relations <- function(settings) {
 
+  # new column to store previous partners for each person
   settings@population$previous_partner <- NA
+  
   population <- settings@population
 
+  # empty vectors to store relationships
   from <- c()
   to <- c()
   type <- c()
@@ -19,7 +24,9 @@ generate_vertical_relations <- function(settings) {
   pb <- utils::txtProgressBar(style = 3)
   for (child in 1:nrow(population)) {
 
-    potential_parents <- get_all_humans_in_child_bearing_age_at_childbirth(settings, child)
+    potential_parents <- get_all_humans_in_child_bearing_age_at_childbirth(
+      settings, child
+    )
     monogamous <- is_monogamous(settings)
 
     # check if there is a potential pair to make a child
@@ -103,7 +110,12 @@ is_monogamous <- function(settings) {
   stats::runif(1,0,1) <= settings@monogamy_probability
 }
 
-get_parent <- function(settings, potential_parents, child, partner_df = data.frame()) {
+get_parent <- function(
+  settings, 
+  potential_parents, 
+  child,
+  partner_df = data.frame()
+) {
   if(nrow(partner_df) == 0) {
     in_unit <- potential_parents %>%
       dplyr::filter(.data$unit == get_parent_unit(settings, child))
@@ -116,7 +128,9 @@ get_parent <- function(settings, potential_parents, child, partner_df = data.fra
     correct_sex <- potential_parents %>%
       dplyr::filter(.data$sex != partner_df$sex)
     in_unit <- correct_sex %>%
-      dplyr::filter(.data$unit == get_parent_unit(settings, child, partner_df$id))
+      dplyr::filter(
+        .data$unit == get_parent_unit(settings, child, partner_df$id)
+      )
     if(nrow(in_unit) >= 1) {
       in_unit %>% dplyr::sample_n(1) %>% return()
     } else {
@@ -128,8 +142,10 @@ get_parent <- function(settings, potential_parents, child, partner_df = data.fra
 get_all_humans_in_child_bearing_age_at_childbirth <- function(settings, child) {
   get_all_humans_alive_at_childbirth(settings, child) %>%
     dplyr::filter(
-      (.data$birth_time + settings@start_fertility_age) <= settings@population$birth_time[child],
-      settings@population$birth_time[child] <= (.data$birth_time +  settings@stop_fertility_age)
+      (.data$birth_time + settings@start_fertility_age) <= 
+        settings@population$birth_time[child],
+      settings@population$birth_time[child] <= 
+        (.data$birth_time +  settings@stop_fertility_age)
     )
 }
 

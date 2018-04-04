@@ -2,16 +2,16 @@
 % Please edit documentation in R/relations_generator_vertical.R
 \name{generate_vertical_relations}
 \alias{generate_vertical_relations}
-\title{generate vertical relations}
+\title{generate_vertical_relations}
 \usage{
 generate_vertical_relations(settings)
 }
 \arguments{
-\item{settings}{test}
+\item{settings}{relations_settings object}
 }
 \value{
-huup
+relations data.frame (every row contains one relation)
 }
 \description{
-generate vertical relations
+Generate relations between parents and children.
 }

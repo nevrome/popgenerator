@@ -1,20 +1,25 @@
-#' generate horizontal relations
+#' generate_horizontal_relations
+#' 
+#' Generate relations between random individuals.
 #'
-#' @param settings test
+#' @param settings relations_settings object
 #'
-#' @return huup
+#' @return relations data.frame (every row contains one relation)
 #'
 #' @export
 generate_horizontal_relations <- function(settings) {
 
   population <- settings@population
 
+  # empty vectors to store relationships
   from <- c()
   to <- c()
   type <- c()
   start_time <- c()
   end_time <- c()
   
+  # if the settings define that humans in general have no friends, then 
+  # give back an empty data.frame
   if (settings@amount_friends <= 0) {
     return(
       tibble::tibble(
@@ -32,7 +37,9 @@ generate_horizontal_relations <- function(settings) {
 
     # get all potential friends of an individual human 
     # (humans that are alive within the same timeframe)
-    potential_friends <- get_all_humans_alive_in_livetime_of_human(settings, person) %>%
+    potential_friends <- get_all_humans_alive_in_livetime_of_human(
+      settings, person
+    ) %>%
       dplyr::filter(
         .data$id != person
       )
@@ -59,8 +66,14 @@ generate_horizontal_relations <- function(settings) {
     to <- append(to, friends$id)
     type <- append(type, rep("friend", settings@amount_friends))
     for (friend in 1:nrow(friends)) {
-      start_time <- append(start_time, max(population$birth_time[person], friends$birth_time[friend]))
-      end_time <- append(end_time, min(population$death_time[person], friends$death_time[friend]))
+      start_time <- append(
+        start_time, 
+        max(population$birth_time[person], friends$birth_time[friend])
+      )
+      end_time <- append(
+        end_time, 
+        min(population$death_time[person], friends$death_time[friend])
+      )
     }
 
     utils::setTxtProgressBar(pb, person/nrow(population))
@@ -77,7 +90,11 @@ generate_horizontal_relations <- function(settings) {
 #### helper functions ####
 
 get_all_humans_alive_in_livetime_of_human <- function(settings, id) {
-  timeframe <- seq(settings@population$birth_time[id], settings@population$death_time[id], 1)
+  timeframe <- seq(
+    settings@population$birth_time[id], 
+    settings@population$death_time[id], 
+    1
+  )
   get_all_humans_alive_in_timeframe(settings, timeframe)
 }
 
