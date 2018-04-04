@@ -5,7 +5,7 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:0
+      0:10
     ),
   # population settings  
   population_size_functions = c(
@@ -39,7 +39,7 @@ all_model_populations <- expand.grid(
     ),
   # relations settings
   monogamy_probabilities = list(
-      0,5,
+      0.5,
       0.7,
       0.9
     ),
@@ -50,12 +50,12 @@ all_model_populations <- expand.grid(
       50
     ),
   same_unit_as_child_probabilities = list(
-      0,5,
+      0.5,
       0.7,
       0.9
     ),
   same_unit_as_partner_probabilities = list(
-      0,5,
+      0.5,
       0.7,
       0.9
     ),
@@ -80,7 +80,7 @@ plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
-all_model_populations[11615,] %>% generate_all_populations() -> test
+all_model_populations[1:1,] %>% generate_all_populations() -> test
 
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
