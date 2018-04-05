@@ -39,21 +39,20 @@ generate_horizontal_relations <- function(settings) {
     # (humans that are alive within the same timeframe)
     potential_friends <- get_all_humans_alive_in_livetime_of_human(
       settings, person
-    ) %>%
-      dplyr::filter(
-        .data$id != person
-      )
+    ) 
+    
+    # remove current person of interest
+    potential_friends <- potential_friends[potential_friends$id != person, ]
 
     # determine probability of friendship based on age difference
     # and friendship_age_distribution_function
-    potential_friends %<>%
-      dplyr::mutate(
-        age_difference = abs(.data$birth_time - population$birth_time[person]),
-        friend_probability = 
-          settings@friendship_age_distribution_function(
-            population$birth_time[person]
-          )(.data$age_difference)
-      )
+    potential_friends$age_difference <- abs(
+      potential_friends$birth_time - population$birth_time[person]
+    )
+    potential_friends$friend_probability <- 
+      settings@friendship_age_distribution_function(
+        population$birth_time[person]
+      )(potential_friends$age_difference)
     
     # select random friends based on friendship probability
     friends <- potential_friends %>% dplyr::sample_n(
@@ -65,16 +64,14 @@ generate_horizontal_relations <- function(settings) {
     from <- append(from, rep(person, settings@amount_friends))
     to <- append(to, friends$id)
     type <- append(type, rep("friend", settings@amount_friends))
-    for (friend in 1:nrow(friends)) {
-      start_time <- append(
-        start_time, 
-        max(population$birth_time[person], friends$birth_time[friend])
-      )
-      end_time <- append(
-        end_time, 
-        min(population$death_time[person], friends$death_time[friend])
-      )
-    }
+    start_time <- append(
+      start_time, 
+      pmax(population$birth_time[person], friends$birth_time)
+    )
+    end_time <- append(
+      end_time, 
+      pmin(population$death_time[person], friends$death_time)
+    )
 
     utils::setTxtProgressBar(pb, person/nrow(population))
   }
