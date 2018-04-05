@@ -116,37 +116,45 @@ get_parent <- function(
   child,
   partner_df = data.frame()
 ) {
+  # if no previous partners available
   if(nrow(partner_df) == 0) {
-    in_unit <- potential_parents %>%
-      dplyr::filter(.data$unit == get_parent_unit(settings, child))
+    # get potential parents in same unit as child
+    in_unit <- potential_parents[
+      potential_parents$unit == get_parent_unit(settings, child),
+    ]
+    # if more than one potential parent in same unit available 
+    # select one of them randomly
     if(nrow(in_unit) >= 1) {
-      in_unit %>% dplyr::sample_n(1) %>% return()
+      return(dplyr::sample_n(in_unit, 1))
+    # if not select one potential parent from all potential
+    # parents across units 
     } else {
-      potential_parents %>% dplyr::sample_n(1) %>% return()
+      return(dplyr::sample_n(potential_parents, 1))
     }
+  # if previous partners are available  
   } else {
-    correct_sex <- potential_parents %>%
-      dplyr::filter(.data$sex != partner_df$sex)
-    in_unit <- correct_sex %>%
-      dplyr::filter(
-        .data$unit == get_parent_unit(settings, child, partner_df$id)
-      )
+    correct_sex <- potential_parents[potential_parents$sex != partner_df$sex, ]
+    in_unit <- correct_sex[
+      correct_sex$unit == get_parent_unit(settings, child, partner_df$id),
+    ]
     if(nrow(in_unit) >= 1) {
-      in_unit %>% dplyr::sample_n(1) %>% return()
+      return(dplyr::sample_n(in_unit, 1))
     } else {
-      correct_sex %>% dplyr::sample_n(1) %>% return()
+      return(dplyr::sample_n(correct_sex, 1))
     }
   }
 }
 
 get_all_humans_in_child_bearing_age_at_childbirth <- function(settings, child) {
-  get_all_humans_alive_at_childbirth(settings, child) %>%
-    dplyr::filter(
-      (.data$birth_time + settings@start_fertility_age) <= 
-        settings@population$birth_time[child],
+  humans_alive_at_childbirth <- get_all_humans_alive_at_childbirth(
+    settings, child
+  )
+  humans_alive_at_childbirth[
+    (humans_alive_at_childbirth$birth_time + settings@start_fertility_age) <= 
+        settings@population$birth_time[child] &
       settings@population$birth_time[child] <= 
-        (.data$birth_time +  settings@stop_fertility_age)
-    )
+        (humans_alive_at_childbirth$birth_time +  settings@stop_fertility_age),
+  ]
 }
 
 get_all_humans_alive_at_childbirth <- function(settings, child) {
@@ -154,11 +162,10 @@ get_all_humans_alive_at_childbirth <- function(settings, child) {
 }
 
 get_all_humans_alive_at_time <- function(settings, t) {
-  settings@population %>%
-    dplyr::filter(
-      .data$birth_time <= t,
-      .data$death_time >= t
-    )
+  settings@population[
+      settings@population$birth_time <= t &
+      settings@population$death_time >= t,
+    ]
 }
 
 get_parent_unit <- function(settings, child, partner = NA) {
@@ -181,8 +188,7 @@ get_available_units_at_childbirth <- function(settings, child) {
 }
 
 get_available_units_at_time <- function(settings, t) {
-  get_all_humans_alive_at_time(settings, t) %>%
-    magrittr::extract2("unit")
+  get_all_humans_alive_at_time(settings, t)[["unit"]]
 }
 
 is_same_unit_as_child <- function(settings) {
