@@ -97,7 +97,7 @@ get_all_humans_alive_in_livetime_of_human <- function(settings, id) {
 
 get_all_humans_alive_in_timeframe <- function(settings, start, stop) {
   settings@population[
-    start <= settings@population$death_time &&
+    start <= settings@population$death_time &
     settings@population$birth_time <= stop,
   ]
 }
