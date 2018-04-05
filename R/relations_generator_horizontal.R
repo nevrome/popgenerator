@@ -90,18 +90,14 @@ generate_horizontal_relations <- function(settings) {
 #### helper functions ####
 
 get_all_humans_alive_in_livetime_of_human <- function(settings, id) {
-  timeframe <- seq(
-    settings@population$birth_time[id], 
-    settings@population$death_time[id], 
-    1
-  )
-  get_all_humans_alive_in_timeframe(settings, timeframe)
+  start <- settings@population$birth_time[id] 
+  stop <- settings@population$death_time[id]
+  get_all_humans_alive_in_timeframe(settings, start, stop)
 }
 
-get_all_humans_alive_in_timeframe <- function(settings, timeframe) {
-  purrr::map(timeframe, function(x){
-    get_all_humans_alive_at_time(settings, x)
-  }) %>%
-    plyr::ldply() %>%
-    unique
+get_all_humans_alive_in_timeframe <- function(settings, start, stop) {
+  settings@population[
+    start <= settings@population$death_time &&
+    settings@population$birth_time <= stop,
+  ]
 }
