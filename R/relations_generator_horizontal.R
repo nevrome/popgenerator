@@ -11,12 +11,15 @@ generate_horizontal_relations <- function(settings) {
 
   population <- settings@population
 
+  # estimate size to preallocate vectors
+  estimated_size <- estimate_amount_of_relations(settings)
+  
   # empty vectors to store relationships
-  from <- c()
-  to <- c()
-  type <- c()
-  start_time <- c()
-  end_time <- c()
+  from <- vector("integer", estimated_size)
+  to <- vector("integer", estimated_size)
+  type <- vector("character", estimated_size)
+  start_time <- vector("integer", estimated_size)
+  end_time <- vector("integer", estimated_size)
   
   # if the settings define that humans in general have no friends, then 
   # give back an empty data.frame
@@ -61,16 +64,18 @@ generate_horizontal_relations <- function(settings) {
     )
     
     # store friendships
-    from <- append(from, rep(person, settings@amount_friends))
-    to <- append(to, friends$id)
-    type <- append(type, rep("friend", settings@amount_friends))
-    start_time <- append(
-      start_time, 
-      pmax(population$birth_time[person], friends$birth_time)
+    start <- (person - 1) * settings@amount_friends + 1
+    stop <- person * settings@amount_friends
+    
+    from[start:stop] <- rep(person, settings@amount_friends)
+    to[start:stop] <- friends$id
+    type[start:stop] <- rep("friend", settings@amount_friends)
+    start_time[start:stop] <- pmax(
+      population$birth_time[person], 
+      friends$birth_time
     )
-    end_time <- append(
-      end_time, 
-      pmin(population$death_time[person], friends$death_time)
+    end_time[start:stop] <- pmin(
+      population$death_time[person], friends$death_time
     )
 
     utils::setTxtProgressBar(pb, person/nrow(population))
@@ -97,4 +102,8 @@ get_all_humans_alive_in_timeframe <- function(settings, start, stop) {
     start <= settings@population$death_time &
     settings@population$birth_time <= stop,
   ]
+}
+
+estimate_amount_of_relations <- function(settings) {
+  nrow(settings@population) * settings@amount_friends
 }
