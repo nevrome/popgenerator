@@ -9,98 +9,110 @@
 #' @export
 generate_vertical_relations <- function(settings) {
 
-  # new column to store previous partners for each person
-  settings@population$previous_partner <- NA
+  # # new column to store previous partners for each person
+  # settings@population$previous_partner <- NA
   
-  population <- settings@population
-
-  # empty vectors to store relationships
-  from <- c()
-  to <- c()
-  type <- c()
-  start_time <- c()
-  end_time <- c()
-
-  pb <- utils::txtProgressBar(style = 3)
-  for (child in 1:nrow(population)) {
-
-    potential_parents <- get_all_humans_in_child_bearing_age_at_childbirth(
-      settings, child
-    )
-    monogamous <- is_monogamous(settings)
-
-    # check if there is a potential pair to make a child
-    # else the child has no parents
-    if (!all(c("male", "female") %in% unique(potential_parents$sex))) {next}
-
-    # randomly select partner1
-    partner1_df <- get_parent(settings, potential_parents, child)
-
-    if(
-      # check if partner1 already has a previous partner
-      !is.na(partner1_df$previous_partner) &&
-      # check if the previous partner is in the right age for another child
-      partner1_df$previous_partner %in% potential_parents$id &&
-      # check if partner1 behaves monogamous
-      monogamous
-    ) {
-      # the previous partner becomes also the parent of this child
-      partner2_df <- population[partner1_df$previous_partner, ]
-    } else {
-      # a new partner is selected
-      partner2_df <- get_parent(settings, potential_parents, child, partner1_df)
-    }
-
-    # store partner as previous partner
-    population$previous_partner[partner1_df$id] <- partner2_df$id
-    population$previous_partner[partner2_df$id] <- partner1_df$id
-
-    # establish family relationships
-    partner1 <- partner1_df$id
-    partner2 <- partner2_df$id
-
-    from <- append(
-      from, c(
-        partner1,
-        partner1,
-        partner2
-      )
-    )
-    to <- append(
-      to, c(
-        partner2,
-        child,
-        child
-      )
-    )
-    type <- append(
-      type, c(
-        "sexing",
-        "child_of",
-        "child_of"
-      )
-    )
-    start_time <- append(
-      start_time, c(
-        population$birth_time[child] - 1,
-        population$birth_time[child],
-        population$birth_time[child]
-      )
-    )
-    end_time <- append(
-      end_time, c(
-        population$birth_time[child] + 2,
-        population$birth_time[child] + 14,
-        population$birth_time[child] + 14
-      )
-    )
-    utils::setTxtProgressBar(pb, child/nrow(population))
-  }
-  close(pb)
-
-  vertical_relations <- tibble::tibble(from, to, type, start_time, end_time)
-
+  population <- settings@population[order(settings@population$birth_time), ]
+  humans <- population$id
+  
+  to <- rep(humans[-(1:100)], each = 2)
+  from <- round(runif(length(to), min = to - 100, max = to - 1), 0)
+  
+  vertical_relations <- tibble::tibble(
+    from = from, 
+    to = to, 
+    type = "child_of"
+  )
+  
   return(vertical_relations)
+  
+  # # empty vectors to store relationships
+  # from <- c()
+  # to <- c()
+  # type <- c()
+  # start_time <- c()
+  # end_time <- c()
+  # 
+  # pb <- utils::txtProgressBar(style = 3)
+  # for (child in 1:nrow(population)) {
+  # 
+  #   potential_parents <- get_all_humans_in_child_bearing_age_at_childbirth(
+  #     settings, child
+  #   )
+  #   monogamous <- is_monogamous(settings)
+  # 
+  #   # check if there is a potential pair to make a child
+  #   # else the child has no parents
+  #   if (!all(c("male", "female") %in% unique(potential_parents$sex))) {next}
+  # 
+  #   # randomly select partner1
+  #   partner1_df <- get_parent(settings, potential_parents, child)
+  # 
+  #   if(
+  #     # check if partner1 already has a previous partner
+  #     !is.na(partner1_df$previous_partner) &&
+  #     # check if the previous partner is in the right age for another child
+  #     partner1_df$previous_partner %in% potential_parents$id &&
+  #     # check if partner1 behaves monogamous
+  #     monogamous
+  #   ) {
+  #     # the previous partner becomes also the parent of this child
+  #     partner2_df <- population[partner1_df$previous_partner, ]
+  #   } else {
+  #     # a new partner is selected
+  #     partner2_df <- get_parent(settings, potential_parents, child, partner1_df)
+  #   }
+  # 
+  #   # store partner as previous partner
+  #   population$previous_partner[partner1_df$id] <- partner2_df$id
+  #   population$previous_partner[partner2_df$id] <- partner1_df$id
+  # 
+  #   # establish family relationships
+  #   partner1 <- partner1_df$id
+  #   partner2 <- partner2_df$id
+  # 
+  #   from <- append(
+  #     from, c(
+  #       partner1,
+  #       partner1,
+  #       partner2
+  #     )
+  #   )
+  #   to <- append(
+  #     to, c(
+  #       partner2,
+  #       child,
+  #       child
+  #     )
+  #   )
+  #   type <- append(
+  #     type, c(
+  #       "sexing",
+  #       "child_of",
+  #       "child_of"
+  #     )
+  #   )
+  #   start_time <- append(
+  #     start_time, c(
+  #       population$birth_time[child] - 1,
+  #       population$birth_time[child],
+  #       population$birth_time[child]
+  #     )
+  #   )
+  #   end_time <- append(
+  #     end_time, c(
+  #       population$birth_time[child] + 2,
+  #       population$birth_time[child] + 14,
+  #       population$birth_time[child] + 14
+  #     )
+  #   )
+  #   utils::setTxtProgressBar(pb, child/nrow(population))
+  # }
+  # close(pb)
+  # 
+  # vertical_relations <- tibble::tibble(from, to, type, start_time, end_time)
+  # 
+  # return(vertical_relations)
 
 }
 

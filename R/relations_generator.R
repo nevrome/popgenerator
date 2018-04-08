@@ -16,16 +16,16 @@ generate_relations <- function(settings) {
   population <- settings@population
 
   vertical_relations <- settings %>% generate_vertical_relations()
-  horizontal_relations <- settings %>% generate_horizontal_relations()
+  #horizontal_relations <- settings %>% generate_horizontal_relations()
   
   all_relations <- rbind(
-    vertical_relations,
-    horizontal_relations
+    vertical_relations#,
+    #horizontal_relations
   )
 
-  all_relations %<>% deal_with_double_connections()
+  #all_relations %<>% deal_with_double_connections()
     
-  all_relations %<>% calculate_relations_weight(settings)
+  #all_relations %<>% calculate_relations_weight(settings)
 
   return(all_relations)
 
