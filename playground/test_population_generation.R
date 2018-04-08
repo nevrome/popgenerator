@@ -5,12 +5,12 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:2000
+      0:1000
     ),
   # population settings  
   population_size_functions = c(
-      function(t) {round(2000 - 0.95 * t, 0)},
       function(t) {1000},
+      function(t) {round(2000 - 0.95 * t, 0)},
       function(t) {round(100 + 0.95 * t, 0)},
       function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
       function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
@@ -63,7 +63,7 @@ all_model_populations <- expand.grid(
       function(t) {function(x) {x}}
     ),
   amounts_friends = list(
-      0,
+      10,
       10,
       50
     ),
@@ -80,7 +80,7 @@ plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
-all_model_populations[1:10,] %>% generate_all_populations() -> test
+all_model_populations[1:1,] %>% generate_all_populations() -> test
 
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
