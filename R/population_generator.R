@@ -12,34 +12,66 @@
 #' @export
 generate_population <- function(settings) {
 
-  # set some start options (situation at the beginning of the timeframe)
-  start_moment <- settings@time[1]
-  intitial_population_size = settings@population_size_function(0)
-  intitial_unit_size = settings@unit_amount_function(0)
-
-  # generate the initial population
-  initial_population <- generate_humans(
-    t = start_moment,
-    n = intitial_population_size,
-    start_id = 1,
-    start_age = NA,
-    settings = settings,
-    unit_vector = 1:intitial_unit_size
-  ) %>%
-    as.data.frame() %>%
-    dplyr::arrange(
-      .data$birth_time
-    ) %>%
-    dplyr::mutate(
-      id = 1:intitial_population_size
-    ) %>%
-    data.table::as.data.table()
-
-  # let the initial population live over the course of the timeframe
-  final_population <- simulate_growth(initial_population, settings) %>%
-    as.data.frame()
-
-  return(final_population)
+  human_year_combinations <- integrate(
+    Vectorize(settings@population_size_function), 
+    lower = min(settings@time), 
+    upper = max(settings@time)
+  )$value
+  
+  average_life_span <- 35
+  
+  number_of_humans <- human_year_combinations / average_life_span  
+  
+  birth_windows <- seq(
+    min(settings@time),
+    max(settings@time),
+    abs(max(settings@time) - min(settings@time)) / average_life_span
+  )
+  
+  humans_per_birth_window <- mapply(
+    function(x, y) {
+      integrate(
+        Vectorize(settings@population_size_function), 
+        lower = x, 
+        upper = y
+      )$value
+    },
+    x = birth_windows[-length(birth_windows)],
+    y = birth_windows[-1]
+  )
+  
+  number_of_humans * (humans_per_birth_window/sum(humans_per_birth_window))
+  
+  # generate humans now
+  
+  # # set some start options (situation at the beginning of the timeframe)
+  # start_moment <- settings@time[1]
+  # intitial_population_size = settings@population_size_function(0)
+  # intitial_unit_size = settings@unit_amount_function(0)
+  # 
+  # # generate the initial population
+  # initial_population <- generate_humans(
+  #   t = start_moment,
+  #   n = intitial_population_size,
+  #   start_id = 1,
+  #   start_age = NA,
+  #   settings = settings,
+  #   unit_vector = 1:intitial_unit_size
+  # ) %>%
+  #   as.data.frame() %>%
+  #   dplyr::arrange(
+  #     .data$birth_time
+  #   ) %>%
+  #   dplyr::mutate(
+  #     id = 1:intitial_population_size
+  #   ) %>%
+  #   data.table::as.data.table()
+  # 
+  # # let the initial population live over the course of the timeframe
+  # final_population <- simulate_growth(initial_population, settings) %>%
+  #   as.data.frame()
+  # 
+  # return(final_population)
 
 }
 
