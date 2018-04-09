@@ -34,16 +34,12 @@ generate_humans <- function(
     birth_time, 
     age
   )
-  
-  units_amount <- n/settings@unit_sizes
-  
-  unit <- round(
+  unit <- floor(
     stats::runif(
       length(age),
       min = 1,
-      max = units_amount
-    ),
-    0
+      max = settings@units_amount + 1
+    )
   )
 
   # combine info into data.frame

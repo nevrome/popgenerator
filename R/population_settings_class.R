@@ -4,7 +4,7 @@
 #'
 #' @slot time test
 #' @slot population_size_function test
-#' @slot unit_sizes test
+#' @slot units_amount test
 #' @slot age_distribution_function test
 #' @slot age_range test
 #' @slot unit_distribution_function test
@@ -16,7 +16,7 @@ setClass(
   slots = c(
     time = "numeric",
     population_size_function = "function",
-    unit_sizes = "numeric",
+    units_amount = "numeric",
     age_distribution_function = "function",
     age_range = "numeric",
     unit_distribution_function = "function",

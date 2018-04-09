@@ -105,7 +105,7 @@ init_population_settings <- function(x) {
       "population_settings",
       time =                       x$timeframe[[i]],
       population_size_function =   x$population_size_functions[[i]],
-      unit_sizes =                 x$unit_sizes[[i]],
+      units_amount =               x$units_amount[[i]],
       age_distribution_function =  x$age_distribution_functions[[i]],
       age_range =                  x$age_ranges[[i]],
       unit_distribution_function = x$unit_distribution_functions[[i]]

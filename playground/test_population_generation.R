@@ -15,7 +15,7 @@ all_model_populations <- expand.grid(
       function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
       function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
     ),
-  unit_sizes = c(
+  units_amount = c(
       50,
       100,
       200
@@ -66,8 +66,8 @@ all_model_populations[1:10,] %>% generate_all_populations() -> test
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
 
-test2$population_settings[[1]] -> settings 
-test2$relations_settings[[1]] -> settings
+test$population_settings[[1]] -> settings 
+test$relations_settings[[2]] -> settings
 
 test2$populations[[1]] -> pop
 test2$relations[[1]] -> rel
