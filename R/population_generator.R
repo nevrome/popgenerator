@@ -54,6 +54,9 @@ generate_population <- function(settings) {
   
   generated_humans <- do.call(rbind.data.frame, generated_humans_raw)
   
+  generated_humans <- generated_humans[order(generated_humans$birth_time), ]
+  generated_humans$id <- 1:nrow(generated_humans)
+  
   return(generated_humans)
   
   # generate humans now
