@@ -16,6 +16,5 @@ huup
 Generate horizontal and vertical relations for a population
 based on a relations_settings object. Vertical and horizontal
 relations are created independently and get merged later.
-Double connections get removed. Every relationtype has a specific
-weight.
+Every relationship type has a specific weight.
 }

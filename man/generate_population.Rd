@@ -14,7 +14,5 @@ data.frame with population (one row for each individual)
 }
 \description{
 Generate an initial population based on an populations settings
-object and let it live over the course of the timeframe. That includes
-death and birth of individual humans. Their units die and rise with
-them.
+object.
 }

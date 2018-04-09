@@ -11,31 +11,30 @@
 #'
 #' @export
 calculate_relations_weight <- function(x, settings) {
-  x %>%
-    dplyr::mutate(
-      weight = unlist(purrrlyr::by_row(x, calculate_weight, settings)[[".out"]])
-    )
+  x$weight <- calculate_weight(x, settings)
+  return(x)
 }
 
 #### helper functions ####
 
 calculate_weight <- function(x, settings) {
   dplyr::case_when(
-    x$type == "child_of" ~ weight_child_of(x, settings) %>% return,
-    x$type == "sexing"   ~ weight_sexing(x, settings) %>% return
+    x$type == "child_of" ~ weight_child_of(x, settings),
+    x$type == "friend"   ~ weight_friend(x, settings)
   )
 }
 
 weight_child_of <- function(x, settings) {
-  get_relation_weight(
-    mean(x$start_time, x$end_time), 
-    1,
-    settings@child_of_weight_distribution_function
-  ) %>% 
-    return()
+  # get_relation_weight(
+  #   mean(x$start_time, x$end_time), 
+  #   1,
+  #   settings@child_of_weight_distribution_function
+  # ) %>% 
+  #   return()
+  2
 }
 
-weight_sexing <- function(x, settings) {
-  5
+weight_friend <- function(x, settings) {
+  1
 }
 

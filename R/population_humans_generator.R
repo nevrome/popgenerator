@@ -2,67 +2,67 @@
 
 #' generate_humans
 #'
-#' @param t integer time
+#' @param start integer start time 
+#' @param stop integer stop time 
 #' @param n integer amount of humans to generate
-#' @param start_id integer id of first generated human. default = 1
-#' @param start_age integer current age of humans. default: NA (current ages are generated)
 #' @param settings population_settings object
-#' @param unit_vector integer vector of unit numbers the new humans can be attributed to 
-#'
+#' 
 #' @return data.frame with population (one row for each individual)
 #'
 #' @export
 generate_humans <- function(
-  t,
+  start,
+  stop,
   n,
-  start_id = 1,
-  start_age = NA,
-  settings,
-  unit_vector
+  settings
   ) {
   
-  # get death ages of humans
-  ages <- get_attribute(t, n, settings@age_distribution_function, settings@age_range)
-  id <-           get_id_range(start_id, n)
-  current_age <-  get_current_age(start_age, ages)
-  death_age <-    get_death_age(ages)
-  birth_time <-   get_birth_time(t, current_age)
-  death_time <-   get_death_time(t, death_age, current_age)
-  sex <-          get_attribute(t, n, settings@sex_distribution_function, settings@sex_range)
-  unit <-         get_attribute(t, n, settings@unit_distribution_function, unit_vector)
+  generation_length <- abs(stop - start)
+  
+  # generate age and lifetime
+  age <- get_attribute(
+    mean(c(start, stop)), 
+    n, 
+    settings@age_distribution_function, settings@age_range
+  )
+  birth_time <- get_birth_time(
+    start,
+    generation_length,
+    age
+  )
+  death_time <- get_death_time(
+    birth_time, 
+    age
+  )
+  
+  #unit <- get_attribute(t, n, settings@unit_distribution_function, unit_vector)
 
-  # generate humans
-  data.table::data.table(
-    id =          id,
-    current_age = current_age,
-    death_age =   death_age,
-    dead =        FALSE,
-    birth_time =  birth_time,
-    death_time =  death_time,
-    sex =         sex,
-    unit =        unit,
-    unit_dead =   FALSE
+  # combine info into data.frame
+  list(
+    age = age,
+    birth_time = birth_time,
+    death_time = death_time
   )
 }
 
 #### helper functions ####
 
-get_id_range <- function(start_id, n) {
-  seq.int(start_id, start_id + n - 1)
-}
-
 get_current_age <- function(start_age, ages) {
   if (is.na(start_age)) {ages/2} else {start_age}
 }
 
-get_death_age <- function(ages) {
-  ages
+get_birth_time <- function(start, generation_length, age) {
+  round(
+    stats::runif(
+      length(age),
+      min = start - generation_length/2,
+      max = start + generation_length/2
+    ),
+    0
+  )
 }
 
-get_birth_time <- function(t, current_age) {
-  t - current_age
+get_death_time <- function(birth_time, age) {
+  birth_time + age
 }
 
-get_death_time <- function(t, death_age, current_age) {
-  t + (death_age - current_age)
-}

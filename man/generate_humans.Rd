@@ -4,20 +4,16 @@
 \alias{generate_humans}
 \title{generate_humans}
 \usage{
-generate_humans(t, n, start_id = 1, start_age = NA, settings, unit_vector)
+generate_humans(start, stop, n, settings)
 }
 \arguments{
-\item{t}{integer time}
+\item{start}{integer start time}
+
+\item{stop}{integer stop time}
 
 \item{n}{integer amount of humans to generate}
 
-\item{start_id}{integer id of first generated human. default = 1}
-
-\item{start_age}{integer current age of humans. default: NA (current ages are generated)}
-
 \item{settings}{population_settings object}
-
-\item{unit_vector}{integer vector of unit numbers the new humans can be attributed to}
 }
 \value{
 data.frame with population (one row for each individual)
