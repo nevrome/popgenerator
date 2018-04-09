@@ -19,11 +19,12 @@ generate_vertical_relations <- function(settings) {
       humans <- population$id
       
       from <- rep(humans[-(1:100)], each = 2)
-      to <- round(
+      to <- floor(
         stats::runif(
-          length(from), min = from - 100, max = from - 1
-        ), 
-        0
+          length(from), 
+          min = from - 100, 
+          max = from
+        )
       )
       
       vertical_relations <- tibble::tibble(

@@ -20,29 +20,26 @@ generate_horizontal_relations <- function(settings) {
     humans <- population$id
     
     from <- rep(humans, each = settings@amount_friends)
-    to_begin <- round(
+    to_begin <- floor(
       stats::runif(
         100, 
         min = 0, 
         max = humans[1:100] + 100
-      ),
-      0
+      )
     )
-    to_middle <- round(
+    to_middle <- floor(
       stats::runif(
         length(from) - 200, 
         min = humans[101:(length(humans) - 100)] - 100, 
         max = humans[101:(length(humans) - 100)] + 100
-      ),
-      0
+      )
     )
-    to_end <- round(
+    to_end <- floor(
       stats::runif(
         100, 
         min = humans[(length(humans) - 100):(length(humans))] - 100, 
         max = humans[(length(humans) - 100):(length(humans))]
-      ),
-      0
+      )
     )
     to <- c(to_begin, to_middle, to_end)
     

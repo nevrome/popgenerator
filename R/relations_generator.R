@@ -22,8 +22,10 @@ generate_relations <- function(settings) {
     horizontal_relations
   )
 
+  # across group relations
+  
   all_relations <- calculate_relations_weight(all_relations, settings)
-
+  
   return(all_relations)
 
 }
