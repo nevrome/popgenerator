@@ -13,7 +13,9 @@ generate_population <- function(settings) {
   human_year_combinations <- stats::integrate(
     Vectorize(settings@population_size_function), 
     lower = min(settings@time), 
-    upper = max(settings@time)
+    upper = max(settings@time),
+    subdivisions = 1000,
+    rel.tol = 1
   )$value
   
   average_life_span <- 22
@@ -32,7 +34,8 @@ generate_population <- function(settings) {
         Vectorize(settings@population_size_function), 
         lower = x, 
         upper = y,
-        subdivisions = 1000
+        subdivisions = 1000,
+        rel.tol = 1
       )$value
     },
     x = birth_windows[-length(birth_windows)],
