@@ -5,7 +5,7 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:1000
+      0:2000
     ),
   # population settings  
   population_size_functions = c(
@@ -80,7 +80,7 @@ plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
-all_model_populations[1:1,] %>% generate_all_populations() -> test
+all_model_populations[2,] %>% generate_all_populations() -> test
 
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
@@ -109,10 +109,13 @@ networkD3::forceNetwork(Links = karate_d3$links, Nodes = karate_d3$nodes,
 
 library(ggplot2)
 
-population_real <- test %>% count_living_humans_over_time(timeframe)
+test2$populations[[1]] -> pop
+timeframe <- 0:2000
+
+population_real <- pop %>% count_living_humans_over_time(timeframe)
 population_expected <- tibble::tibble(
   time = timeframe,
-  n = population_size(time)
+  n = test$population_settings[[1]]@population_size_function(time)
 )
 
 units_real <- test %>% count_living_units_over_time(timeframe)
