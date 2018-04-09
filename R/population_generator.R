@@ -33,7 +33,8 @@ generate_population <- function(settings) {
       integrate(
         Vectorize(settings@population_size_function), 
         lower = x, 
-        upper = y
+        upper = y,
+        subdivisions = 1000
       )$value
     },
     x = birth_windows[-length(birth_windows)],
