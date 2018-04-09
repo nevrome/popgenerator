@@ -15,12 +15,10 @@ all_model_populations <- expand.grid(
       function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
       function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
     ),
-  unit_amount_functions = c(
-      function(t) {round(20 - 0.0095 * t, 0)},
-      function(t) {10},
-      function(t) {round(1 + 0.0095 * t, 0)},
-      function(t) {round(0.000019 * (t - 1000)^2 + 1, 0)},
-      function(t) {round(-0.000019 * (t - 1000)^2 + 20, 0)}
+  unit_sizes = c(
+      50,
+      100,
+      200
     ),
   age_distribution_functions = c(
       function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
@@ -63,11 +61,30 @@ plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
-all_model_populations[1:100,] %>% generate_all_populations() -> test
+all_model_populations[1:10,] %>% generate_all_populations() -> test
 
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
 
+test2$population_settings[[1]] -> settings 
+test2$relations_settings[[1]] -> settings
+
+test2$populations[[1]] -> pop
+test2$relations[[1]] -> rel
+
+pop$id
+hu <- rel[rel$type == "child_of", ]
+
+hu
+
+# g <- igraph::graph_from_data_frame(hu, directed = FALSE)
+# g <- igraph::simplify(g)
+# pu <- igraph::fastgreedy.community(g)
+# 
+# igraph::membership(pu)
+# igraph::sizes(pu)
+# 
+# plot(pu)
 
 ####
 

@@ -9,7 +9,7 @@
 #'
 #' @export
 generate_population <- function(settings) {
-
+  
   human_year_combinations <- stats::integrate(
     Vectorize(settings@population_size_function), 
     lower = min(settings@time), 
@@ -105,7 +105,7 @@ init_population_settings <- function(x) {
       "population_settings",
       time =                       x$timeframe[[i]],
       population_size_function =   x$population_size_functions[[i]],
-      unit_amount_function =       x$unit_amount_functions[[i]],
+      unit_sizes =                 x$unit_sizes[[i]],
       age_distribution_function =  x$age_distribution_functions[[i]],
       age_range =                  x$age_ranges[[i]],
       unit_distribution_function = x$unit_distribution_functions[[i]]

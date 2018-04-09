@@ -35,13 +35,23 @@ generate_humans <- function(
     age
   )
   
-  #unit <- get_attribute(t, n, settings@unit_distribution_function, unit_vector)
+  units_amount <- n/settings@unit_sizes
+  
+  unit <- round(
+    stats::runif(
+      length(age),
+      min = 1,
+      max = units_amount
+    ),
+    0
+  )
 
   # combine info into data.frame
   list(
     age = age,
     birth_time = birth_time,
-    death_time = death_time
+    death_time = death_time,
+    unit = unit
   )
 }
 
