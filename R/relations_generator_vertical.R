@@ -10,18 +10,33 @@
 generate_vertical_relations <- function(settings) {
 
   population <- settings@population[order(settings@population$birth_time), ]
-  humans <- population$id
   
-  to <- rep(humans[-(1:100)], each = 2)
-  from <- round(stats::runif(length(to), min = to - 100, max = to - 1), 0)
+  population_by_unit <- split(population, population$unit)
   
-  vertical_relations <- tibble::tibble(
-    from = from, 
-    to = to, 
-    type = "child_of"
+  relations_by_unit <- lapply(
+    population_by_unit,
+    function(population) {
+      humans <- population$id
+      
+      from <- rep(humans[-(1:100)], each = 2)
+      to <- round(
+        stats::runif(
+          length(from), min = from - 100, max = from - 1
+        ), 
+        0
+      )
+      
+      vertical_relations <- tibble::tibble(
+        from = from, 
+        to = to, 
+        type = "child_of"
+      )
+    }
   )
+
+  all_relations <- do.call(rbind, relations_by_unit)
   
-  return(vertical_relations)
+  return(all_relations)
   
 }
 
