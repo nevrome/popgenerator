@@ -72,15 +72,12 @@ generate_population <- function(settings) {
 #'
 #' @export
 generate_all_populations <- function(x) {
-  x %>% 
-    dplyr::mutate(
-      # generate all populations defined in the grid
-      populations = pbapply::pblapply(
-        .data$population_settings, 
-        generate_population#,
-        #cl = 4
-      )
-    )
+  x$populations <- pbapply::pblapply(
+    x$population_settings, 
+    generate_population#,
+    #cl = 4
+  )
+  return(x)
 }
 
 #' init_population_settings
@@ -108,17 +105,12 @@ init_population_settings <- function(x) {
       unit_amount_function =       x$unit_amount_functions[[i]],
       age_distribution_function =  x$age_distribution_functions[[i]],
       age_range =                  x$age_ranges[[i]],
-      sex_distribution_function =  x$sex_distribution_functions[[i]],
-      sex_range =                  x$sex_ranges[[i]],
       unit_distribution_function = x$unit_distribution_functions[[i]]
     )
   }
 
-  # add new list column with population_settings objects to the
-  # input grid
-  x %>%
-    dplyr::mutate(
-      population_settings = population_settings
-    )
-
+  # add new list column with population_settings objects to the input grid
+  x$population_settings <- population_settings
+  
+  return(x)
 }

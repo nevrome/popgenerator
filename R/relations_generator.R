@@ -14,15 +14,15 @@ generate_relations <- function(settings) {
 
   population <- settings@population
 
-  vertical_relations <- settings %>% generate_vertical_relations()
-  horizontal_relations <- settings %>% generate_horizontal_relations()
+  vertical_relations <- generate_vertical_relations(settings)
+  horizontal_relations <- generate_horizontal_relations(settings)
   
   all_relations <- rbind(
     vertical_relations,
     horizontal_relations
   )
 
-  #all_relations %<>% calculate_relations_weight(settings)
+  #all_relations <- calculate_relations_weight(all_relations, settings)
 
   return(all_relations)
 
@@ -40,14 +40,12 @@ generate_relations <- function(settings) {
 #'
 #' @export
 generate_all_relations <- function(x) {
-  x %>% 
-    dplyr::mutate(
-      relations = pbapply::pblapply(
-        .data$relations_settings, 
-        generate_relations#,
-        #cl = 4
-      )
-    )
+  x$relations <- pbapply::pblapply(
+    x$relations_settings, 
+    generate_relations#,
+    #cl = 4
+  )
+  return(x)
 }
 
 #' init_relations_settings
@@ -69,9 +67,6 @@ init_relations_settings <- function(x) {
     relations_settings[[i]] <- methods::new(
       "relations_settings",
       population =                            x$populations[[i]],
-      monogamy_probability =                  x$monogamy_probabilities[[i]],
-      start_fertility_age =                   x$start_fertility_ages[[i]],
-      stop_fertility_age =                    x$stop_fertility_ages[[i]],
       same_unit_as_child_probability =        x$same_unit_as_child_probabilities[[i]],
       same_unit_as_partner_probability =      x$same_unit_as_partner_probabilities[[i]],
       child_of_weight_distribution_function = x$child_of_weight_distribution_functions[[i]],
@@ -80,10 +75,8 @@ init_relations_settings <- function(x) {
     )
   }
   
-  x %<>%
-    dplyr::mutate(
-      relations_settings = relations_settings
-    )
+  x$relations_settings <- relations_settings
   
+  return(x)
 }
 
