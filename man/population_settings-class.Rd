@@ -14,7 +14,7 @@ class to store values that should be passed to the population generator
 
 \item{\code{population_size_function}}{test}
 
-\item{\code{unit_amount_function}}{test}
+\item{\code{units_amount}}{test}
 
 \item{\code{age_distribution_function}}{test}
 
