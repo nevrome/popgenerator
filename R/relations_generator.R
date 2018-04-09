@@ -23,8 +23,6 @@ generate_relations <- function(settings) {
     horizontal_relations
   )
 
-  #all_relations %<>% deal_with_double_connections()
-    
   #all_relations %<>% calculate_relations_weight(settings)
 
   return(all_relations)
