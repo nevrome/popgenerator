@@ -18,7 +18,7 @@ generate_population <- function(settings) {
     upper = max(settings@time)
   )$value
   
-  average_life_span <- 35
+  average_life_span <- 22
   
   number_of_humans <- human_year_combinations / average_life_span  
   
@@ -28,7 +28,7 @@ generate_population <- function(settings) {
     abs(max(settings@time) - min(settings@time)) / average_life_span
   )
   
-  humans_per_birth_window <- mapply(
+  human_year_per_birth_window <- mapply(
     function(x, y) {
       integrate(
         Vectorize(settings@population_size_function), 
@@ -40,7 +40,21 @@ generate_population <- function(settings) {
     y = birth_windows[-1]
   )
   
-  number_of_humans * (humans_per_birth_window/sum(humans_per_birth_window))
+  humans_per_birth_window <- number_of_humans * 
+    (human_year_per_birth_window/sum(human_year_per_birth_window))
+  
+  generated_humans_raw <- mapply(
+    function(start, stop, n, settings) {generate_humans(start, stop, n, settings)},
+    start = birth_windows[-length(birth_windows)],
+    stop = birth_windows[-1],
+    n = humans_per_birth_window,
+    MoreArgs = list(settings = settings),
+    SIMPLIFY = FALSE
+  )
+  
+  generated_humans <- do.call(rbind.data.frame, generated_humans_raw)
+  
+  return(generated_humans)
   
   # generate humans now
   
