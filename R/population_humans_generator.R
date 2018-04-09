@@ -2,13 +2,11 @@
 
 #' generate_humans
 #'
-#' @param t integer time
+#' @param start integer start time 
+#' @param stop integer stop time 
 #' @param n integer amount of humans to generate
-#' @param start_id integer id of first generated human. default = 1
-#' @param start_age integer current age of humans. default: NA (current ages are generated)
 #' @param settings population_settings object
-#' @param unit_vector integer vector of unit numbers the new humans can be attributed to 
-#'
+#' 
 #' @return data.frame with population (one row for each individual)
 #'
 #' @export

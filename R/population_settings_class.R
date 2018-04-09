@@ -7,8 +7,6 @@
 #' @slot unit_amount_function test
 #' @slot age_distribution_function test
 #' @slot age_range test
-#' @slot sex_distribution_function test
-#' @slot sex_range test
 #' @slot unit_distribution_function test
 #' @slot start_unit_vector test
 #'
@@ -21,8 +19,6 @@ setClass(
     unit_amount_function = "function",
     age_distribution_function = "function",
     age_range = "numeric",
-    sex_distribution_function = "function",
-    sex_range = "character",
     unit_distribution_function = "function",
     start_unit_vector = "numeric"
   )
