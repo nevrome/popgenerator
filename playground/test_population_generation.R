@@ -28,27 +28,10 @@ all_model_populations <- expand.grid(
   age_ranges = list(
       1:100
     ),
-  sex_distribution_functions = c(
-      function(t) {function(x) {rep(1/length(x), length(x))}}
-    ),
-  sex_ranges = list(
-      c("male", "female")
-    ),
   unit_distribution_functions = c(
       function(t) {function(x) {rep(1/length(x), length(x))}}
     ),
   # relations settings
-  monogamy_probabilities = list(
-      0.5,
-      0.7,
-      0.9
-    ),
-  start_fertility_ages = list(
-      15
-    ),
-  stop_fertility_ages = list(
-      50
-    ),
   same_unit_as_child_probabilities = list(
       0.5,
       0.7,
@@ -80,7 +63,7 @@ plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
-all_model_populations[2,] %>% generate_all_populations() -> test
+all_model_populations[1:100,] %>% generate_all_populations() -> test
 
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
