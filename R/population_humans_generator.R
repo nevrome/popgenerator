@@ -55,7 +55,7 @@ get_current_age <- function(start_age, ages) {
 
 get_birth_time <- function(start, generation_length, age) {
   round(
-    runif(
+    stats::runif(
       length(age),
       min = start - generation_length/2,
       max = start + generation_length/2

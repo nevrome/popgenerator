@@ -12,7 +12,7 @@
 #' @export
 generate_population <- function(settings) {
 
-  human_year_combinations <- integrate(
+  human_year_combinations <- stats::integrate(
     Vectorize(settings@population_size_function), 
     lower = min(settings@time), 
     upper = max(settings@time)
@@ -30,7 +30,7 @@ generate_population <- function(settings) {
   
   human_year_per_birth_window <- mapply(
     function(x, y) {
-      integrate(
+      stats::integrate(
         Vectorize(settings@population_size_function), 
         lower = x, 
         upper = y,

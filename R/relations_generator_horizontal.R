@@ -14,7 +14,7 @@ generate_horizontal_relations <- function(settings) {
   
   from <- rep(humans, each = settings@amount_friends)
   to_begin <- round(
-    runif(
+    stats::runif(
       100, 
       min = 0, 
       max = humans[1:100] + 100
@@ -22,7 +22,7 @@ generate_horizontal_relations <- function(settings) {
     0
   )
   to_middle <- round(
-    runif(
+    stats::runif(
       length(from) - 200, 
       min = humans[101:(length(humans) - 100)] - 100, 
       max = humans[101:(length(humans) - 100)] + 100
@@ -30,7 +30,7 @@ generate_horizontal_relations <- function(settings) {
     0
   )
   to_end <- round(
-    runif(
+    stats::runif(
       100, 
       min = humans[(length(humans) - 100):(length(humans))] - 100, 
       max = humans[(length(humans) - 100):(length(humans))]
