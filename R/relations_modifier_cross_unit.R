@@ -20,16 +20,14 @@ modify_relations_cross_unit <- function(relations, settings) {
     amount = calculate_amount_to_replace(
       child_of_relations, 
       settings@cross_unit_proportion_child_of
-    ),
-    settings
+    )
   )
   friend_relations <- swap_partners(
     relations = friend_relations,
     amount = calculate_amount_to_replace(
       friend_relations, 
       settings@cross_unit_proportion_friend
-    ),
-    settings
+    )
   )
   
   # combine different relationship types again
@@ -44,26 +42,27 @@ modify_relations_cross_unit <- function(relations, settings) {
 
 #### helper functions ####
 
-swap_partners <- function(relations, amount, settings) {
+swap_partners <- function(relations, amount) {
   
+  deviation_factor <- table(relations$to) %>% max()
   selected_for_swap <- floor(
     stats::runif(
       amount, 
       1, 
-      nrow(relations) - settings@amount_friends - 1
+      nrow(relations) - deviation_factor
     )
   )
-  relations <- relations[order(relations$from), ]
+  relations <- relations[order(relations$to), ]
     
   first <- relations$to[selected_for_swap]
   first_unit <- relations$unit[selected_for_swap]
-  second <- relations$to[selected_for_swap + settings@amount_friends]
-  second_unit <- relations$unit[selected_for_swap + settings@amount_friends]
+  second <- relations$to[selected_for_swap + deviation_factor]
+  second_unit <- relations$unit[selected_for_swap + deviation_factor]
   
   relations$to[selected_for_swap] <- second
   relations$unit[selected_for_swap] <- second_unit
-  relations$to[selected_for_swap + settings@amount_friends] <- first
-  relations$unit[selected_for_swap + settings@amount_friends] <- first_unit
+  relations$to[selected_for_swap + deviation_factor] <- first
+  relations$unit[selected_for_swap + deviation_factor] <- first_unit
   
   return(relations)
 }

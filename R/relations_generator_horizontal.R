@@ -29,15 +29,15 @@ generate_horizontal_relations <- function(settings) {
       to_index_middle <- floor(
         stats::runif(
           length(from_index) - 200, 
-          min = 101:(length(from_index) - 100) - 100,
-          max = 101:(length(from_index) - 100) + 100
+          min = 101:(length(humans) - 100) - 100,
+          max = 101:(length(humans) - 100) + 100
         )
       )
       to_index_end <- floor(
         stats::runif(
           100, 
-          min = (length(from_index) - 100):length(from_index) - 100, 
-          max = (length(from_index) - 100):length(from_index)
+          min = (length(humans) - 100):length(humans) - 100, 
+          max = (length(humans) - 100):length(humans)
         )
       )
       to_index <- c(to_index_begin, to_index_middle, to_index_end)
