@@ -9,46 +9,45 @@
 #' @export
 generate_horizontal_relations <- function(settings) {
 
-  population <- settings@population[order(settings@population$birth_time), ]
-  
-  population_by_unit <- split(population, population$unit)
+  population_by_unit <- split(settings@population, settings@population$unit)
   
   relations_by_unit <- lapply(
     population_by_unit,
     function(population) {
   
-    humans <- population$id
-    
-    from <- rep(humans, each = settings@amount_friends)
-    to_begin <- floor(
-      stats::runif(
-        100, 
-        min = 0, 
-        max = humans[1:100] + 100
+      humans <- population$id
+      
+      from_index <- rep(101:length(humans), each = settings@amount_friends)
+      
+      to_index_begin <- floor(
+        stats::runif(
+          100, 
+          min = 1, 
+          max = 1:100 + 100
+        )
       )
-    )
-    to_middle <- floor(
-      stats::runif(
-        length(from) - 200, 
-        min = humans[101:(length(humans) - 100)] - 100, 
-        max = humans[101:(length(humans) - 100)] + 100
+      to_index_middle <- floor(
+        stats::runif(
+          length(from_index) - 200, 
+          min = 101:(length(from_index) - 100) - 100,
+          max = 101:(length(from_index) - 100) + 100
+        )
       )
-    )
-    to_end <- floor(
-      stats::runif(
-        100, 
-        min = humans[(length(humans) - 100):(length(humans))] - 100, 
-        max = humans[(length(humans) - 100):(length(humans))]
+      to_index_end <- floor(
+        stats::runif(
+          100, 
+          min = (length(from_index) - 100):length(from_index) - 100, 
+          max = (length(from_index) - 100):length(from_index)
+        )
       )
-    )
-    to <- c(to_begin, to_middle, to_end)
-    
-    vertical_relations <- tibble::tibble(
-      from = from, 
-      to = to, 
-      unit = population$unit[1],
-      type = "friend"
-    )
+      to_index <- c(to_index_begin, to_index_middle, to_index_end)
+      
+      vertical_relations <- tibble::tibble(
+        from = humans[from_index], 
+        to = humans[to_index],
+        unit = population$unit[1],
+        type = "friend"
+      )
     
     }
   )
