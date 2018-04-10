@@ -21,9 +21,9 @@ generate_humans <- function(
   
   # generate age and lifetime
   age <- get_attribute(
-    mean(c(start, stop)), 
     n, 
-    settings@age_distribution_function, settings@age_range
+    settings@age_distribution_function, 
+    settings@age_range
   )
   birth_time <- get_birth_time(
     start,

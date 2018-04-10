@@ -21,7 +21,7 @@ all_model_populations <- expand.grid(
     200
   ),
   age_distribution_functions = c(
-    function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
+    function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}
   ),
   age_ranges = list(
     1:100

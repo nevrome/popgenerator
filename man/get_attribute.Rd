@@ -2,13 +2,11 @@
 % Please edit documentation in R/default_population_relations_attributes.R
 \name{get_attribute}
 \alias{get_attribute}
-\title{get n attributes according to attribute distribution at time}
+\title{get n attributes according to attribute distribution}
 \usage{
-get_attribute(t = NA, n = NA, distribution_function, range)
+get_attribute(n = NA, distribution_function, range)
 }
 \arguments{
-\item{t}{double time}
-
 \item{n}{integer amount}
 
 \item{distribution_function}{function probability distribution}
@@ -19,5 +17,5 @@ get_attribute(t = NA, n = NA, distribution_function, range)
 vector of attributes
 }
 \description{
-get n attributes according to attribute distribution at time
+get n attributes according to attribute distribution
 }
