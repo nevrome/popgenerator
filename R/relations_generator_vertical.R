@@ -20,7 +20,7 @@ generate_vertical_relations <- function(settings) {
       from_index <- rep(101:length(humans), each = 2)
       to_index <- floor(
         stats::runif(
-          length(from), 
+          length(from_index), 
           min = from_index - 100, 
           max = from_index
         )
