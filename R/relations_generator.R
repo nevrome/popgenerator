@@ -67,11 +67,8 @@ init_relations_settings <- function(x) {
     relations_settings[[i]] <- methods::new(
       "relations_settings",
       population =                            x$populations[[i]],
-      same_unit_as_child_probability =        x$same_unit_as_child_probabilities[[i]],
-      same_unit_as_partner_probability =      x$same_unit_as_partner_probabilities[[i]],
-      child_of_weight_distribution_function = x$child_of_weight_distribution_functions[[i]],
       amount_friends =                        x$amounts_friends[[i]],
-      friendship_age_distribution_function =  x$friendship_age_distribution_functions[[i]]
+      child_of_weight_distribution_function = x$child_of_weight_distribution_functions[[i]]
     )
   }
   
