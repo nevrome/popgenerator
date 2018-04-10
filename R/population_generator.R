@@ -18,7 +18,8 @@ generate_population <- function(settings) {
     rel.tol = 1
   )$value
   
-  average_life_span <- 22
+  schu <- settings@age_distribution_function(settings@age_range) 
+  average_life_span <- sum(settings@age_range * (schu / sum(schu)))
   
   number_of_humans <- human_year_combinations / average_life_span  
   
