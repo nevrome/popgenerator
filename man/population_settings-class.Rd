@@ -19,9 +19,5 @@ class to store values that should be passed to the population generator
 \item{\code{age_distribution_function}}{test}
 
 \item{\code{age_range}}{test}
-
-\item{\code{unit_distribution_function}}{test}
-
-\item{\code{start_unit_vector}}{test}
 }}
 

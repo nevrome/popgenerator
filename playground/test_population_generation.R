@@ -26,9 +26,6 @@ all_model_populations <- expand.grid(
   age_ranges = list(
     1:100
   ),
-  unit_distribution_functions = c(
-    function(t) {function(x) {rep(1/length(x), length(x))}}
-  ),
   # relations settings
   amounts_friends = list(
     10,
