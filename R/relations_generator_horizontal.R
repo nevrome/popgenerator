@@ -46,6 +46,7 @@ generate_horizontal_relations <- function(settings) {
     vertical_relations <- tibble::tibble(
       from = from, 
       to = to, 
+      unit = population$unit[1],
       type = "friend"
     )
     
