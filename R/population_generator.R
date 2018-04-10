@@ -38,6 +38,7 @@ generate_population <- function(settings) {
   generated_humans <- generated_humans[order(generated_humans$birth_time), ]
   # add id column
   generated_humans$id <- 1:nrow(generated_humans)
+  rownames(generated_humans) <- generated_humans$id
   
   return(generated_humans)
   
