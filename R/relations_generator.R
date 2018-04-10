@@ -68,6 +68,8 @@ init_relations_settings <- function(x) {
       "relations_settings",
       population =                            x$populations[[i]],
       amount_friends =                        x$amounts_friends[[i]],
+      cross_unit_proportion_child_of =        x$cross_unit_proportion_child_of[[i]],
+      cross_unit_proportion_friend =          x$cross_unit_proportion_friend[[i]],
       child_of_weight_distribution_function = x$child_of_weight_distribution_functions[[i]]
     )
   }

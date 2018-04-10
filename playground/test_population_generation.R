@@ -5,39 +5,51 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-      0:2000
-    ),
+    0:2000
+  ),
   # population settings  
   population_size_functions = c(
-      function(t) {1000},
-      function(t) {round(2000 - 0.95 * t, 0)},
-      function(t) {round(100 + 0.95 * t, 0)},
-      function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
-      function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
-    ),
+    function(t) {1000},
+    function(t) {round(2000 - 0.95 * t, 0)},
+    function(t) {round(100 + 0.95 * t, 0)},
+    function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
+    function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
+  ),
   units_amount = c(
-      50,
-      100,
-      200
-    ),
+    50,
+    100,
+    200
+  ),
   age_distribution_functions = c(
-      function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
-    ),
+    function(t) {function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}}
+  ),
   age_ranges = list(
-      1:100
-    ),
+    1:100
+  ),
   unit_distribution_functions = c(
-      function(t) {function(x) {rep(1/length(x), length(x))}}
-    ),
+    function(t) {function(x) {rep(1/length(x), length(x))}}
+  ),
   # relations settings
   amounts_friends = list(
-      10,
-      10,
-      50
-    ),
+    10,
+    10,
+    50
+  ),
+  cross_unit_proportion_child_of = list(
+    0.01,
+    0.05,
+    0.1,
+    0.5
+  ),
+  cross_unit_proportion_friend = list(
+    0.01,
+    0.05,
+    0.1,
+    0.5
+  ),
   child_of_weight_distribution_functions = c(
     function(t) {function(x) {x}}
-    )
+  )
 ) %>% tibble::as.tibble()
 
 plot_prep_grid(all_model_populations, "population_size_functions")

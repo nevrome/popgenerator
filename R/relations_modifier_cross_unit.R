@@ -10,22 +10,27 @@
 #' @export
 modify_relations_cross_unit <- function(relations, settings) {
   
+  # select different relations by type
   child_of_relations <- relations[relations$type == "child_of", ]
   friend_relations <- relations[relations$type == "friend", ]
   
-  part_parent_child_relations <- 0.05
-  part_friend_relations <- 0.1
-  
+  # apply swap partner function with relevant proportion setting
   child_of_relations <- swap_partners(
     child_of_relations,
-    calculate_amount_to_replace(child_of_relations, part_parent_child_relations)
+    calculate_amount_to_replace(
+      child_of_relations, 
+      settings@cross_unit_proportion_child_of
+    )
   )
-  
   friend_relations <- swap_partners(
     friend_relations,
-    calculate_amount_to_replace(child_of_relations, part_friend_relations)
+    calculate_amount_to_replace(
+      child_of_relations, 
+      settings@cross_unit_proportion_friend
+    )
   )
   
+  # combine different relationship types again
   all_relations <- rbind(
     child_of_relations,
     friend_relations
