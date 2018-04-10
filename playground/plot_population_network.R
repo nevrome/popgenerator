@@ -1,5 +1,5 @@
 test2$populations[[4]] -> pop
-test2$relations[[1]] -> rel
+test2$relations[[4]] -> rel
 
 pop_groups <- pop %>% 
   dplyr::group_by(unit) %>%
@@ -12,12 +12,12 @@ pop_groups <- pop %>%
   )
 
 frommer <- dplyr::left_join(
-  rel[, c("from")],
+  rel[, c("from", "type")],
   pop,
   by = c("from" = "id")
 ) %>%
   dplyr::select(
-    from, birth_time, unit
+    from, birth_time, unit, type
   ) %>%
   dplyr::rename(
     "from_birth_time" = "birth_time",
@@ -55,22 +55,31 @@ rel4 <- rel3 %>% dplyr::group_by(
   from_unit, to_unit, timeblock_from, timeblock_to
 ) %>%
   dplyr::summarise(
-    n = n()
+    n = n(),
+    type = type[1]
   )
 
-rel5 <- rel4 %>% dplyr::filter(
-  n > 5
-)
+# rel5 <- rel4 %>% dplyr::filter(
+#   n > 6
+# )
 
 library(ggplot2)
 ggplot() +
   geom_point(data = pop_groups, aes(x = unit, y = timeblock, size = n)) +
   geom_segment(
-    data = rel5, 
+    data = rel4, 
     aes(
       x = from_unit, xend = to_unit, 
       y = timeblock_from, yend = timeblock_to,
-      alpha = n
+      alpha = n,
+      size = n, 
+      color = as.character(type)
+    )
+  ) +
+  scale_color_manual(
+    values = c(
+      "child_of" = "red",
+      "friend" = "blue"
     )
   )
 

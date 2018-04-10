@@ -64,9 +64,9 @@ test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
 
 test$population_settings[[1]] -> settings 
-test$relations_settings[[2]] -> settings
+test$relations_settings[[1]] -> settings
 
-test2$populations[[1]] -> pop
+test$populations[[1]] -> pop
 test2$relations[[1]] -> rel
 
 pop$id
