@@ -12,8 +12,6 @@
 #' @export
 generate_relations <- function(settings) {
 
-  population <- settings@population
-
   vertical_relations <- generate_vertical_relations(settings)
   horizontal_relations <- generate_horizontal_relations(settings)
   
@@ -22,7 +20,7 @@ generate_relations <- function(settings) {
     horizontal_relations
   )
 
-  # across group relations
+  all_relations <- modify_relations_cross_unit(all_relations, settings)
   
   all_relations <- calculate_relations_weight(all_relations, settings)
   

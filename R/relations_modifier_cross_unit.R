@@ -4,21 +4,47 @@ modify_relations_cross_unit <- function(relations, settings) {
   friend_relations <- relations[relations$type == "friend", ]
   
   part_parent_child_relations <- 0.05
+  part_friend_relations <- 0.1
   
-  amount_to_replace <- floor(nrow(child_of_relations) * part_parent_child_relations)
+  child_of_relations <- swap_partners(
+    child_of_relations,
+    calculate_amount_to_replace(child_of_relations, part_parent_child_relations)
+  )
   
-  selected_for_swap <- floor(runif(amount_to_replace, 1, nrow(child_of_relations)))
+  friend_relations <- swap_partners(
+    friend_relations,
+    calculate_amount_to_replace(child_of_relations, part_friend_relations)
+  )
+  
+  all_relations <- rbind(
+    child_of_relations,
+    friend_relations
+  )
 
-  child_of_relations <- child_of_relations[order(child_of_relations$to), ]
+  return(all_relations)
   
-  first <- child_of_relations$to[selected_for_swap]
-  first_unit <- child_of_relations$unit[selected_for_swap]
-  second <- child_of_relations$to[selected_for_swap + 1]
-  second_unit <- child_of_relations$unit[selected_for_swap + 1]
-  
-  child_of_relations$to[selected_for_swap] <- second
-  child_of_relations$unit[selected_for_swap] <- second_unit
-  child_of_relations$to[selected_for_swap + 1] <- first
-  child_of_relations$unit[selected_for_swap + 1] <- first_unit
+}
 
+swap_partners <- function(relations, amount) {
+  
+  selected_for_swap <- floor(stats::runif(amount, 1, nrow(relations)))
+  relations <- relations[order(relations$to), ]
+  
+  first <- relations$to[selected_for_swap]
+  first_unit <- relations$unit[selected_for_swap]
+  second <- relations$to[selected_for_swap + 1]
+  second_unit <- relations$unit[selected_for_swap + 1]
+  
+  relations$to[selected_for_swap] <- second
+  relations$unit[selected_for_swap] <- second_unit
+  relations$to[selected_for_swap + 1] <- first
+  relations$unit[selected_for_swap + 1] <- first_unit
+  
+  relations <- relations[order(relations$from), ]
+  
+  return(relations)
+}
+
+calculate_amount_to_replace <- function(relations, proportion) {
+  floor(nrow(relations) * proportion)
 }
