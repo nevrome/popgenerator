@@ -66,11 +66,12 @@ init_relations_settings <- function(x) {
   for (i in 1:nrow(x)) {
     relations_settings[[i]] <- methods::new(
       "relations_settings",
-      population =                            x$populations[[i]],
-      amount_friends =                        x$amounts_friends[[i]],
-      cross_unit_proportion_child_of =        x$cross_unit_proportion_child_of[[i]],
-      cross_unit_proportion_friend =          x$cross_unit_proportion_friend[[i]],
-      child_of_weight_distribution_function = x$child_of_weight_distribution_functions[[i]]
+      population =                     x$populations[[i]],
+      amount_friends =                 x$amounts_friends[[i]],
+      cross_unit_proportion_child_of = x$cross_unit_proportion_child_of[[i]],
+      cross_unit_proportion_friend =   x$cross_unit_proportion_friend[[i]],
+      weight_child_of =                x$weight_child_of[[i]],
+      weight_friend =                  x$weight_friend[[i]]
     )
   }
   

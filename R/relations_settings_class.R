@@ -6,7 +6,8 @@
 #' @slot amount_friends test
 #' @slot cross_unit_proportion_child_of test
 #' @slot cross_unit_proportion_friend test
-#' @slot child_of_weight_distribution_function test
+#' @slot weight_child_of test
+#' @slot weight_friend test
 #'
 #' @export
 setClass(
@@ -16,6 +17,7 @@ setClass(
     amount_friends = "numeric",
     cross_unit_proportion_child_of = "numeric",
     cross_unit_proportion_friend = "numeric",
-    child_of_weight_distribution_function = "function"
+    weight_child_of = "numeric",
+    weight_friend = "numeric"
   )
 )

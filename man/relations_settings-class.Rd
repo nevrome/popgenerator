@@ -14,6 +14,12 @@ class to store values that should be passed to the relations generator
 
 \item{\code{amount_friends}}{test}
 
-\item{\code{child_of_weight_distribution_function}}{test}
+\item{\code{cross_unit_proportion_child_of}}{test}
+
+\item{\code{cross_unit_proportion_friend}}{test}
+
+\item{\code{weight_child_of}}{test}
+
+\item{\code{weight_friend}}{test}
 }}
 

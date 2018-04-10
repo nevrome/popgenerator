@@ -47,8 +47,12 @@ all_model_populations <- expand.grid(
     0.1,
     0.5
   ),
-  child_of_weight_distribution_functions = c(
-    function(t) {function(x) {x}}
+  weight_child_of = list(
+    1,
+    3
+  ),
+  weight_friend = list(
+    2
   )
 ) %>% tibble::as.tibble()
 
