@@ -63,13 +63,10 @@ rel5 <- rel4 %>% dplyr::filter(
 )
 
 library(ggplot2)
-ggplot(pop_groups) +
-<<<<<<< HEAD
+ggplot() +
   geom_point(data = pop_groups, aes(x = unit, y = timeblock, size = n)) +
   geom_segment(
     data = rel5, 
     aes(x = from_unit, xend = to_unit, y = timeblock_from, yend = timeblock_to)
   )
-=======
-  geom_point(aes(x = unit, y = timeblock, size = n))
->>>>>>> 64bb8d812bce6fc8a3f665821f5ca2cf6ea15797
+
