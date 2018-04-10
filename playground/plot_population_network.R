@@ -59,7 +59,7 @@ rel4 <- rel3 %>% dplyr::group_by(
   )
 
 rel5 <- rel4 %>% dplyr::filter(
-  n > 10
+  n > 5
 )
 
 library(ggplot2)
@@ -67,6 +67,10 @@ ggplot() +
   geom_point(data = pop_groups, aes(x = unit, y = timeblock, size = n)) +
   geom_segment(
     data = rel5, 
-    aes(x = from_unit, xend = to_unit, y = timeblock_from, yend = timeblock_to)
+    aes(
+      x = from_unit, xend = to_unit, 
+      y = timeblock_from, yend = timeblock_to,
+      alpha = n
+    )
   )
 
