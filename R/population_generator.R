@@ -10,26 +10,65 @@
 #' @export
 generate_population <- function(settings) {
   
-  human_year_combinations <- stats::integrate(
+  # get total amount of humans necessary in every year
+  human_year_combinations <- get_number_human_year_combinations(settings)
+  # get average life span based on age_distribution_function
+  average_life_span <- get_human_average_life_span(settings)
+  # calculate necessary number of humans to satisfy human_year_combinations
+  # with humans of said life span
+  number_of_humans <- human_year_combinations / average_life_span  
+  # get_birth starting times of birth windows given said
+  # lifespan
+  birth_windows <- get_birth_windows(average_life_span, settings)
+  # get amount of humans necessary per year in every birth_window
+  human_year_birth_window <- get_number_human_year_combinations_birth_window(
+    birth_windows, settings
+  )
+  # get number of humans per birth_window
+  humans_per_birth_window <- get_number_humans_per_birth_window(
+    number_of_humans, human_year_birth_window
+  )
+  # generate humans for every birth_window  
+  generated_humans_raw <- generate_humans_per_birth_window(
+    birth_windows, humans_per_birth_window, settings
+  )
+  # merge birth_window wise humans lists into a single data.frame
+  generated_humans <- do.call(rbind.data.frame, generated_humans_raw)
+  # order by birth_time
+  generated_humans <- generated_humans[order(generated_humans$birth_time), ]
+  # add id column
+  generated_humans$id <- 1:nrow(generated_humans)
+  
+  return(generated_humans)
+  
+}
+
+get_number_human_year_combinations <- function(settings) {
+  stats::integrate(
     Vectorize(settings@population_size_function), 
     lower = min(settings@time), 
     upper = max(settings@time),
     subdivisions = 1000,
     rel.tol = 1
   )$value
-  
-  schu <- settings@age_distribution_function(settings@age_range) 
-  average_life_span <- sum(settings@age_range * (schu / sum(schu)))
-  
-  number_of_humans <- human_year_combinations / average_life_span  
-  
-  birth_windows <- seq(
+}
+
+get_human_average_life_span <- function(settings) {
+  unnormal_prop <- settings@age_distribution_function(settings@age_range) 
+  normal_prop <- (unnormal_prop / sum(unnormal_prop))
+  sum(settings@age_range * normal_prop)
+}
+
+get_birth_windows <- function(average_life_span, settings) {
+  seq(
     min(settings@time),
     max(settings@time),
     abs(max(settings@time) - min(settings@time)) / average_life_span
   )
-  
-  human_year_per_birth_window <- mapply(
+}
+
+get_number_human_year_combinations_birth_window <- function(birth_windows, settings) {
+  mapply(
     function(x, y) {
       stats::integrate(
         Vectorize(settings@population_size_function), 
@@ -42,26 +81,27 @@ generate_population <- function(settings) {
     x = birth_windows[-length(birth_windows)],
     y = birth_windows[-1]
   )
-  
-  humans_per_birth_window <- number_of_humans * 
-    (human_year_per_birth_window/sum(human_year_per_birth_window))
-  
-  generated_humans_raw <- mapply(
-    function(start, stop, n, settings) {generate_humans(start, stop, n, settings)},
+}
+
+get_number_humans_per_birth_window <- function(
+  number_of_humans, human_year_birth_window
+  ) {
+  number_of_humans * (human_year_birth_window/sum(human_year_birth_window))
+}
+
+generate_humans_per_birth_window <- function(
+  birth_windows, humans_per_birth_window, settings
+) {
+  mapply(
+    function(start, stop, n, settings) {
+      generate_humans(start, stop, n, settings)
+    },
     start = birth_windows[-length(birth_windows)],
     stop = birth_windows[-1],
     n = humans_per_birth_window,
     MoreArgs = list(settings = settings),
     SIMPLIFY = FALSE
   )
-  
-  generated_humans <- do.call(rbind.data.frame, generated_humans_raw)
-  
-  generated_humans <- generated_humans[order(generated_humans$birth_time), ]
-  generated_humans$id <- 1:nrow(generated_humans)
-  
-  return(generated_humans)
-  
 }
 
 #' generate_all_populations
