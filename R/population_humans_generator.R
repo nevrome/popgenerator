@@ -17,9 +17,10 @@ generate_humans <- function(
   settings
   ) {
   
+  # calc length of one generation
   generation_length <- abs(stop - start)
   
-  # generate age and lifetime
+  # generate age, lifetime and unit attribution
   age <- get_attribute(
     n, 
     settings@age_distribution_function, 
@@ -34,15 +35,12 @@ generate_humans <- function(
     birth_time, 
     age
   )
-  unit <- floor(
-    stats::runif(
-      length(age),
-      min = 1,
-      max = settings@units_amount + 1
-    )
+  unit <- get_unit(
+    age, 
+    settings
   )
 
-  # combine info into data.frame
+  # combine vectors into list
   list(
     age = age,
     birth_time = birth_time,
@@ -70,5 +68,15 @@ get_birth_time <- function(start, generation_length, age) {
 
 get_death_time <- function(birth_time, age) {
   birth_time + age
+}
+
+get_unit <- function(age, settings) {
+  floor(
+    stats::runif(
+      length(age),
+      min = 1,
+      max = settings@units_amount + 1
+    )
+  )
 }
 
