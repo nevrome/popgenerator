@@ -1,3 +1,13 @@
+#' modify_relations_cross_unit
+#'
+#' Replace existing relations within units by relations across units.
+#'
+#' @param relations relations data.frame
+#' @param settings relations_settings object
+#'
+#' @return modified relations data.frame
+#' 
+#' @export
 modify_relations_cross_unit <- function(relations, settings) {
   
   child_of_relations <- relations[relations$type == "child_of", ]
@@ -24,6 +34,8 @@ modify_relations_cross_unit <- function(relations, settings) {
   return(all_relations)
   
 }
+
+#### helper functions ####
 
 swap_partners <- function(relations, amount) {
   
