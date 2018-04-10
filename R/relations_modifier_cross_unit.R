@@ -16,18 +16,20 @@ modify_relations_cross_unit <- function(relations, settings) {
   
   # apply swap partner function with relevant proportion setting
   child_of_relations <- swap_partners(
-    child_of_relations,
-    calculate_amount_to_replace(
+    relations = child_of_relations,
+    amount = calculate_amount_to_replace(
       child_of_relations, 
       settings@cross_unit_proportion_child_of
-    )
+    ),
+    settings
   )
   friend_relations <- swap_partners(
-    friend_relations,
-    calculate_amount_to_replace(
-      child_of_relations, 
+    relations = friend_relations,
+    amount = calculate_amount_to_replace(
+      friend_relations, 
       settings@cross_unit_proportion_friend
-    )
+    ),
+    settings
   )
   
   # combine different relationship types again
@@ -42,22 +44,26 @@ modify_relations_cross_unit <- function(relations, settings) {
 
 #### helper functions ####
 
-swap_partners <- function(relations, amount) {
+swap_partners <- function(relations, amount, settings) {
   
-  selected_for_swap <- floor(stats::runif(amount, 1, nrow(relations)))
-  relations <- relations[order(relations$to), ]
-  
+  selected_for_swap <- floor(
+    stats::runif(
+      amount, 
+      1, 
+      nrow(relations) - settings@amount_friends - 1
+    )
+  )
+  relations <- relations[order(relations$from), ]
+    
   first <- relations$to[selected_for_swap]
   first_unit <- relations$unit[selected_for_swap]
-  second <- relations$to[selected_for_swap + 1]
-  second_unit <- relations$unit[selected_for_swap + 1]
+  second <- relations$to[selected_for_swap + settings@amount_friends]
+  second_unit <- relations$unit[selected_for_swap + settings@amount_friends]
   
   relations$to[selected_for_swap] <- second
   relations$unit[selected_for_swap] <- second_unit
-  relations$to[selected_for_swap + 1] <- first
-  relations$unit[selected_for_swap + 1] <- first_unit
-  
-  relations <- relations[order(relations$from), ]
+  relations$to[selected_for_swap + settings@amount_friends] <- first
+  relations$unit[selected_for_swap + settings@amount_friends] <- first_unit
   
   return(relations)
 }
