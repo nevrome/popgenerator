@@ -33,13 +33,13 @@ all_model_populations <- expand.grid(
     50
   ),
   cross_unit_proportion_child_of = list(
-    0.01,
+    0.001,
     0.05,
     0.1,
     0.5
   ),
   cross_unit_proportion_friend = list(
-    0.01,
+    0.001,
     0.05,
     0.1,
     0.5
@@ -58,7 +58,7 @@ plot_prep_grid(all_model_populations, "age_distribution_functions")
 plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
-all_model_populations[1:10,] %>% generate_all_populations() -> test
+all_model_populations[1:5,] %>% generate_all_populations() -> test
 
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
