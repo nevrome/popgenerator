@@ -74,6 +74,6 @@ get_average_index_shift_vector <- function(x, index_shift, n = 5, sides = 1) {
 }
 
 moving_average <- function(x, n = 5, sides = 1) {
-  filter(x, rep(1/n, n), sides = sides)
+  stats::filter(x, rep(1/n, n), sides = sides)
 }
 
