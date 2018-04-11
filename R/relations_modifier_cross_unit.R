@@ -10,9 +10,19 @@
 #' @export
 modify_relations_cross_unit <- function(relations, settings) {
   
+  relations_with_to_info <- dplyr::left_join(
+    relations,
+    settings@population[, !(colnames(settings@population) %in% c("unit"))],
+    by = c("to" = "id")
+  )
+  
+  relations_with_to_info <- relations_with_to_info[
+    order(relations_with_to_info$birth_time),
+  ]
+  
   # select different relations by type
-  child_of_relations <- relations[relations$type == "child_of", ]
-  friend_relations <- relations[relations$type == "friend", ]
+  child_of_relations <- relations_with_to_info[relations$type == "child_of", ]
+  friend_relations <- relations_with_to_info[relations$type == "friend", ]
   
   # apply swap partner function with relevant proportion setting
   child_of_relations <- swap_partners(
@@ -35,6 +45,10 @@ modify_relations_cross_unit <- function(relations, settings) {
     child_of_relations,
     friend_relations
   )
+  
+  all_relations <- all_relations[
+    , !(colnames(all_relations) %in% c("age", "birth_time", "death_time"))
+  ]
 
   return(all_relations)
   
@@ -54,18 +68,6 @@ swap_partners <- function(relations, amount) {
   )
   
   relations$to[selected_for_swap] <- relations$to[selected_for_swap] + 1
-  
-  #relations <- relations[order(relations$to), ]
-    
-  # first <- relations$to[selected_for_swap]
-  # first_unit <- relations$unit[selected_for_swap]
-  # second <- relations$to[selected_for_swap + deviation_factor]
-  # second_unit <- relations$unit[selected_for_swap + deviation_factor]
-  # 
-  # relations$to[selected_for_swap] <- second
-  # relations$unit[selected_for_swap] <- second_unit
-  # relations$to[selected_for_swap + deviation_factor] <- first
-  # relations$unit[selected_for_swap + deviation_factor] <- first_unit
   
   return(relations)
 }
