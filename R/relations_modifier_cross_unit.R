@@ -21,8 +21,12 @@ modify_relations_cross_unit <- function(relations, settings) {
   ]
   
   # select different relations by type
-  child_of_relations <- relations_with_to_info[relations$type == "child_of", ]
-  friend_relations <- relations_with_to_info[relations$type == "friend", ]
+  child_of_relations <- relations_with_to_info[
+    relations_with_to_info$type == "child_of", 
+  ]
+  friend_relations <- relations_with_to_info[
+    relations_with_to_info$type == "friend", 
+  ]
   
   # apply swap partner function with relevant proportion setting
   child_of_relations <- swap_partners(
