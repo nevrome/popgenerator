@@ -44,25 +44,28 @@ modify_relations_cross_unit <- function(relations, settings) {
 
 swap_partners <- function(relations, amount) {
   
-  deviation_factor <- table(relations$to) %>% max()
+  #deviation_factor <- table(relations$to) %>% max()
   selected_for_swap <- floor(
     stats::runif(
       amount, 
       1, 
-      nrow(relations) - deviation_factor
+      nrow(relations)# - deviation_factor
     )
   )
-  relations <- relations[order(relations$to), ]
-    
-  first <- relations$to[selected_for_swap]
-  first_unit <- relations$unit[selected_for_swap]
-  second <- relations$to[selected_for_swap + deviation_factor]
-  second_unit <- relations$unit[selected_for_swap + deviation_factor]
   
-  relations$to[selected_for_swap] <- second
-  relations$unit[selected_for_swap] <- second_unit
-  relations$to[selected_for_swap + deviation_factor] <- first
-  relations$unit[selected_for_swap + deviation_factor] <- first_unit
+  relations$to[selected_for_swap] <- relations$to[selected_for_swap] + 1
+  
+  #relations <- relations[order(relations$to), ]
+    
+  # first <- relations$to[selected_for_swap]
+  # first_unit <- relations$unit[selected_for_swap]
+  # second <- relations$to[selected_for_swap + deviation_factor]
+  # second_unit <- relations$unit[selected_for_swap + deviation_factor]
+  # 
+  # relations$to[selected_for_swap] <- second
+  # relations$unit[selected_for_swap] <- second_unit
+  # relations$to[selected_for_swap + deviation_factor] <- first
+  # relations$unit[selected_for_swap + deviation_factor] <- first_unit
   
   return(relations)
 }
