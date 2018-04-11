@@ -1,5 +1,5 @@
-test2$populations[[1]] -> pop
-test2$relations[[1]] -> rel
+test2$populations[[4]] -> pop
+test2$relations[[4]] -> rel
 
 pop_groups <- pop %>% 
   dplyr::group_by(unit) %>%
@@ -67,14 +67,14 @@ library(ggplot2)
 ggplot() +
   geom_point(data = pop_groups, aes(x = unit, y = timeblock, size = n)) +
   geom_segment(
-    data = rel4, 
+    data = rel4,#[rel4$type != "friend", ], 
     aes(
       x = from_unit, xend = to_unit, 
       y = timeblock_from, yend = timeblock_to,
-      alpha = n,
       color = type
     ),
-    size = 1
+    size = 1,
+    alpha = 0.3
   ) +
   scale_color_manual(
     values = c(
