@@ -18,11 +18,26 @@ generate_vertical_relations <- function(settings) {
       humans <- population$id
       
       from_index <- rep(101:length(humans), each = 2)
+      
+      downshift_1 <- rep(      
+        get_average_index_shift_vector(
+          population$birth_time, 40, n = 5, sides = 1
+        )[101:length(humans)],
+        each = 2
+      )
+      
+      downshift_2 <- rep(      
+        get_average_index_shift_vector(
+          population$birth_time, 15, n = 5, sides = 1
+        )[101:length(humans)],
+        each = 2
+      )
+
       to_index <- floor(
         stats::runif(
           length(from_index), 
-          min = from_index - 100, 
-          max = from_index
+          min = from_index - downshift_1, 
+          max = from_index - downshift_2
         )
       )
       
@@ -32,6 +47,8 @@ generate_vertical_relations <- function(settings) {
         unit = population$unit[1],
         type = "child_of"
       )
+      
+      return(vertical_relations)
     }
   )
 
@@ -42,3 +59,21 @@ generate_vertical_relations <- function(settings) {
 }
 
 #### helper functions ####
+
+get_average_index_shift_vector <- function(x, index_shift, n = 5, sides = 1) {
+  ais <- index_shift / diff(x)
+  ais[is.infinite(ais)] <- index_shift
+  ais <- moving_average(
+    ais, n = n,  sides = sides
+  )
+  ais <- as.vector(ais)
+  ais[is.na(ais)] <- index_shift
+  ais <- ceiling(ais)
+  
+  return(ais)
+}
+
+moving_average <- function(x, n = 5, sides = 1) {
+  filter(x, rep(1/n, n), sides = sides)
+}
+
