@@ -33,13 +33,13 @@ all_model_populations <- expand.grid(
     50
   ),
   cross_unit_proportion_child_of = list(
-    0.001,
+    0.02,
     0.05,
     0.1,
     0.5
   ),
   cross_unit_proportion_friend = list(
-    0.001,
+    0.1,
     0.05,
     0.1,
     0.5
@@ -54,8 +54,8 @@ all_model_populations <- expand.grid(
 ) %>% tibble::as.tibble()
 
 plot_prep_grid(all_model_populations, "population_size_functions")
-plot_prep_grid(all_model_populations, "age_distribution_functions")
-plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
+#plot_prep_grid(all_model_populations, "age_distribution_functions")
+#plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
 all_model_populations %<>% init_population_settings()
 all_model_populations[1:5,] %>% generate_all_populations() -> test
@@ -67,12 +67,42 @@ test$population_settings[[1]] -> settings
 test$relations_settings[[1]] -> settings
 
 test$populations[[1]] -> pop
+save(pop, file = "testresults/pop.RData")
 test2$relations[[1]] -> rel
+save(rel, file = "testresults/rel.RData")
 
 pop$id
 hu <- rel[rel$type == "child_of", ]
 
 hu
+
+pop_small <- pop %>% dplyr::select(id)
+rel_small <- rel %>% dplyr::select(from, to, weight)
+rel_small$to <- as.integer(rel_small$to )
+
+rel_small <- rel_small[complete.cases(rel_small), ]
+
+g <- igraph::graph_from_data_frame(
+  rel_small,
+  directed = FALSE
+)
+
+igraph::write_graph(
+  g, 
+  "../gluesless/test_data/real_graph.paj",
+  format = "pajek"
+)
+
+incomplete_pajek <- 
+  readLines("../gluesless/test_data/real_graph.paj")
+incomplete_pajek[2] = paste(
+  c(pop$id, "*Edges"), 
+  collapse = "\n"
+)
+writeLines(
+  incomplete_pajek, 
+  "../gluesless/test_data/real_graph.paj"
+)
 
 # g <- igraph::graph_from_data_frame(hu, directed = FALSE)
 # g <- igraph::simplify(g)
