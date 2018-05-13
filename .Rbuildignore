@@ -2,4 +2,4 @@
 ^\.Rproj\.user$
 ^playground$
 ^\.travis\.yml$
-^testresults/$
+^testresults$
