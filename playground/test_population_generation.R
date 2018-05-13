@@ -116,8 +116,10 @@ load("testresults/pop.RData")
 cremation_pop <- pop[cremation, ] %>%
   tibble::as.tibble()
 
+timesteps <- 1:1000
+
 count_in_time <- function(y) {
-  purrr::map_int(1:1000, function(x){
+  purrr::map_int(timesteps, function(x){
     y %>%
       dplyr::mutate(
         is = birth_time <= x & death_time >= x  
@@ -126,9 +128,32 @@ count_in_time <- function(y) {
   })
 }
 
-count_in_time(pop[cremation, ])
-count_in_time(pop[inhumation, ])
+complete_pop <- count_in_time(pop)
 
+simulation_data <- tibble::tibble(
+  time = timesteps,
+  crem = count_in_time(pop[cremation, ]),
+  inhu = count_in_time(pop[inhumation, ]),
+  not_involved =  complete_pop - (crem + inhu) 
+) %>%
+  dplyr::mutate(
+    crem = crem / complete_pop,
+    inhu = inhu / complete_pop,
+    not_involved = not_involved / complete_pop
+  ) %>%
+  tidyr::gather(
+    variant, individuals_with_variant, -time
+  )
+
+library(ggplot2)
+
+simulation_data %>%
+  ggplot() +
+  geom_area(aes(x = time, y = individuals_with_variant, fill = variant, group = variant)) +
+  geom_line(aes(x = time, y = individuals_with_variant, group = variant), position = "stack") +
+  theme_bw() +
+  xlab(expression(paste("t"))) +
+  ylab("variants and their occurence in the population [%]")
 
 
 # pop %>%
