@@ -17,8 +17,7 @@ generate_population <- function(settings) {
   # calculate necessary number of humans to satisfy human_year_combinations
   # with humans of said life span
   number_of_humans <- human_year_combinations / average_life_span  
-  # get_birth starting times of birth windows given said
-  # lifespan
+  # get_birth starting times of birth windows given said lifespan
   birth_windows <- get_birth_windows(average_life_span, settings)
   # get amount of humans necessary per year in every birth_window
   human_year_birth_window <- get_number_human_year_combinations_birth_window(
@@ -44,11 +43,13 @@ generate_population <- function(settings) {
   
 }
 
+#### helper functions start ####
+
 get_number_human_year_combinations <- function(settings) {
   stats::integrate(
     Vectorize(settings@population_size_function), 
-    lower = min(settings@time), 
-    upper = max(settings@time),
+    lower = min(settings@time) - 50, 
+    upper = max(settings@time) + 50,
     subdivisions = 1000,
     rel.tol = 1
   )$value
@@ -62,9 +63,9 @@ get_human_average_life_span <- function(settings) {
 
 get_birth_windows <- function(average_life_span, settings) {
   seq(
-    min(settings@time),
-    max(settings@time),
-    abs(max(settings@time) - min(settings@time)) / average_life_span
+    min(settings@time) - 50,
+    max(settings@time) + 50,
+    abs((max(settings@time) + 50) - (min(settings@time) - 50)) / average_life_span
   )
 }
 
@@ -104,6 +105,8 @@ generate_humans_per_birth_window <- function(
     SIMPLIFY = FALSE
   )
 }
+
+#### helper functions end ####
 
 #' generate_all_populations
 #'

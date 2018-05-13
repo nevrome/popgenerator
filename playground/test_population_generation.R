@@ -196,7 +196,7 @@ networkD3::forceNetwork(Links = karate_d3$links, Nodes = karate_d3$nodes,
 
 library(ggplot2)
 
-test2$populations[[1]] -> pop
+#test2$populations[[1]] -> pop
 timeframe <- 0:1000
 
 population_real <- pop %>% count_living_humans_over_time(timeframe)
