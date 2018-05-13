@@ -53,7 +53,7 @@ all_model_populations <- expand.grid(
   )
 ) %>% tibble::as.tibble()
 
-#plot_prep_grid(all_model_populations, "population_size_functions")
+plot_prep_grid(all_model_populations, "population_size_functions")
 #plot_prep_grid(all_model_populations, "age_distribution_functions")
 #plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
@@ -106,8 +106,8 @@ writeLines(
 
 #### test working with gluesless ####
 
-system("../gluesless/build/gluesless ../gluesless/test_data/real_graph.paj")
-result <- readLines("result.txt")
+system("cd testresults && ../../gluesless/build/gluesless ../../gluesless/test_data/real_graph.paj")
+result <- readLines("testresults/result.txt")
 cremation <- as.integer(unlist(strsplit(result[9], split = " ")))
 inhumation <- as.integer(unlist(strsplit(result[11], split = " ")))
 
@@ -197,7 +197,7 @@ networkD3::forceNetwork(Links = karate_d3$links, Nodes = karate_d3$nodes,
 library(ggplot2)
 
 test2$populations[[1]] -> pop
-timeframe <- 0:2000
+timeframe <- 0:1000
 
 population_real <- pop %>% count_living_humans_over_time(timeframe)
 population_expected <- tibble::tibble(
@@ -253,5 +253,49 @@ test %>%
   facet_wrap(~unit) +
   geom_vline(aes(xintercept = timeframe[1])) +
   geom_vline(aes(xintercept = timeframe[length(timeframe)]))
+
+
+#### Plot grid attributes ####
+
+plot_prep_grid <- function(x, method) {
+  list_of_interest <- unique(x[[method]])
+  timeframe <- x[["timeframe"]]
+  
+  if (method %in% c(
+    "population_size_functions", 
+    "unit_amount_functions"
+  )) {
+    cols <- grDevices::rainbow(length(list_of_interest), 1)
+    p <- ggplot2::ggplot() + 
+      ggplot2::xlim(c(min(timeframe[[1]]), max(timeframe[[1]])))
+    for (i in 1:length(list_of_interest)) {
+      p <- p + ggplot2::stat_function(
+        ggplot2::aes(y = 0),
+        fun = list_of_interest[[i]], 
+        colour = cols[i]
+      )
+    }
+    return(p)
+  }
+  
+  if (method %in% c(
+    "age_distribution_functions",
+    "friendship_age_distribution_functions"
+  )) {
+    cols <- grDevices::rainbow(length(list_of_interest), 1)
+    p <- ggplot2::ggplot() + 
+      ggplot2::xlim(c(min(x[["age_ranges"]][[1]]), max(x[["age_ranges"]][[1]]))) +
+      ggplot2::ggtitle("only t = 0")
+    for (i in 1:length(list_of_interest)) {
+      p <- p + ggplot2::stat_function(
+        ggplot2::aes(y = 0),
+        fun = list_of_interest[[i]](0), 
+        colour = cols[i]
+      )
+    }
+    return(p)
+  }
+  
+}
 
 

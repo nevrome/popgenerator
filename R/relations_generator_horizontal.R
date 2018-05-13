@@ -50,5 +50,3 @@ generate_horizontal_relations <- function(settings) {
   return(all_relations)
 
 }
-
-#### helper functions ####

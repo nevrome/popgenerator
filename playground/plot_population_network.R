@@ -74,7 +74,7 @@ ggplot() +
       color = type
     ),
     size = 1,
-    alpha = 0.3
+    alpha = 0.05
   ) +
   scale_color_manual(
     values = c(
