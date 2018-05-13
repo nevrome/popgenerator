@@ -5,7 +5,7 @@ all_model_populations <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-    0:2000
+    0:1000
   ),
   # population settings  
   population_size_functions = c(
@@ -53,7 +53,7 @@ all_model_populations <- expand.grid(
   )
 ) %>% tibble::as.tibble()
 
-plot_prep_grid(all_model_populations, "population_size_functions")
+#plot_prep_grid(all_model_populations, "population_size_functions")
 #plot_prep_grid(all_model_populations, "age_distribution_functions")
 #plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
 
@@ -103,6 +103,41 @@ writeLines(
   incomplete_pajek, 
   "../gluesless/test_data/real_graph.paj"
 )
+
+#### test working with gluesless ####
+
+system("../gluesless/build/gluesless ../gluesless/test_data/real_graph.paj")
+result <- readLines("result.txt")
+cremation <- as.integer(unlist(strsplit(result[9], split = " ")))
+inhumation <- as.integer(unlist(strsplit(result[11], split = " ")))
+
+load("testresults/pop.RData")
+
+cremation_pop <- pop[cremation, ] %>%
+  tibble::as.tibble()
+
+count_in_time <- function(y) {
+  purrr::map_int(1:1000, function(x){
+    y %>%
+      dplyr::mutate(
+        is = birth_time <= x & death_time >= x  
+      ) %$%
+      sum(is)
+  })
+}
+
+count_in_time(pop[cremation, ])
+count_in_time(pop[inhumation, ])
+
+
+
+# pop %>%
+#   tibble::as.tibble() %>%
+#   dplyr::rowwise() %>%
+#   dplyr::mutate(
+#     years = list(birth_time:death_time)
+#   ) %>%
+#   dplyr::ungroup()
 
 # g <- igraph::graph_from_data_frame(hu, directed = FALSE)
 # g <- igraph::simplify(g)
