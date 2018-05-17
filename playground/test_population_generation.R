@@ -87,22 +87,9 @@ g <- igraph::graph_from_data_frame(
   directed = FALSE
 )
 
-igraph::write_graph(
-  g, 
-  "../gluesless/test_data/real_graph.paj",
-  format = "pajek"
-)
+write_pajek(g, pop, "../gluesless/test_data/real_graph.paj")
 
-incomplete_pajek <- 
-  readLines("../gluesless/test_data/real_graph.paj")
-incomplete_pajek[2] = paste(
-  c(pop$id, "*Edges"), 
-  collapse = "\n"
-)
-writeLines(
-  incomplete_pajek, 
-  "../gluesless/test_data/real_graph.paj"
-)
+
 
 #### test working with gluesless ####
 
