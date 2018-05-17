@@ -155,7 +155,6 @@ simulation_data %>%
   xlab(expression(paste("t"))) +
   ylab("variants and their occurence in the population [%]")
 
-
 # pop %>%
 #   tibble::as.tibble() %>%
 #   dplyr::rowwise() %>%
@@ -164,39 +163,10 @@ simulation_data %>%
 #   ) %>%
 #   dplyr::ungroup()
 
-# g <- igraph::graph_from_data_frame(hu, directed = FALSE)
-# g <- igraph::simplify(g)
-# pu <- igraph::fastgreedy.community(g)
-# 
-# igraph::membership(pu)
-# igraph::sizes(pu)
-# 
-# plot(pu)
-
-####
-
-test2
-
-g <- igraph::graph_from_data_frame(
-  test2,
-  directed = FALSE,
-  vertices = test
-)
-
-RBioFabric::bioFabric(g)
-
-karate_d3 <- networkD3::igraph_to_networkD3(g, group = test)
-
-# Create force directed network plot
-networkD3::forceNetwork(Links = karate_d3$links, Nodes = karate_d3$nodes, 
-             Source = 'source', Target = 'target', 
-             NodeID = 'name', Group = 'name')
-
 #### analyse result ####
 
 library(ggplot2)
 
-#test2$populations[[1]] -> pop
 timeframe <- 0:1000
 
 population_real <- pop %>% count_living_humans_over_time(timeframe)
@@ -205,11 +175,7 @@ population_expected <- tibble::tibble(
   n = test$population_settings[[1]]@population_size_function(time)
 )
 
-units_real <- test %>% count_living_units_over_time(timeframe)
-units_expected <- tibble::tibble(
-  time = timeframe,
-  n = unit_amount(time)
-)
+units_real <- pop %>% count_living_units_over_time(timeframe)
 
 population_development_plot <- ggplot() +
   geom_line(
@@ -225,11 +191,6 @@ population_development_plot <- ggplot() +
 
 unit_development_plot <- ggplot() +
   geom_line(
-    data = units_expected,
-    aes(x = time, y = n),
-    color = "black"
-  ) +
-  geom_line(
     data = units_real,
     aes(x = time, y = n),
     color = "red"
@@ -244,15 +205,6 @@ cowplot::plot_grid(
   labels = "AUTO"
 )
 
-library(ggplot2)
-test %>%
-  ggplot() +
-  geom_segment(
-    aes(y = id, yend = id, x = birth_time, xend = death_time, color = unit)
-  ) +
-  facet_wrap(~unit) +
-  geom_vline(aes(xintercept = timeframe[1])) +
-  geom_vline(aes(xintercept = timeframe[length(timeframe)]))
 
 
 #### Plot grid attributes ####
