@@ -18,7 +18,7 @@ plot_population_development <- function(pop, time = c()) {
       ggplot2::aes_string(x = "time", y = "n"),
       color = "red"
     ) +
-    scale_x_continuous(breaks = seq(0, max(time), by = 100))
+    ggplot2::scale_x_continuous(breaks = seq(0, max(time), by = 100))
   
   return(population_development_plot)
 }
@@ -63,7 +63,7 @@ plot_relations_development <- function(pop, rel, time = c()) {
       ggplot2::aes_string(x = "time", y = "n"),
       color = "red"
     ) +
-    scale_x_continuous(breaks = seq(0, max(time), by = 100))
+    ggplot2::scale_x_continuous(breaks = seq(0, max(time), by = 100))
   
   return(relations_development_plot)
 }
