@@ -154,7 +154,9 @@ simulation_data %>%
 
 #### analyse result ####
 
-plot_population_development(pop, timeframe = 0:1000)
+plot_population_development(pop)
+
+plot_relations_development(pop, rel)
 
 library(cowplot)
 cowplot::plot_grid(
