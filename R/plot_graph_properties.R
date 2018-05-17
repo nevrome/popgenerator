@@ -15,7 +15,7 @@ plot_population_development <- function(pop, timeframe = c()) {
   population_development_plot <- ggplot2::ggplot() +
     ggplot2::geom_line(
       data = population_over_time,
-      aes(x = time, y = n),
+      ggplot2::aes_string(x = "time", y = "n"),
       color = "red"
     )
   

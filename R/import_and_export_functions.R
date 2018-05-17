@@ -11,7 +11,7 @@ write_pajek_for_snap <- function(graph, pop, path) {
   if (file.exists(path)) {file.remove(path)}
   igraph::write_graph(graph, path, format = "pajek")
   incomplete_pajek <- readLines(path)
-  incomplete_pajek[2] = paste(c(pop_df$id, "*Edges"), collapse = "\n")
+  incomplete_pajek[2] = paste(c(pop$id, "*Edges"), collapse = "\n")
   writeLines(incomplete_pajek, path)
   return(TRUE)
 }
