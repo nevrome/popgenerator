@@ -166,11 +166,11 @@ cowplot::plot_grid(
   labels = "AUTO"
 )
 
-hu %>%
-  ggplot() +
-    geom_area(aes(x = time, y = n, fill = unit, group = unit)) +
-    geom_line(aes(x = time, y = n, group = unit), position = "stack") +
-    theme_bw()
+# hu %>%
+#   ggplot() +
+#     geom_area(aes(x = time, y = n, fill = unit, group = unit)) +
+#     geom_line(aes(x = time, y = n, group = unit), position = "stack") +
+#     theme_bw()
 
 
 #### Plot grid attributes ####
