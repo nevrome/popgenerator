@@ -1,13 +1,14 @@
-#' write_pajek
+#' write_pajek_for_snap
 #'
 #' @param graph igraph object
-#' @param pop_df population data.frame
+#' @param pop population data.frame
 #' @param path output file path
 #'
 #' @return TRUE, called for the side effect of writing to the file system
 #'
 #' @export
-write_pajek <- function(graph, pop_df, path) {
+write_pajek_for_snap <- function(graph, pop, path) {
+  if (file.exists(path)) {file.remove(path)}
   igraph::write_graph(graph, path, format = "pajek")
   incomplete_pajek <- readLines(path)
   incomplete_pajek[2] = paste(c(pop_df$id, "*Edges"), collapse = "\n")

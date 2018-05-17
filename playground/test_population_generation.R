@@ -87,7 +87,9 @@ g <- igraph::graph_from_data_frame(
   directed = FALSE
 )
 
-write_pajek(g, pop, "../gluesless/test_data/real_graph.paj")
+igraph::write_graph(g,  "../gluesless/test_data/real_graph_test.paj", format = "pajek")
+
+write_pajek_for_snap(g, pop, "../gluesless/test_data/real_graph.paj")
 
 
 
@@ -152,36 +154,7 @@ simulation_data %>%
 
 #### analyse result ####
 
-library(ggplot2)
-
-timeframe <- 0:1000
-
-population_real <- pop %>% count_living_humans_over_time(timeframe)
-population_expected <- tibble::tibble(
-  time = timeframe,
-  n = test$population_settings[[1]]@population_size_function(time)
-)
-
-units_real <- pop %>% count_living_units_over_time(timeframe)
-
-population_development_plot <- ggplot() +
-  geom_line(
-    data = population_expected,
-    aes(x = time, y = n),
-    color = "black"
-  ) +
-  geom_line(
-    data = population_real,
-    aes(x = time, y = n),
-    color = "red"
-  )
-
-unit_development_plot <- ggplot() +
-  geom_line(
-    data = units_real,
-    aes(x = time, y = n),
-    color = "red"
-  )
+plot_population_development(pop, timeframe = 0:1000)
 
 library(cowplot)
 cowplot::plot_grid(
