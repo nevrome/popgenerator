@@ -154,19 +154,23 @@ simulation_data %>%
 
 #### analyse result ####
 
-plot_population_development(pop)
-
-plot_relations_development(pop, rel)
+population_development_plot <- plot_population_development(pop)
+relations_development_plot <- plot_relations_development(pop, rel)
 
 library(cowplot)
 cowplot::plot_grid(
   population_development_plot,
-  unit_development_plot,
+  relations_development_plot,
   align = "v",
   nrow = 2,
   labels = "AUTO"
 )
 
+hu %>%
+  ggplot() +
+    geom_area(aes(x = time, y = n, fill = unit, group = unit)) +
+    geom_line(aes(x = time, y = n, group = unit), position = "stack") +
+    theme_bw()
 
 
 #### Plot grid attributes ####
