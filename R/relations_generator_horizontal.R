@@ -17,13 +17,13 @@ generate_horizontal_relations <- function(settings) {
   
       humans <- population$id
       
-      from_index <- rep(101:(length(humans) - 100), each = settings@amount_friends)
+      from_index <- rep(51:(length(humans) - 50), each = settings@amount_friends)
       
       shift <- rep(      
         get_average_index_shift_vector(
           population$birth_time, 50, n = 5, sides = 2
-        )[101:(length(humans) - 100)],
-        each = 2
+        )[50:(length(humans) - 51)],
+        each = settings@amount_friends
       )
       
       to_index <- floor(

@@ -17,19 +17,19 @@ generate_vertical_relations <- function(settings) {
       
       humans <- population$id
       
-      from_index <- rep(101:length(humans), each = 2)
+      from_index <- rep(51:length(humans), each = 2)
       
       downshift_1 <- rep(      
         get_average_index_shift_vector(
           population$birth_time, 40, n = 5, sides = 1
-        )[101:length(humans)],
+        )[50:(length(humans) - 1)],
         each = 2
       )
       
       downshift_2 <- rep(      
         get_average_index_shift_vector(
           population$birth_time, 15, n = 5, sides = 1
-        )[101:length(humans)],
+        )[50:(length(humans) - 1)],
         each = 2
       )
 
