@@ -55,7 +55,7 @@ count_living_units_over_time <- function(humans, time) {
 #'
 #' @export
 count_population_by_living_units_over_time <- function(humans, time) {
-  expand.grid(time = time, unit = sort(unique(pop$unit))) %>%
+  expand.grid(time = time, unit = sort(unique(humans$unit))) %>%
     dplyr::mutate(
       n = purrr::map2_int(
         .data$time, .data$unit,
