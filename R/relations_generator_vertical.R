@@ -42,7 +42,6 @@ generate_vertical_relations <- function(settings) {
           max = from_index - downshift_2
         )
       )
-      
       to_index[to_index < 1] <- NA
       
       vertical_relations <- tibble::tibble(
@@ -51,7 +50,6 @@ generate_vertical_relations <- function(settings) {
         unit = population$unit[1],
         type = "child_of"
       )
-      
       vertical_relations <- vertical_relations[!is.na(vertical_relations$to), ]
       
       return(vertical_relations)
