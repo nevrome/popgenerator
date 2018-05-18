@@ -9,16 +9,16 @@ all_model_populations <- expand.grid(
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {1000},
-    function(t) {round(2000 - 0.95 * t, 0)},
-    function(t) {round(100 + 0.95 * t, 0)},
-    function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
-    function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
+    function(t) {200}#,
+    # function(t) {round(2000 - 0.95 * t, 0)},
+    # function(t) {round(100 + 0.95 * t, 0)},
+    # function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
+    # function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
   ),
   units_amount = c(
-    50,
-    100,
-    200
+    20#,
+    # 100,
+    # 200
   ),
   age_distribution_functions = c(
     function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}
@@ -28,36 +28,52 @@ all_model_populations <- expand.grid(
   ),
   # relations settings
   amounts_friends = list(
-    10,
-    10,
-    50
+    10#,
+    # 10,
+    # 50
   ),
   cross_unit_proportion_child_of = list(
-    0.02,
-    0.05,
-    0.1,
-    0.5
+    0.02#,
+    # 0.05,
+    # 0.1,
+    # 0.5
   ),
   cross_unit_proportion_friend = list(
-    0.1,
-    0.05,
-    0.1,
-    0.5
+    0.1#,
+    # 0.05,
+    # 0.1,
+    # 0.5
   ),
   weight_child_of = list(
-    1,
-    3
+    3#,
+    # 1
   ),
   weight_friend = list(
     2
+  ),
+  # ideas settings
+  names = list(
+    c("cremation", "inhumation")
+  ),
+  start_distribution = list(
+    c(0.5, 0.5)#,
+    #c(0.7, 0.3),
+    #c(0.3, 0.7)
+  ), 
+  strength = list(
+    c(1, 1)#, 
+    #c(1, 2),
+    #c(2, 1)
   )
 ) %>% tibble::as.tibble()
 
 all_model_populations %<>% init_population_settings()
-all_model_populations[1:5,] %>% generate_all_populations() -> test
+all_model_populations[1,] %>% generate_all_populations() -> test
 
 test %<>% init_relations_settings()
 test %>% generate_all_relations() -> test2
+
+test %<>% init_ideas_settings()
 
 test$population_settings[[1]] -> settings 
 test$relations_settings[[1]] -> settings
