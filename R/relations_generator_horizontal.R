@@ -34,16 +34,16 @@ generate_horizontal_relations <- function(settings) {
           max = from_index + shift
         )
       )
-      to_index[to_index < 1 | to_index > length(humans)] <- NA
-      
+      from_index <- from_index[!(to_index < 1 | to_index > length(humans))]
+      to_index <- to_index[!(to_index < 1 | to_index > length(humans))]
+
       horizontal_relations <- tibble::tibble(
         from = humans[from_index], 
         to = humans[to_index],
         unit = population$unit[1],
         type = "friend"
       )
-      horizontal_relations <- horizontal_relations[!is.na(horizontal_relations$to), ]
-      
+
       return(horizontal_relations)
     }
   )
