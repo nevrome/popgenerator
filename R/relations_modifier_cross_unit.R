@@ -71,7 +71,14 @@ swap_partners <- function(relations, amount) {
     )
   )
   
+  max_to <- max(relations$to) 
+  
+  # actual swap: incrementing to vector
   relations$to[selected_for_swap] <- relations$to[selected_for_swap] + 1
+  
+  # if incrementation causes the to node of some relations to rise 
+  # above the number of available nodes then remove this relation
+  relations <- relations[!(relations$to > max_to), ]
   
   return(relations)
 }
