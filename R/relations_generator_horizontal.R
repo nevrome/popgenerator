@@ -49,7 +49,7 @@ generate_horizontal_relations <- function(settings) {
   )
   
   all_relations <- do.call(rbind, relations_by_unit)
-  
+
   return(all_relations)
 
 }

@@ -53,10 +53,6 @@ all_model_populations <- expand.grid(
   )
 ) %>% tibble::as.tibble()
 
-plot_prep_grid(all_model_populations, "population_size_functions")
-#plot_prep_grid(all_model_populations, "age_distribution_functions")
-#plot_prep_grid(all_model_populations, "friendship_age_distribution_functions")
-
 all_model_populations %<>% init_population_settings()
 all_model_populations[1:5,] %>% generate_all_populations() -> test
 
@@ -70,11 +66,6 @@ test$populations[[1]] -> pop
 save(pop, file = "testresults/pop.RData")
 test2$relations[[1]] -> rel
 save(rel, file = "testresults/rel.RData")
-
-pop$id
-hu <- rel[rel$type == "child_of", ]
-
-hu
 
 pop_small <- pop %>% dplyr::select(id)
 rel_small <- rel %>% dplyr::select(from, to, weight)
