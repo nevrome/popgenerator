@@ -17,21 +17,23 @@ generate_vertical_relations <- function(settings) {
       
       humans <- population$id
       
-      from_index <- rep(51:length(humans), each = 2)
+      from_index <- rep(1:length(humans), each = 2)
       
       downshift_1 <- rep(      
         get_average_index_shift_vector(
           population$birth_time, 40, n = 5, sides = 1
-        )[50:(length(humans) - 1)],
+        ),
         each = 2
       )
+      downshift_1 <- rlang::prepend(downshift_1, rep(downshift_1[1], 2))
       
       downshift_2 <- rep(      
         get_average_index_shift_vector(
           population$birth_time, 15, n = 5, sides = 1
-        )[50:(length(humans) - 1)],
+        ),
         each = 2
       )
+      downshift_2 <- rlang::prepend(downshift_2, rep(downshift_2[1], 2))
 
       to_index <- floor(
         stats::runif(
@@ -41,12 +43,16 @@ generate_vertical_relations <- function(settings) {
         )
       )
       
+      to_index[to_index < 1] <- NA
+      
       vertical_relations <- tibble::tibble(
         from = humans[from_index], 
         to = humans[to_index], 
         unit = population$unit[1],
         type = "child_of"
       )
+      
+      vertical_relations <- vertical_relations[!is.na(vertical_relations$to), ]
       
       return(vertical_relations)
     }
