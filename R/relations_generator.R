@@ -47,36 +47,3 @@ generate_all_relations <- function(x) {
   )
   return(x)
 }
-
-#' init_relations_settings
-#'
-#' Create relations_settings object for every row in the 
-#' populations_grid data.frame and add it in an additional
-#' column.
-#'
-#' @param x populations_grid data.frame
-#'
-#' @return populations_grid data.frame with additional column 
-#' relations_settings
-#'
-#' @export
-init_relations_settings <- function(x) { 
-  
-  relations_settings <- list() 
-  for (i in 1:nrow(x)) {
-    relations_settings[[i]] <- methods::new(
-      "relations_settings",
-      population =                     x$populations[[i]],
-      amount_friends =                 x$amounts_friends[[i]],
-      cross_unit_proportion_child_of = x$cross_unit_proportion_child_of[[i]],
-      cross_unit_proportion_friend =   x$cross_unit_proportion_friend[[i]],
-      weight_child_of =                x$weight_child_of[[i]],
-      weight_friend =                  x$weight_friend[[i]]
-    )
-  }
-  
-  x$relations_settings <- relations_settings
-  
-  return(x)
-}
-
