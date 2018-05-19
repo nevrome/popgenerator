@@ -28,7 +28,7 @@ write_ideas <- function(settings, path) {
   
   content <- paste(
     settings@names,
-    settings@start_distribution,
+    sapply(idea_distribution_to_starting_nodes(settings), paste, collapse = " "),
     settings@strength,
     sep = ";",
     collapse = "\n"
@@ -36,7 +36,7 @@ write_ideas <- function(settings, path) {
   
   if (file.exists(path)) {file.remove(path)}
   file.create(path)
-  writeLines(content, path)
+  writeLines(content, path, sep = "")
   
   return(TRUE)
   

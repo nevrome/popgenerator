@@ -10,6 +10,8 @@ class to store idea definition values
 \section{Slots}{
 
 \describe{
+\item{\code{population}}{test}
+
 \item{\code{names}}{test}
 
 \item{\code{start_distribution}}{test}
