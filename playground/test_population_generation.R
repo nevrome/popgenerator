@@ -77,6 +77,7 @@ test %<>% init_ideas_settings()
 
 test$population_settings[[1]] -> settings 
 test$relations_settings[[1]] -> settings
+test$ideas_settings[[1]] -> settings
 
 test$populations[[1]] -> pop
 save(pop, file = "testresults/pop.RData")

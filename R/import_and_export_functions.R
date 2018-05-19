@@ -16,3 +16,29 @@ write_pajek_for_snap <- function(graph, pop, path) {
   return(TRUE)
 }
 
+#' write_ideas
+#'
+#' @param settings ideas_settings object
+#' @param path output file path
+#'
+#' @return TRUE, called for the side effect of writing to the file system
+#'
+#' @export
+write_ideas <- function(settings, path) {
+  
+  content <- paste0(
+    "names:\n",
+    paste0(settings@names, collapse = ";"), "\n",
+    "start_distribution:\n",
+    paste0(settings@start_distribution, collapse = ";"), "\n",
+    "strength:\n",
+    paste0(settings@strength, collapse = ";"), "\n"
+  )
+  
+  if (file.exists(path)) {file.remove(path)}
+  file.create(path)
+  writeLines(content, path)
+  
+  return(TRUE)
+  
+}
