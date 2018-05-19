@@ -26,13 +26,12 @@ write_pajek_for_snap <- function(graph, pop, path) {
 #' @export
 write_ideas <- function(settings, path) {
   
-  content <- paste0(
-    "names:\n",
-    paste0(settings@names, collapse = ";"), "\n",
-    "start_distribution:\n",
-    paste0(settings@start_distribution, collapse = ";"), "\n",
-    "strength:\n",
-    paste0(settings@strength, collapse = ";"), "\n"
+  content <- paste(
+    settings@names,
+    settings@start_distribution,
+    settings@strength,
+    sep = ";",
+    collapse = "\n"
   )
   
   if (file.exists(path)) {file.remove(path)}
