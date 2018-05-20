@@ -89,45 +89,11 @@ models_grid %>% write_all_models_to_files(dir_path = "../gluesless/test_data/mod
 run_gluesless(
   app_path = "/home/clemens/neomod/gluesless/build/gluesless",
   input_file_dir = "/home/clemens/neomod/gluesless/test_data/model_grid",
-  output_file_path = "/home/clemens/neomod/gluesless/test_data/model_grid/1_result.txt",
+  output_file_dir = "/home/clemens/neomod/gluesless/test_data/model_grid",
   models_to_run = c(1, 4)
 )
 
 ####
-
-load("testresults/pop.RData")
-
-cremation_pop <- pop[cremation, ] %>%
-  tibble::as.tibble()
-
-timesteps <- 1:1000
-
-count_in_time <- function(y) {
-  purrr::map_int(timesteps, function(x){
-    y %>%
-      dplyr::mutate(
-        is = birth_time <= x & death_time >= x  
-      ) %$%
-      sum(is)
-  })
-}
-
-complete_pop <- count_in_time(pop)
-
-simulation_data <- tibble::tibble(
-  time = timesteps,
-  crem = count_in_time(pop[cremation, ]),
-  inhu = count_in_time(pop[inhumation, ]),
-  not_involved =  complete_pop - (crem + inhu) 
-) %>%
-  dplyr::mutate(
-    crem = crem / complete_pop,
-    inhu = inhu / complete_pop,
-    not_involved = not_involved / complete_pop
-  ) %>%
-  tidyr::gather(
-    variant, individuals_with_variant, -time
-  )
 
 library(ggplot2)
 

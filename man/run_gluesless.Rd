@@ -4,14 +4,14 @@
 \alias{run_gluesless}
 \title{run_gluesless}
 \usage{
-run_gluesless(app_path, input_file_dir, output_file_path, models_to_run)
+run_gluesless(app_path, input_file_dir, output_file_dir, models_to_run)
 }
 \arguments{
 \item{app_path}{test}
 
 \item{input_file_dir}{test}
 
-\item{output_file_path}{test}
+\item{output_file_dir}{test}
 
 \item{models_to_run}{test}
 }
