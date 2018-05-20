@@ -1,3 +1,30 @@
+#' write_all_models_to_files
+#'
+#' @param x models_grid data.frame
+#' @param dir_path directory path where to store the files
+#'
+#' @return called for side effect writing to file system
+#' 
+#' @export
+write_all_models_to_files <- function(x, dir_path) {
+
+  pbapply::pblapply(
+    1:nrow(x), function(y) {
+      write_pajek_for_snap(
+        generate_graph(x$relations[[y]]), 
+        x$populations[[y]], 
+        file.path(dir_path, paste0(x$model_id[y], "_pajek_graph.paj"))
+      )
+      write_ideas(
+        x$ideas_settings[[y]], 
+        file.path(dir_path, paste0(x$model_id[y], "_idea.txt"))
+      )
+    }
+  )
+    
+}
+
+
 #' write_pajek_for_snap
 #'
 #' @param graph igraph object

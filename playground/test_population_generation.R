@@ -1,22 +1,23 @@
 #### setup settings grid ####
 
 # create populations_grid data.frame
-all_model_populations <- expand.grid(
+models_grid <- expand.grid(
   #multiplier = 1:10,
   # general settings
   timeframe = list(
-    0:1000
+    0:2000
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {200}#,
+    function(t) {300},
+    function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(2000 - 0.95 * t, 0)},
     # function(t) {round(100 + 0.95 * t, 0)},
     # function(t) {round(0.0019 * (t - 1000)^2 + 100, 0)},
     # function(t) {round(-0.0019 * (t - 1000)^2 + 2000, 0)}
   ),
   units_amount = c(
-    20#,
+    10#,
     # 100,
     # 200
   ),
@@ -61,45 +62,27 @@ all_model_populations <- expand.grid(
     #c(0.3, 0.7)
   ), 
   strength = list(
-    c(1, 1)#, 
-    #c(1, 2),
+    c(1, 1), 
+    c(1, 2)#,
     #c(2, 1)
   )
-) %>% tibble::as.tibble()
+) %>% tibble::as.tibble() %>%
+  dplyr::mutate(
+    model_id = 1:nrow(.)
+  )
 
-all_model_populations %<>% init_population_settings()
-all_model_populations[1,] %>% generate_all_populations() -> test
+models_grid %<>% prepare_pops_rels_ideas()
 
-test %<>% init_relations_settings()
-test %>% generate_all_relations() -> test2
+# models_grid$population_settings[[1]] -> settings 
+# models_grid$relations_settings[[1]] -> settings
+# models_grid$ideas_settings[[1]] -> settings
 
-test %<>% init_ideas_settings()
+# models_grid$populations[[1]] -> pop
+# save(pop, file = "testresults/pop.RData")
+# models_grid$relations[[1]] -> rel
+# save(rel, file = "testresults/rel.RData")
 
-test$population_settings[[1]] -> settings 
-test$relations_settings[[1]] -> settings
-test$ideas_settings[[1]] -> settings
-
-test$populations[[1]] -> pop
-save(pop, file = "testresults/pop.RData")
-test2$relations[[1]] -> rel
-save(rel, file = "testresults/rel.RData")
-
-pop_small <- pop %>% dplyr::select(id)
-rel_small <- rel %>% dplyr::select(from, to, weight)
-rel_small$to <- as.integer(rel_small$to )
-
-rel_small <- rel_small[complete.cases(rel_small), ]
-
-g <- igraph::graph_from_data_frame(
-  rel_small,
-  directed = FALSE
-)
-
-igraph::write_graph(g,  "../gluesless/test_data/real_graph_test.paj", format = "pajek")
-
-write_pajek_for_snap(g, pop, "../gluesless/test_data/real_graph.paj")
-
-write_ideas(test$ideas_settings[[1]], "../gluesless/test_data/idea.txt")
+models_grid %>% write_all_models_to_files(dir_path = "../gluesless/test_data")
 
 #### test working with gluesless ####
 
