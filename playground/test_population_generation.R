@@ -56,7 +56,7 @@ all_model_populations <- expand.grid(
     c("cremation", "inhumation")
   ),
   start_distribution = list(
-    c(0.5, 0.5)#,
+    c(0.2, 0.8)#,
     #c(0.7, 0.3),
     #c(0.3, 0.7)
   ), 
@@ -103,7 +103,9 @@ write_pajek_for_snap(g, pop, "../gluesless/test_data/real_graph.paj")
 
 #### test working with gluesless ####
 
-system("cd testresults && ../../gluesless/build/gluesless ../../gluesless/test_data/real_graph.paj")
+system("
+  cd testresults &&\
+../../gluesless/build/gluesless ../../gluesless/test_data/real_graph.paj ../../gluesless/test_data/idea.txt")
 result <- readLines("testresults/result.txt")
 cremation <- as.integer(unlist(strsplit(result[9], split = " ")))
 inhumation <- as.integer(unlist(strsplit(result[11], split = " ")))
