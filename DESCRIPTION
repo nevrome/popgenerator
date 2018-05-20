@@ -22,6 +22,7 @@ Imports:
     purrr (>= 0.2.2.2),
     rlang (>= 0.1.2),
     tibble (>= 1.4.2),
+    tidyr,
     utils (>= 3.4.2)
 Suggests:
     devtools (>= 1.12.0),

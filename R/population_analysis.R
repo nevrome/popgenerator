@@ -76,7 +76,7 @@ count_population_by_living_units_over_time <- function(humans, time) {
 #'
 #' @param x test
 #'
-#' @return
+#' @return test
 #' 
 #' @export
 calculate_all_idea_proportions_over_time <- function(x) {
@@ -94,7 +94,7 @@ calculate_all_idea_proportions_over_time <- function(x) {
 #' @param id test
 #' @param x test
 #'
-#' @return
+#' @return test
 #' 
 #' @export
 calculate_idea_proportions_over_time <- function(id, x) {
@@ -116,7 +116,7 @@ calculate_idea_proportions_over_time <- function(id, x) {
     dplyr::mutate(
       crem = .data$crem / complete_pop,
       inhu = .data$inhu / complete_pop,
-      not_involved = not_involved / complete_pop
+      not_involved = .data$not_involved / complete_pop
     ) %>%
     tidyr::gather(
       "variant", "individuals_with_variant", -.data$timesteps

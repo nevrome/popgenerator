@@ -10,7 +10,7 @@ calculate_all_idea_proportions_over_time(x)
 \item{x}{test}
 }
 \value{
-
+test
 }
 \description{
 calculate_all_idea_proportions_over_time
