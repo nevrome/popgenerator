@@ -61,19 +61,23 @@ idea_distribution_to_starting_nodes <- function(settings) {
   
   population_by_unit <- split(settings@population, settings@population$unit)
   
-  initial_ideas_by_unit <- unlist(lapply(
+  initial_ideas_by_unit <- unname(unlist(lapply(
     population_by_unit,
     function(population) {
       utils::head(population$id, 5)
     }
-  ))
+  )))
   
   starting_humans_per_idea <- list()
+  index_border_start <- 1
+  index_border_end <- 0
   for (i in 1:number_of_ideas) {
+    index_border_end <- index_border_end + round(length(initial_ideas_by_unit) * settings@start_distribution[i])
     starting_humans_per_idea[[i]] <- initial_ideas_by_unit[
-      1:round(length(initial_ideas_by_unit) * settings@start_distribution[i])
+      index_border_start:index_border_end
     ]
+    index_border_start <- index_border_end + 1
   }
-  
+
   return(starting_humans_per_idea)  
 }
