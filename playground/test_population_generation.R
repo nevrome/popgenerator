@@ -82,16 +82,18 @@ models_grid %<>% prepare_pops_rels_ideas()
 # models_grid$relations[[1]] -> rel
 # save(rel, file = "testresults/rel.RData")
 
-models_grid %>% write_all_models_to_files(dir_path = "../gluesless/test_data")
+models_grid %>% write_all_models_to_files(dir_path = "../gluesless/test_data/model_grid")
 
 #### test working with gluesless ####
 
-system("
-  cd testresults &&\
-../../gluesless/build/gluesless ../../gluesless/test_data/real_graph.paj ../../gluesless/test_data/idea.txt")
-result <- readLines("testresults/result.txt")
-cremation <- as.integer(unlist(strsplit(result[9], split = " ")))
-inhumation <- as.integer(unlist(strsplit(result[11], split = " ")))
+run_gluesless(
+  app_path = "/home/clemens/neomod/gluesless/build/gluesless",
+  input_file_dir = "/home/clemens/neomod/gluesless/test_data/model_grid",
+  output_file_path = "/home/clemens/neomod/gluesless/test_data/model_grid/1_result.txt",
+  models_to_run = c(1, 4)
+)
+
+####
 
 load("testresults/pop.RData")
 

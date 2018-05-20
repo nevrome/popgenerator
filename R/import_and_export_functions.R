@@ -21,7 +21,8 @@ write_all_models_to_files <- function(x, dir_path) {
       )
     }
   )
-    
+  
+  return(TRUE)
 }
 
 
