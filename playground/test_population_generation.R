@@ -99,7 +99,7 @@ igraph::write_graph(g,  "../gluesless/test_data/real_graph_test.paj", format = "
 
 write_pajek_for_snap(g, pop, "../gluesless/test_data/real_graph.paj")
 
-
+write_ideas(test$ideas_settings[[1]], "../gluesless/test_data/idea.txt")
 
 #### test working with gluesless ####
 
