@@ -99,6 +99,7 @@ calculate_all_idea_proportions_over_time <- function(x) {
 #' @export
 calculate_idea_proportions_over_time <- function(id, x) {
   
+  timesteps <- x$timeframe[[id]]
   cremation <- x$simulation_results[[id]]$notes_per_idea$cremation
   inhumation <- x$simulation_results[[id]]$notes_per_idea$inhumation
   pop <- x$populations[[id]]
@@ -107,16 +108,18 @@ calculate_idea_proportions_over_time <- function(id, x) {
   proportions <- tibble::tibble(
     timesteps = timesteps,
     crem = count_living_humans_over_time(pop[cremation, ], timesteps)$n,
-    inhu = count_living_humans_over_time(pop[inhumation, ], timesteps)$n,
-    not_involved =  complete_pop - (crem + inhu) 
+    inhu = count_living_humans_over_time(pop[inhumation, ], timesteps)$n
   ) %>%
     dplyr::mutate(
-      crem = crem / complete_pop,
-      inhu = inhu / complete_pop,
+      not_involved = complete_pop - (.data$crem + .data$inhu)
+    ) %>%
+    dplyr::mutate(
+      crem = .data$crem / complete_pop,
+      inhu = .data$inhu / complete_pop,
       not_involved = not_involved / complete_pop
     ) %>%
     tidyr::gather(
-      variant, individuals_with_variant, -timesteps
+      "variant", "individuals_with_variant", -.data$timesteps
     )
   
   return(proportions)
