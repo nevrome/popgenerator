@@ -70,3 +70,55 @@ count_population_by_living_units_over_time <- function(humans, time) {
       )
     ) %>% return()
 }
+
+
+#' calculate_all_idea_proportions_over_time
+#'
+#' @param x test
+#'
+#' @return
+#' 
+#' @export
+calculate_all_idea_proportions_over_time <- function(x) {
+  x$idea_proportions <- pbapply::pblapply(
+    x$model_id, 
+    FUN = calculate_idea_proportions_over_time,
+    x
+    #cl = 4
+  )
+  return(x)
+}
+
+#' calculate_idea_proportions_over_time
+#'
+#' @param id test
+#' @param x test
+#'
+#' @return
+#' 
+#' @export
+calculate_idea_proportions_over_time <- function(id, x) {
+  
+  cremation <- x$simulation_results[[id]]$notes_per_idea$cremation
+  inhumation <- x$simulation_results[[id]]$notes_per_idea$inhumation
+  pop <- x$populations[[id]]
+  complete_pop <- count_living_humans_over_time(pop, timesteps)$n
+  
+  proportions <- tibble::tibble(
+    timesteps = timesteps,
+    crem = count_living_humans_over_time(pop[cremation, ], timesteps)$n,
+    inhu = count_living_humans_over_time(pop[inhumation, ], timesteps)$n,
+    not_involved =  complete_pop - (crem + inhu) 
+  ) %>%
+    dplyr::mutate(
+      crem = crem / complete_pop,
+      inhu = inhu / complete_pop,
+      not_involved = not_involved / complete_pop
+    ) %>%
+    tidyr::gather(
+      variant, individuals_with_variant, -timesteps
+    )
+  
+  return(proportions)
+}
+

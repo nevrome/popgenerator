@@ -86,21 +86,23 @@ models_grid %>% write_all_models_to_files(dir_path = "../gluesless/test_data/mod
 
 #### test working with gluesless ####
 
-run_gluesless(
+models_grid$simulation_results <- run_gluesless(
   app_path = "/home/clemens/neomod/gluesless/build/gluesless",
   input_file_dir = "/home/clemens/neomod/gluesless/test_data/model_grid",
   output_file_dir = "/home/clemens/neomod/gluesless/test_data/model_grid",
-  models_to_run = c(1, 4)
+  models_to_run = models_grid$model_id
 )
 
 ####
 
+models_grid %<>% calculate_all_idea_proportions_over_time()
+
 library(ggplot2)
 
-simulation_data %>%
+models_grid$idea_proportions[[4]] %>%
   ggplot() +
-  geom_area(aes(x = time, y = individuals_with_variant, fill = variant, group = variant)) +
-  geom_line(aes(x = time, y = individuals_with_variant, group = variant), position = "stack") +
+  geom_area(aes(x = timesteps, y = individuals_with_variant, fill = variant, group = variant)) +
+  geom_line(aes(x = timesteps, y = individuals_with_variant, group = variant), position = "stack") +
   theme_bw() +
   xlab(expression(paste("t"))) +
   ylab("variants and their occurence in the population [%]")
