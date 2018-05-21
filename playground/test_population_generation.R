@@ -54,7 +54,7 @@ models_grid <- expand.grid(
   ),
   # ideas settings
   names = list(
-    c("cremation", "inhumation")
+    c("idea_1", "idea_2")
   ),
   start_distribution = list(
     c(0.2, 0.8)#,

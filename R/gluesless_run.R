@@ -34,13 +34,13 @@ run_gluesless <- function(
           result[which(result == "Number of remaining nodes after this iteration:") + 1], split = " "
         )))
       result_list$notes_per_idea <- list()
-      result_list$notes_per_idea$inhumation <- 
+      result_list$notes_per_idea$idea_2 <- 
         as.integer(unlist(strsplit(
-          result[which(result == "inhumation") + 1], split = " "
+          result[which(result == "idea_2") + 1], split = " "
         )))
-      result_list$notes_per_idea$cremation <- 
+      result_list$notes_per_idea$idea_1 <- 
         as.integer(unlist(strsplit(
-          result[which(result == "cremation") + 1], split = " "
+          result[which(result == "idea_1") + 1], split = " "
         )))
       
       return(result_list)
