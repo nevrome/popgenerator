@@ -102,29 +102,40 @@ calculate_idea_proportions_over_time <- function(id, x) {
   timesteps <- x$timeframe[[id]]
   idea_1 <- x$simulation_results[[id]]$notes_per_idea$idea_1
   idea_2 <- x$simulation_results[[id]]$notes_per_idea$idea_2
-  pop <- x$populations[[id]]
-  complete_pop <- count_living_humans_over_time(pop, timesteps)$n
   
-  proportions <- tibble::tibble(
-    timesteps = timesteps,
-    idea_1 = count_living_humans_over_time(pop[idea_1, ], timesteps)$n,
-    idea_2 = count_living_humans_over_time(pop[idea_2, ], timesteps)$n
-  ) %>%
-    dplyr::mutate(
-      not_involved = complete_pop - (.data$idea_1 + .data$idea_2)
-    ) %>%
-    dplyr::mutate(
-      idea_1 = .data$idea_1 / complete_pop,
-      idea_2 = .data$idea_2 / complete_pop,
-      not_involved = .data$not_involved / complete_pop
-    ) %>%
-    tidyr::gather(
-      "variant", "individuals_with_variant", -.data$timesteps
-    ) %>%
-    dplyr::mutate(
-      multiplier = x$multiplier[[id]]
-    )
+  populations <- split(x$populations[[id]], x$populations[[id]]$unit) 
+  multiplier <- x$multiplier[[id]]
   
-  return(proportions)
+  all_proportions <- lapply(
+    populations, function(pop, id) {
+    
+      complete_pop <- count_living_humans_over_time(pop, timesteps)$n
+  
+      proportions <- tibble::tibble(
+        timesteps = timesteps,
+        idea_1 = count_living_humans_over_time(pop[idea_1, ], timesteps)$n,
+        idea_2 = count_living_humans_over_time(pop[idea_2, ], timesteps)$n
+      ) %>%
+        dplyr::mutate(
+          not_involved = complete_pop - (.data$idea_1 + .data$idea_2)
+        ) %>%
+        dplyr::mutate(
+          idea_1 = .data$idea_1 / complete_pop,
+          idea_2 = .data$idea_2 / complete_pop,
+          not_involved = .data$not_involved / complete_pop
+        ) %>%
+        tidyr::gather(
+          "variant", "individuals_with_variant", -.data$timesteps
+        ) %>%
+        dplyr::mutate(
+          multiplier = multiplier,
+          unit = pop$unit[1]
+        )
+    },
+    multiplier
+  ) %>% 
+    dplyr::bind_rows()
+  
+  return(all_proportions)
 }
 

@@ -117,13 +117,13 @@ models_grid %<>% calculate_all_idea_proportions_over_time()
 
 library(ggplot2)
 
-models_grid$idea_proportions[[4]] %>%
-  ggplot() +
-    geom_area(aes(x = timesteps, y = individuals_with_variant, fill = variant, group = variant)) +
-    geom_line(aes(x = timesteps, y = individuals_with_variant, group = variant), position = "stack") +
-    theme_bw() +
-    xlab(expression(paste("t"))) +
-    ylab("variants and their occurence in the population [%]")
+# models_grid$idea_proportions[[4]] %>%
+#   ggplot() +
+#     geom_area(aes(x = timesteps, y = individuals_with_variant, fill = variant, group = variant)) +
+#     geom_line(aes(x = timesteps, y = individuals_with_variant, group = variant), position = "stack") +
+#     theme_bw() +
+#     xlab(expression(paste("t"))) +
+#     ylab("variants and their occurence in the population [%]")
 
 
 idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions, .id = 'model_id')
@@ -132,7 +132,8 @@ idea_proportions %>%
   ggplot(aes(x = timesteps, y = individuals_with_variant, color = multiplier, group = model_id)) +
     geom_line(alpha = 0.4) +
     theme_bw() +
-    facet_wrap(~variant) +
+    #facet_wrap(~variant) +
+    facet_wrap(unit~variant) +
     stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
     xlab(expression(paste("t"))) 
 
