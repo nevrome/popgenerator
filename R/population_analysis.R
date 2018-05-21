@@ -120,6 +120,9 @@ calculate_idea_proportions_over_time <- function(id, x) {
     ) %>%
     tidyr::gather(
       "variant", "individuals_with_variant", -.data$timesteps
+    ) %>%
+    dplyr::mutate(
+      multiplier = x$multiplier[[id]]
     )
   
   return(proportions)

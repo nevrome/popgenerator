@@ -2,7 +2,6 @@
 
 # create populations_grid data.frame
 models_grid <- expand.grid(
-  #multiplier = 1:10,
   # general settings
   timeframe = list(
     0:2000
@@ -57,16 +56,20 @@ models_grid <- expand.grid(
     c("idea_1", "idea_2")
   ),
   start_distribution = list(
-    c(0.2, 0.8)#,
+    c(0.5, 0.5)#,
     #c(0.7, 0.3),
     #c(0.3, 0.7)
   ), 
   strength = list(
-    c(1, 1), 
-    c(1, 2)#,
+    c(1, 1) 
+    #c(1, 2),
     #c(2, 1)
   )
 ) %>% tibble::as.tibble() %>%
+  dplyr::mutate(
+    multiplier = 1:nrow(.)
+  ) %>%
+  tidyr::uncount(3) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
@@ -108,14 +111,14 @@ models_grid$idea_proportions[[4]] %>%
     ylab("variants and their occurence in the population [%]")
 
 
-idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions, .id = 'source')
+idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions, .id = 'model_id')
 
 idea_proportions %>% 
-  ggplot(aes(x = timesteps, y = individuals_with_variant, color = source)) +
+  ggplot(aes(x = timesteps, y = individuals_with_variant, color = multiplier, group = model_id)) +
     geom_line(alpha = 0.4) +
     theme_bw() +
     facet_wrap(~variant) +
-    stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.1) +
+    stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
     xlab(expression(paste("t"))) 
 
 # pop %>%
