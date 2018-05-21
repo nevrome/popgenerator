@@ -14,6 +14,8 @@ class to store values that should be passed to the relations generator
 
 \item{\code{amount_friends}}{test}
 
+\item{\code{unit_interaction_matrix}}{test}
+
 \item{\code{cross_unit_proportion_child_of}}{test}
 
 \item{\code{cross_unit_proportion_friend}}{test}
