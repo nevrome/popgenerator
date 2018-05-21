@@ -4,6 +4,7 @@
 #'
 #' @slot population test
 #' @slot amount_friends test
+#' @slot unit_interaction_matrix test
 #' @slot cross_unit_proportion_child_of test
 #' @slot cross_unit_proportion_friend test
 #' @slot weight_child_of test
@@ -15,6 +16,7 @@ setClass(
   slots = c(
     population = "data.frame",
     amount_friends = "numeric",
+    unit_interaction_matrix = "matrix",
     cross_unit_proportion_child_of = "numeric",
     cross_unit_proportion_friend = "numeric",
     weight_child_of = "numeric",
@@ -42,6 +44,7 @@ init_relations_settings <- function(x) {
       "relations_settings",
       population =                     x$populations[[i]],
       amount_friends =                 x$amounts_friends[[i]],
+      unit_interaction_matrix =        x$unit_interaction_matrix[[i]],
       cross_unit_proportion_child_of = x$cross_unit_proportion_child_of[[i]],
       cross_unit_proportion_friend =   x$cross_unit_proportion_friend[[i]],
       weight_child_of =                x$weight_child_of[[i]],

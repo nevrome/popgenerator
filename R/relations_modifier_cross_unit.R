@@ -34,14 +34,16 @@ modify_relations_cross_unit <- function(relations, settings) {
     amount = calculate_amount_to_replace(
       child_of_relations, 
       settings@cross_unit_proportion_child_of
-    )
+    ),
+    interaction_matrix = settings@unit_interaction_matrix
   )
   friend_relations <- swap_partners(
     relations = friend_relations,
     amount = calculate_amount_to_replace(
       friend_relations, 
       settings@cross_unit_proportion_friend
-    )
+    ),
+    interaction_matrix = settings@unit_interaction_matrix
   )
   
   # combine different relationship types again
@@ -60,22 +62,37 @@ modify_relations_cross_unit <- function(relations, settings) {
 
 #### helper functions ####
 
-swap_partners <- function(relations, amount) {
+swap_partners <- function(relations, amount, interaction_matrix) {
   
-  #deviation_factor <- table(relations$to) %>% max()
   selected_for_swap <- floor(
     stats::runif(
       amount, 
       1, 
-      nrow(relations)# - deviation_factor
+      nrow(relations)
     )
   )
   
   max_to <- max(relations$to) 
   
-  # actual swap: incrementing to vector
-  relations$to[selected_for_swap] <- relations$to[selected_for_swap] + 1
+  unit_list <- split(relations, relations$unit)
   
+  # actual swap
+  relations$to[selected_for_swap] <- unname(unlist(lapply(
+    selected_for_swap, function(to_index, unit_list) {
+      sample(  
+        unname(unlist(lapply(
+          unit_list, function(x, to) {
+            x$to[x$to > to][1]
+          },
+          relations$to[to_index]
+        ))),
+        1,
+        prob = interaction_matrix[relations$unit[to_index], ]
+      )
+    }, 
+    unit_list
+  )))
+
   # if incrementation causes the to node of some relations to rise 
   # above the number of available nodes then remove this relation
   relations <- relations[!(relations$to > max_to), ]
