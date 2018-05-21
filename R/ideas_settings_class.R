@@ -64,7 +64,8 @@ idea_distribution_to_starting_nodes <- function(settings) {
   initial_ideas_by_unit <- unname(unlist(lapply(
     population_by_unit,
     function(population) {
-      utils::head(population$id, 5)
+      #utils::head(population$id, 5)
+      population$id[population$birth_time < 0 & population$death_time > 0]
     }
   )))
   
