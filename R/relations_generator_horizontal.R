@@ -21,11 +21,11 @@ generate_horizontal_relations <- function(settings) {
       
       shift <- rep(      
         get_average_index_shift_vector(
-          population$birth_time, 50, n = 5, sides = 2
+          x = population$birth_time, age_shift = 50, moving_average_looking_range = 5, sides = 2
         ),
         each = settings@amount_friends
       )
-      shift <- rlang::prepend(shift, rep(shift[1], 10))
+      shift <- rlang::prepend(shift, rep(shift[1], settings@amount_friends))
       
       to_index <- floor(
         stats::runif(
