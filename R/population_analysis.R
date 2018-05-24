@@ -15,6 +15,24 @@ count_living_humans_over_time <- function(humans, time) {
   )
 }
 
+#' count population by living units per timestep in population
+#'
+#' @param humans tibble population
+#' @param time vector timesteps
+#'
+#' @return tibble
+#'
+#' @export
+count_population_by_living_units_over_time <- function(humans, time) {
+  humans_by_unit <- split(humans, humans$unit)
+  lapply(
+    humans_by_unit, function(humans, time) {
+      count_living_humans_over_time(humans, time)
+    }, 
+    time
+  )
+}
+
 #' count living units per timestep in population
 #'
 #' @param humans tibble population
@@ -40,32 +58,6 @@ count_living_units_over_time <- function(humans, time) {
     ) %>% return()
 }
 
-#' count population by living units per timestep in population
-#'
-#' @param humans tibble population
-#' @param time vector timesteps
-#'
-#' @return tibble
-#'
-#' @export
-count_population_by_living_units_over_time <- function(humans, time) {
-  expand.grid(time = time, unit = sort(unique(humans$unit))) %>%
-    dplyr::mutate(
-      n = purrr::map2_int(
-        .data$time, .data$unit,
-        function(x, y) {
-          humans %>% dplyr::filter(
-            .data$birth_time <= x & x <= .data$death_time,
-            .data$unit == y
-          ) %>%
-            nrow() %>%
-            return()
-        }
-      )
-    ) %>% return()
-}
-
-
 #' calculate_all_idea_proportions_over_time
 #'
 #' @param x test
@@ -73,11 +65,11 @@ count_population_by_living_units_over_time <- function(humans, time) {
 #' @return test
 #' 
 #' @export
-calculate_all_idea_proportions_over_time <- function(x) {
+calculate_all_idea_proportions_over_time <- function(x, by_unit = FALSE) {
   x$idea_proportions <- pbapply::pblapply(
     x$model_id, 
     FUN = calculate_idea_proportions_over_time,
-    x
+    x, by_unit
     #cl = 4
   )
   return(x)
@@ -91,45 +83,59 @@ calculate_all_idea_proportions_over_time <- function(x) {
 #' @return test
 #' 
 #' @export
-calculate_idea_proportions_over_time <- function(id, x) {
+calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
   
+  pop <- x$populations[[id]]
   timesteps <- x$timeframe[[id]]
+  multiplier <- x$multiplier[[id]]
   idea_1 <- x$simulation_results[[id]]$notes_per_idea$idea_1
   idea_2 <- x$simulation_results[[id]]$notes_per_idea$idea_2
+
+  if (by_unit) {
+    all_humans <- count_population_by_living_units_over_time(pop, timesteps)
+    idea_1_humans <- count_population_by_living_units_over_time(pop[idea_1, ], timesteps)
+    idea_2_humans <- count_population_by_living_units_over_time(pop[idea_2, ], timesteps)
+  } else {
+    all_humans <- count_living_humans_over_time(pop, timesteps)
+    idea_1_humans <- count_living_humans_over_time(pop[idea_1, ], timesteps)
+    idea_2_humans <- count_living_humans_over_time(pop[idea_2, ], timesteps)
+  }
   
-  populations <- split(x$populations[[id]], x$populations[[id]]$unit) 
-  multiplier <- x$multiplier[[id]]
-  
-  all_proportions <- lapply(
-    populations, function(pop, id) {
-    
-      complete_pop <- count_living_humans_over_time(pop, timesteps)$n
-  
-      proportions <- tibble::tibble(
-        timesteps = timesteps,
-        idea_1 = count_living_humans_over_time(pop[idea_1, ], timesteps)$n,
-        idea_2 = count_living_humans_over_time(pop[idea_2, ], timesteps)$n
+  if (by_unit) {
+    all_proportions <- lapply(
+      length(all_humans), function(unit_id) {
+        tibble::tibble(
+          timesteps = timesteps,
+          idea_1 = idea_1_humans[[unit_id]] / all_humans[[unit_id]],
+          idea_2 = idea_2_humans[[unit_id]] / all_humans[[unit_id]],
+          not_involved = (all_humans[[unit_id]] - idea_1_humans[[unit_id]] - idea_2_humans[[unit_id]]) / all_humans[[unit_id]]
+        ) %>%
+          tidyr::gather(
+            "variant", "individuals_with_variant", -.data$timesteps
+          )  %>%
+          dplyr::mutate(
+            model_id = id,
+            multiplier = multiplier,
+            unit = as.integer(names(all_humans)[unit_id])
+          )
+      }
+    ) %>% dplyr::bind_rows()
+  } else {
+    all_proportions <- tibble::tibble(
+      timesteps = timesteps,
+      idea_1 = idea_1_humans / all_humans,
+      idea_2 = idea_2_humans / all_humans,
+      not_involved = (all_humans - idea_1_humans - idea_2_humans) / all_humans
+    ) %>%
+      tidyr::gather(
+        "variant", "individuals_with_variant", -.data$timesteps
       ) %>%
-        dplyr::mutate(
-          not_involved = complete_pop - (.data$idea_1 + .data$idea_2)
-        ) %>%
-        dplyr::mutate(
-          idea_1 = .data$idea_1 / complete_pop,
-          idea_2 = .data$idea_2 / complete_pop,
-          not_involved = .data$not_involved / complete_pop
-        ) %>%
-        tidyr::gather(
-          "variant", "individuals_with_variant", -.data$timesteps
-        ) %>%
-        dplyr::mutate(
-          multiplier = multiplier,
-          unit = pop$unit[1]
-        )
-    },
-    multiplier
-  ) %>% 
-    dplyr::bind_rows()
-  
+      dplyr::mutate(
+        model_id = id,
+        multiplier = multiplier
+      )
+  }
+
   return(all_proportions)
 }
 

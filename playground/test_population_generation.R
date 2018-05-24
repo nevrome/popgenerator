@@ -105,18 +105,9 @@ models_grid$simulation_results <- run_gluesless(
 
 ####
 
-models_grid %<>% calculate_all_idea_proportions_over_time()
+models_grid %<>% calculate_all_idea_proportions_over_time(by_unit = TRUE)
 
 library(ggplot2)
-
-# models_grid$idea_proportions[[4]] %>%
-#   ggplot() +
-#     geom_area(aes(x = timesteps, y = individuals_with_variant, fill = variant, group = variant)) +
-#     geom_line(aes(x = timesteps, y = individuals_with_variant, group = variant), position = "stack") +
-#     theme_bw() +
-#     xlab(expression(paste("t"))) +
-#     ylab("variants and their occurence in the population [%]")
-
 
 idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions, .id = 'model_id')
 
@@ -129,50 +120,8 @@ idea_proportions %>%
     stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
     xlab(expression(paste("t"))) 
 
-####
 
-id <- 1
-timesteps <- models_grid$timeframe[[id]]
 
-models_grid$populations[[id]] -> pop
-timesteps <- models_grid$timeframe[[id]]
-idea_1 <- models_grid$simulation_results[[id]]$notes_per_idea$idea_1
-idea_2 <- models_grid$simulation_results[[id]]$notes_per_idea$idea_2
-complete_pop <- count_living_humans_over_time(pop, timesteps)$n
-
-proportions <- tibble::tibble(
-  timesteps = timesteps,
-  idea_1 = count_living_humans_over_time(pop[idea_1, ], timesteps),
-  idea_2 = count_living_humans_over_time(pop[idea_2, ], timesteps)
-) %>%
-  dplyr::mutate(
-    not_involved = complete_pop - (.data$idea_1 + .data$idea_2)
-  ) %>%
-  dplyr::mutate(
-    idea_1 = .data$idea_1 / complete_pop,
-    idea_2 = .data$idea_2 / complete_pop,
-    not_involved = .data$not_involved / complete_pop
-  ) %>%
-  tidyr::gather(
-    "variant", "individuals_with_variant", -.data$timesteps
-  ) 
-
-proportions %>% 
-  ggplot(aes(x = timesteps, y = individuals_with_variant)) +
-  geom_line(alpha = 0.4) +
-  theme_bw() +
-  #facet_wrap(~variant) +
-  facet_wrap(~variant) +
-  stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
-  xlab(expression(paste("t"))) 
-
-# pop %>%
-#   tibble::as.tibble() %>%
-#   dplyr::rowwise() %>%
-#   dplyr::mutate(
-#     years = list(birth_time:death_time)
-#   ) %>%
-#   dplyr::ungroup()
 
 #### analyse result ####
 
