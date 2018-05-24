@@ -7,18 +7,12 @@
 #'
 #' @export
 count_living_humans_over_time <- function(humans, time) {
-  tibble::tibble(time) %>%
-    dplyr::mutate(
-      n = time %>% purrr::map_int(
-        function(x) {
-          humans %>% dplyr::filter(
-            .data$birth_time <= x & x <= .data$death_time
-          ) %>%
-            nrow() %>%
-            return()
-        }
-      )
-    ) %>% return()
+  sapply(
+    time, function(x, humans) {
+      sum(humans$birth_time <= x & x <= humans$death_time)
+    },
+    humans
+  )
 }
 
 #' count living units per timestep in population

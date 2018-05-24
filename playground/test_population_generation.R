@@ -131,7 +131,7 @@ idea_proportions %>%
 
 ####
 
-id <- 5
+id <- 1
 timesteps <- models_grid$timeframe[[id]]
 
 models_grid$populations[[id]] -> pop
@@ -140,11 +140,10 @@ idea_1 <- models_grid$simulation_results[[id]]$notes_per_idea$idea_1
 idea_2 <- models_grid$simulation_results[[id]]$notes_per_idea$idea_2
 complete_pop <- count_living_humans_over_time(pop, timesteps)$n
 
-
 proportions <- tibble::tibble(
   timesteps = timesteps,
-  idea_1 = count_living_humans_over_time(pop[idea_1, ], timesteps)$n,
-  idea_2 = count_living_humans_over_time(pop[idea_2, ], timesteps)$n
+  idea_1 = count_living_humans_over_time(pop[idea_1, ], timesteps),
+  idea_2 = count_living_humans_over_time(pop[idea_2, ], timesteps)
 ) %>%
   dplyr::mutate(
     not_involved = complete_pop - (.data$idea_1 + .data$idea_2)
