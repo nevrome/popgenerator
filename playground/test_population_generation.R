@@ -129,6 +129,44 @@ idea_proportions %>%
     stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
     xlab(expression(paste("t"))) 
 
+####
+
+id <- 5
+timesteps <- models_grid$timeframe[[id]]
+
+models_grid$populations[[id]] -> pop
+timesteps <- models_grid$timeframe[[id]]
+idea_1 <- models_grid$simulation_results[[id]]$notes_per_idea$idea_1
+idea_2 <- models_grid$simulation_results[[id]]$notes_per_idea$idea_2
+complete_pop <- count_living_humans_over_time(pop, timesteps)$n
+
+
+proportions <- tibble::tibble(
+  timesteps = timesteps,
+  idea_1 = count_living_humans_over_time(pop[idea_1, ], timesteps)$n,
+  idea_2 = count_living_humans_over_time(pop[idea_2, ], timesteps)$n
+) %>%
+  dplyr::mutate(
+    not_involved = complete_pop - (.data$idea_1 + .data$idea_2)
+  ) %>%
+  dplyr::mutate(
+    idea_1 = .data$idea_1 / complete_pop,
+    idea_2 = .data$idea_2 / complete_pop,
+    not_involved = .data$not_involved / complete_pop
+  ) %>%
+  tidyr::gather(
+    "variant", "individuals_with_variant", -.data$timesteps
+  ) 
+
+proportions %>% 
+  ggplot(aes(x = timesteps, y = individuals_with_variant)) +
+  geom_line(alpha = 0.4) +
+  theme_bw() +
+  #facet_wrap(~variant) +
+  facet_wrap(~variant) +
+  stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
+  xlab(expression(paste("t"))) 
+
 # pop %>%
 #   tibble::as.tibble() %>%
 #   dplyr::rowwise() %>%
