@@ -95,23 +95,37 @@ models_grid$simulation_results <- run_gluesless(
 
 ####
 
-models_grid %<>% calculate_all_idea_proportions_over_time(by_unit = TRUE)
+models_grid %<>% calculate_all_idea_proportions_over_time(by_unit = FALSE)
 
 library(ggplot2)
 
 idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions, .id = 'model_id')
 
 idea_proportions %>% 
-  ggplot(aes(x = timesteps, y = individuals_with_variant, color = multiplier, group = model_id)) +
+  ggplot(aes(x = timesteps, y = individuals_with_variant, color = as.factor(multiplier), group = model_id)) +
     geom_line(alpha = 0.4) +
     theme_bw() +
     #facet_wrap(~variant) +
-    facet_wrap(unit~variant) +
+    facet_wrap(as.factor(multiplier)~variant) +
     stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
     xlab(expression(paste("t"))) 
 
+idea_proportions %>% 
+  ggplot(aes(x = timesteps, y = individuals_with_variant, fill = variant, group = variant)) +
+  geom_area() +
+  geom_line(alpha = 0.4, position="stack",  color = "black") +
+  theme_bw() +
+  #facet_wrap(~variant) +
+  facet_wrap(~model_id) +
+  xlab(expression(paste("t"))) 
 
-
+idea_proportions %>% 
+  ggplot(aes(x = timesteps, y = individuals_with_variant, color = variant, group = variant)) +
+  geom_line(alpha = 0.4) +
+  theme_bw() +
+  stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
+  facet_wrap(~model_id) +
+  xlab(expression(paste("t"))) 
 
 #### analyse result ####
 
