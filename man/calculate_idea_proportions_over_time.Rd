@@ -4,12 +4,14 @@
 \alias{calculate_idea_proportions_over_time}
 \title{calculate_idea_proportions_over_time}
 \usage{
-calculate_idea_proportions_over_time(id, x)
+calculate_idea_proportions_over_time(id, x, by_unit = FALSE)
 }
 \arguments{
 \item{id}{test}
 
 \item{x}{test}
+
+\item{by_unit}{test}
 }
 \value{
 test

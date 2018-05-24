@@ -61,6 +61,7 @@ count_living_units_over_time <- function(humans, time) {
 #' calculate_all_idea_proportions_over_time
 #'
 #' @param x test
+#' @param by_unit test
 #'
 #' @return test
 #' 
@@ -79,6 +80,7 @@ calculate_all_idea_proportions_over_time <- function(x, by_unit = FALSE) {
 #'
 #' @param id test
 #' @param x test
+#' @param by_unit test
 #'
 #' @return test
 #' 
@@ -103,7 +105,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
   
   if (by_unit) {
     all_proportions <- lapply(
-      length(all_humans), function(unit_id) {
+      1:length(all_humans), function(unit_id) {
         tibble::tibble(
           timesteps = timesteps,
           idea_1 = idea_1_humans[[unit_id]] / all_humans[[unit_id]],
@@ -116,7 +118,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
           dplyr::mutate(
             model_id = id,
             multiplier = multiplier,
-            unit = as.integer(names(all_humans)[unit_id])
+            unit = as.integer(names(all_humans)[[unit_id]])
           )
       }
     ) %>% dplyr::bind_rows()
