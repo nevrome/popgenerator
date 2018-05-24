@@ -8,12 +8,13 @@ models_grid <- expand.grid(
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {30},
+    function(t) {50},
     function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
+    # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(2000 - 0.95 * t, 0)}
   ),
   units_amount = c(
-    3
+    5
   ),
   age_distribution_functions = c(
     function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}
@@ -23,38 +24,27 @@ models_grid <- expand.grid(
   ),
   # relations settings
   amounts_friends = list(
-    3
+    20
   ),
   unit_interaction_matrix = list(
-    # t(matrix(
-    #   c(
-    #     0,   0.2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-    #     0.2,   0, 0.2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-    #     0.1, 0.2,   0, 0.2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-    #     0.1, 0.1, 0.2,   0, 0.2, 0.1, 0.1, 0.1, 0.1, 0.1,
-    #     0.1, 0.1, 0.1, 0.2,   0, 0.2, 0.1, 0.1, 0.1, 0.1,
-    #     0.1, 0.1, 0.1, 0.1, 0.2,   0, 0.2, 0.1, 0.1, 0.1,
-    #     0.1, 0.1, 0.1, 0.1, 0.1, 0.2,   0, 0.2, 0.1, 0.1,
-    #     0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2,   0, 0.2, 0.1,
-    #     0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2,   0, 0.2,
-    #     0.2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2,   0
-    #   ),
-    #   10, 10
-    # ))
     t(matrix(
       c(
-        0,   0.2, 0.1,
-        0.2,   0, 0.2,
-        0.1, 0.2,   0
+        0,1,1,1,1,
+        1,0,1,1,1,
+        1,1,0,1,1,
+        1,1,1,0,1,
+        1,1,1,1,0
       ),
-      3, 3
+      5, 5
     ))
   ),
   cross_unit_proportion_child_of = list(
-    0.02
+    0.01,
+    0.1,
+    0.5
   ),
   cross_unit_proportion_friend = list(
-    0.1
+    0.01
   ),
   weight_child_of = list(
     3
