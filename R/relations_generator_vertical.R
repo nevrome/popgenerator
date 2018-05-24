@@ -29,7 +29,7 @@ generate_vertical_relations <- function(settings) {
       # downshift_1 is the lower limit of the possible parent index range
       downshift_1 <- rep(      
         get_average_index_shift_vector(
-          x = population$birth_time, age_shift = 40, n = 5, sides = 1
+          x = population$birth_time, age_shift = 40, moving_average_looking_range = 5, sides = 1
         ),
         each = 2
       )
@@ -38,7 +38,7 @@ generate_vertical_relations <- function(settings) {
       # downshift_2 is the upper limit of the possible parent index range
       downshift_2 <- rep(      
         get_average_index_shift_vector(
-          x = population$birth_time, age_shift = 15, n = 5, sides = 1
+          x = population$birth_time, age_shift = 15, moving_average_looking_range = 5, sides = 1
         ),
         each = 2
       )
@@ -75,11 +75,15 @@ generate_vertical_relations <- function(settings) {
 
 #### helper functions ####
 
-get_average_index_shift_vector <- function(x, age_shift, n = 5, sides = 1) {
+get_average_index_shift_vector <- function(x, age_shift, moving_average_looking_range = 5, sides = 1) {
+  # diff(x) contains the birth_time differences between the sequential members of a unit
+  # if we divide the demanded age_shift with this vector, we get a vector that contains the
+  # size of the index_shift for the individual unit member
   ais <- age_shift / diff(x)
   ais[is.infinite(ais)] <- age_shift
+  # to smooth this result, we apply a moving average calculation
   ais <- moving_average(
-    ais, n = n,  sides = sides
+    ais, n = moving_average_looking_range,  sides = sides
   )
   ais <- as.vector(ais)
   ais[is.na(ais)] <- age_shift
