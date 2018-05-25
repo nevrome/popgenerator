@@ -8,8 +8,8 @@ models_grid <- expand.grid(
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {70},
-    function(t) {round(0.0001 * (t - 700)^2 + 50, 0)}
+    function(t) {50},
+    function(t) {round(0.0001 * (t - 700)^2 + 30, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(2000 - 0.95 * t, 0)}
@@ -67,7 +67,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     multiplier = 1:nrow(.)
   ) %>%
-  tidyr::uncount(3) %>%
+  tidyr::uncount(10) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
@@ -139,12 +139,73 @@ idea_proportions %>%
 
 #### 
 
-idea_proportions %>%
-  dplyr::filter(variant == "idea_1", model_id == 1)
+models_grid$idea_proportions[[9]] -> test_prop
+
+test_prop %>%
+  ggplot(aes(x = timesteps, y = individuals_with_variant, color = variant, group = variant)) +
+  geom_line(alpha = 0.4) +
+  theme_bw() +
+  stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
+  xlab(expression(paste("t"))) 
 
 moving_average <- function(x, n = 5, sides = 1) {
-  stats::filter(x, rep(1/n, n), sides = sides)
+  as.vector(stats::filter(x, rep(1/n, n), sides = sides))
 }
+
+test_prop_smooth <- test_prop %>% 
+  dplyr::group_by(variant) %>%
+  dplyr::mutate(
+    individuals_with_variant = moving_average(individuals_with_variant, n = 50, sides = 2)
+  )
+
+ggplot() +
+  geom_line(
+    data = test_prop,
+    mapping = aes(x = timesteps, y = individuals_with_variant, color = variant, group = variant), 
+    alpha = 0.4
+  ) +
+  geom_line(
+    data = test_prop_smooth,
+    mapping = aes(x = timesteps, y = individuals_with_variant, color = variant, group = variant), 
+    alpha = 1
+  ) +
+  theme_bw() +
+  xlab(expression(paste("t"))) 
+
+####
+
+huup <- idea_proportions %>%
+  dplyr::filter(variant == "idea_1") %>%
+  dplyr::group_by(model_id) %>%
+  dplyr::mutate(
+    individuals_with_variant = moving_average(individuals_with_variant, n = 50, sides = 2)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::group_by(timesteps, multiplier) %>%
+  dplyr::summarise(
+    min = min(individuals_with_variant),
+    max = max(individuals_with_variant),
+    mean = mean(individuals_with_variant),
+    standard_deviation = sd(individuals_with_variant),
+    range = abs(min - max),
+    lower_quart = quantile(individuals_with_variant, na.rm = TRUE)[2],
+    upper_quart = quantile(individuals_with_variant, na.rm = TRUE)[4]
+  ) %>%
+  dplyr::ungroup()
+
+huup %>%
+  ggplot() +
+  geom_ribbon(aes(x = timesteps, ymin = min, ymax = max)) +
+  geom_line(aes(x = timesteps, y = mean)) +
+  geom_line(aes(x = timesteps, y = mean + standard_deviation), color = "red") +
+  geom_line(aes(x = timesteps, y = mean - standard_deviation), color = "red") +
+  geom_line(aes(x = timesteps, y = lower_quart), color = "darkgreen") +
+  geom_line(aes(x = timesteps, y = upper_quart), color = "darkgreen") +
+  facet_wrap(~multiplier)
+
+huup %>%
+  ggplot() +
+  geom_line(aes(x = timesteps, y = range, color = as.factor(multiplier), group = as.factor(multiplier)))
 
 #### analyse result ####
 
