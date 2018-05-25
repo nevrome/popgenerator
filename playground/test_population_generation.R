@@ -128,6 +128,15 @@ idea_proportions %>%
   facet_wrap(~model_id) +
   xlab(expression(paste("t"))) 
 
+idea_proportions %>% 
+  tidyr::spread(variant, individuals_with_variant) %>%
+  ggplot(aes(x = idea_1, y = idea_2, z = not_involved)) +
+  geom_point(alpha = 0.4) +
+  theme_bw() +
+  #stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
+  facet_wrap(~model_id) +
+  ggtern::coord_tern()
+
 #### 
 
 idea_proportions %>%
