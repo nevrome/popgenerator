@@ -8,8 +8,9 @@ models_grid <- expand.grid(
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {50},
-    function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
+    function(t) {70},
+    function(t) {round(0.0001 * (t - 700)^2 + 50, 0)}
+    # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(2000 - 0.95 * t, 0)}
   ),
@@ -99,7 +100,7 @@ models_grid %<>% calculate_all_idea_proportions_over_time(by_unit = FALSE)
 
 library(ggplot2)
 
-idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions, .id = 'model_id')
+idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions)
 
 idea_proportions %>% 
   ggplot(aes(x = timesteps, y = individuals_with_variant, color = as.factor(multiplier), group = model_id)) +
@@ -126,6 +127,15 @@ idea_proportions %>%
   stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
   facet_wrap(~model_id) +
   xlab(expression(paste("t"))) 
+
+#### 
+
+idea_proportions %>%
+  dplyr::filter(variant == "idea_1", model_id == 1)
+
+moving_average <- function(x, n = 5, sides = 1) {
+  stats::filter(x, rep(1/n, n), sides = sides)
+}
 
 #### analyse result ####
 
