@@ -189,7 +189,8 @@ huup <- idea_proportions %>%
     standard_deviation = sd(individuals_with_variant),
     range = abs(min - max),
     lower_quart = quantile(individuals_with_variant, na.rm = TRUE)[2],
-    upper_quart = quantile(individuals_with_variant, na.rm = TRUE)[4]
+    upper_quart = quantile(individuals_with_variant, na.rm = TRUE)[4],
+    inter_quart_dist = abs(upper_quart - upper_quart)
   ) %>%
   dplyr::ungroup()
 
@@ -206,6 +207,10 @@ huup %>%
 huup %>%
   ggplot() +
   geom_line(aes(x = timesteps, y = range, color = as.factor(multiplier), group = as.factor(multiplier)))
+
+huup %>%
+  ggplot() +
+  geom_line(aes(x = timesteps, y = inter_quart_dist, color = as.factor(multiplier), group = as.factor(multiplier)))
 
 #### analyse result ####
 
