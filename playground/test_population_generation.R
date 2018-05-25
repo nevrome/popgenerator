@@ -9,7 +9,7 @@ models_grid <- expand.grid(
   # population settings  
   population_size_functions = c(
     function(t) {50},
-    function(t) {round(0.0001 * (t - 700)^2 + 30, 0)}
+    function(t) {round(0.0002 * (t - 700)^2 + 10, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(2000 - 0.95 * t, 0)}
@@ -40,9 +40,7 @@ models_grid <- expand.grid(
     ))
   ),
   cross_unit_proportion_child_of = list(
-    0.01,
-    0.1,
-    0.5
+    0.01
   ),
   cross_unit_proportion_friend = list(
     0.01
@@ -67,7 +65,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     multiplier = 1:nrow(.)
   ) %>%
-  tidyr::uncount(10) %>%
+  tidyr::uncount(50) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
@@ -181,6 +179,11 @@ huup <- idea_proportions %>%
     individuals_with_variant = moving_average(individuals_with_variant, n = 50, sides = 2)
   ) %>%
   dplyr::ungroup() %>%
+  # dplyr::group_by(timesteps) %>%
+  # dplyr::mutate(
+  #   general_sd = sd(individuals_with_variant)
+  # ) %>%
+  # dplyr::ungroup() %>%
   dplyr::group_by(timesteps, multiplier) %>%
   dplyr::summarise(
     min = min(individuals_with_variant),
@@ -190,9 +193,12 @@ huup <- idea_proportions %>%
     range = abs(min - max),
     lower_quart = quantile(individuals_with_variant, na.rm = TRUE)[2],
     upper_quart = quantile(individuals_with_variant, na.rm = TRUE)[4],
-    inter_quart_dist = abs(upper_quart - upper_quart)
+    inter_quart_dist = abs(upper_quart - lower_quart)
   ) %>%
-  dplyr::ungroup()
+  dplyr::ungroup()# %>%
+  # dplyr::mutate(
+  #   diff_standard_deviation = general_sd - standard_deviation
+  # )
 
 huup %>%
   ggplot() +
@@ -211,6 +217,10 @@ huup %>%
 huup %>%
   ggplot() +
   geom_line(aes(x = timesteps, y = inter_quart_dist, color = as.factor(multiplier), group = as.factor(multiplier)))
+
+huup %>%
+  ggplot() +
+  geom_line(aes(x = timesteps, y = standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
 
 #### analyse result ####
 
