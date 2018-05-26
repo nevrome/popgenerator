@@ -179,11 +179,11 @@ huup <- idea_proportions %>%
     individuals_with_variant = moving_average(individuals_with_variant, n = 50, sides = 2)
   ) %>%
   dplyr::ungroup() %>%
-  # dplyr::group_by(timesteps) %>%
-  # dplyr::mutate(
-  #   general_sd = sd(individuals_with_variant)
-  # ) %>%
-  # dplyr::ungroup() %>%
+  dplyr::group_by(timesteps) %>%
+  dplyr::mutate(
+    general_sd = sd(individuals_with_variant)
+  ) %>%
+  dplyr::ungroup() %>%
   dplyr::group_by(timesteps, multiplier) %>%
   dplyr::summarise(
     min = min(individuals_with_variant),
@@ -193,12 +193,13 @@ huup <- idea_proportions %>%
     range = abs(min - max),
     lower_quart = quantile(individuals_with_variant, na.rm = TRUE)[2],
     upper_quart = quantile(individuals_with_variant, na.rm = TRUE)[4],
-    inter_quart_dist = abs(upper_quart - lower_quart)
+    inter_quart_dist = abs(upper_quart - lower_quart),
+    general_sd = mean(general_sd)
   ) %>%
-  dplyr::ungroup()# %>%
-  # dplyr::mutate(
-  #   diff_standard_deviation = general_sd - standard_deviation
-  # )
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    diff_standard_deviation = standard_deviation - general_sd
+  )
 
 huup %>%
   ggplot() +
@@ -221,6 +222,10 @@ huup %>%
 huup %>%
   ggplot() +
   geom_line(aes(x = timesteps, y = standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
+
+huup %>%
+  ggplot() +
+  geom_line(aes(x = timesteps, y = diff_standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
 
 #### analyse result ####
 
