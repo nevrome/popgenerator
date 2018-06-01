@@ -13,7 +13,7 @@ setClass(
   slots = c(
     population = "data.frame",
     names = "character",
-    start_distribution = "numeric",
+    start_distribution = "data.frame",
     strength = "numeric"
   )
 )
@@ -61,24 +61,34 @@ idea_distribution_to_starting_nodes <- function(settings) {
   
   population_by_unit <- split(settings@population, settings@population$unit)
   
-  initial_ideas_by_unit <- unname(unlist(lapply(
+  humans_at_time_zero_by_unit <- lapply(
     population_by_unit,
     function(population) {
-      #utils::head(population$id, 5)
       population$id[population$birth_time < 0 & population$death_time > 0]
     }
-  )))
+  )
   
-  starting_humans_per_idea <- list()
-  index_border_start <- 1
-  index_border_end <- 0
-  for (i in 1:number_of_ideas) {
-    index_border_end <- index_border_end + round(length(initial_ideas_by_unit) * settings@start_distribution[i])
-    starting_humans_per_idea[[i]] <- initial_ideas_by_unit[
-      index_border_start:index_border_end
-    ]
-    index_border_start <- index_border_end + 1
+  number_of_units <- length(population_by_unit)
+  idea_1_pot <- c()
+  idea_2_pot <- c()
+  for (i in 1:number_of_units) {
+    if (length(humans_at_time_zero_by_unit[[i]]) == 0) {
+      next;
+    }
+    pot_split <- split(
+      humans_at_time_zero_by_unit[[i]], 
+      sample(
+        2, 
+        length(humans_at_time_zero_by_unit[[i]]), 
+        prob = settings@start_distribution[1, ], 
+        replace = TRUE
+      )
+    )
+    idea_1_pot <- c(idea_1_pot, pot_split[["1"]])
+    idea_2_pot <- c(idea_2_pot, pot_split[["2"]])
   }
-
+  
+  starting_humans_per_idea <- list(idea_1_pot, idea_2_pot)
+  
   return(starting_humans_per_idea)  
 }
