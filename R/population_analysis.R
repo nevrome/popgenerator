@@ -90,29 +90,45 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
   pop <- x$populations[[id]]
   timesteps <- x$timeframe[[id]]
   multiplier <- x$multiplier[[id]]
-  idea_1 <- x$simulation_results[[id]]$notes_per_idea$idea_1
-  idea_2 <- x$simulation_results[[id]]$notes_per_idea$idea_2
+  idea_1_nodes <- x$simulation_results[[id]]$notes_per_idea$idea_1
+  idea_2_nodes <- x$simulation_results[[id]]$notes_per_idea$idea_2
 
   if (by_unit) {
     all_humans <- count_population_by_living_units_over_time(pop, timesteps)
-    idea_1_humans <- count_population_by_living_units_over_time(pop[idea_1, ], timesteps)
-    idea_2_humans <- count_population_by_living_units_over_time(pop[idea_2, ], timesteps)
+    idea_1_humans <- count_population_by_living_units_over_time(pop[idea_1_nodes, ], timesteps)
+    idea_2_humans <- count_population_by_living_units_over_time(pop[idea_2_nodes, ], timesteps)
   } else {
     all_humans <- count_living_humans_over_time(pop, timesteps)
-    idea_1_humans <- count_living_humans_over_time(pop[idea_1, ], timesteps)
-    idea_2_humans <- count_living_humans_over_time(pop[idea_2, ], timesteps)
+    idea_1_humans <- count_living_humans_over_time(pop[idea_1_nodes, ], timesteps)
+    idea_2_humans <- count_living_humans_over_time(pop[idea_2_nodes, ], timesteps)
   }
   
   if (by_unit) {
     all_proportions <- lapply(
       1:length(all_humans), function(unit_id) {
+        
+        unit_name <- as.character(unit_id) 
+        
+        if (unit_name %in% names(idea_1_humans) & unit_name %in% names(idea_2_humans)) {
+          idea_1 = idea_1_humans[[unit_name]] / (idea_1_humans[[unit_name]] + idea_2_humans[[unit_name]])
+          idea_2 = idea_2_humans[[unit_name]] / (idea_1_humans[[unit_name]] + idea_2_humans[[unit_name]])
+        } else if (unit_name %in% names(idea_1_humans) & !(unit_name %in% names(idea_2_humans))) {
+          idea_1 = 1
+          idea_2 = 0
+        } else if (unit_name %in% names(idea_2_humans) & !(unit_name %in% names(idea_1_humans))) {
+          idea_1 = 0
+          idea_2 = 1
+        } else {
+          stop("empty unit?")
+        }
+        
         tibble::tibble(
           timestep = timesteps,
           # idea_1 = idea_1_humans[[unit_id]] / all_humans[[unit_id]],
           # idea_2 = idea_2_humans[[unit_id]] / all_humans[[unit_id]],
           # not_involved = (all_humans[[unit_id]] - idea_1_humans[[unit_id]] - idea_2_humans[[unit_id]]) / all_humans[[unit_id]]
-          idea_1 = idea_1_humans[[unit_id]] / (idea_1_humans[[unit_id]] + idea_2_humans[[unit_id]]),
-          idea_2 = idea_2_humans[[unit_id]] / (idea_1_humans[[unit_id]] + idea_2_humans[[unit_id]])
+          idea_1 = idea_1,
+          idea_2 = idea_2
         ) %>%
           tidyr::gather(
             "idea", "proportion", -.data$timestep
