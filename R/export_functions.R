@@ -28,7 +28,7 @@ write_all_models_to_files <- function(x, dir_path) {
 
 #' write_pajek_for_snap
 #'
-#' @param graph igraph object
+#' @param rel relations data.frame
 #' @param pop population data.frame
 #' @param path output file path
 #'
@@ -41,7 +41,7 @@ write_pajek_for_snap <- function(rel, pop, path) {
   rel_small <- rel %>% dplyr::select(.data$from, .data$to, .data$weight)
   rel_small <- rel_small[stats::complete.cases(rel_small), ]
   
-  write.table(rel_small, file = path, sep = " ", row.names = F, col.names = F)
+  utils::write.table(rel_small, file = path, sep = " ", row.names = F, col.names = F)
   
   incomplete_pajek <- readLines(path)
   

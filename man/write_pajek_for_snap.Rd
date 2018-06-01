@@ -4,10 +4,10 @@
 \alias{write_pajek_for_snap}
 \title{write_pajek_for_snap}
 \usage{
-write_pajek_for_snap(graph, pop, path)
+write_pajek_for_snap(rel, pop, path)
 }
 \arguments{
-\item{graph}{igraph object}
+\item{rel}{relations data.frame}
 
 \item{pop}{population data.frame}
 
