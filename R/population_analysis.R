@@ -107,34 +107,44 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
     all_proportions <- lapply(
       1:length(all_humans), function(unit_id) {
         tibble::tibble(
-          timesteps = timesteps,
-          idea_1 = idea_1_humans[[unit_id]] / all_humans[[unit_id]],
-          idea_2 = idea_2_humans[[unit_id]] / all_humans[[unit_id]],
-          not_involved = (all_humans[[unit_id]] - idea_1_humans[[unit_id]] - idea_2_humans[[unit_id]]) / all_humans[[unit_id]]
+          timestep = timesteps,
+          # idea_1 = idea_1_humans[[unit_id]] / all_humans[[unit_id]],
+          # idea_2 = idea_2_humans[[unit_id]] / all_humans[[unit_id]],
+          # not_involved = (all_humans[[unit_id]] - idea_1_humans[[unit_id]] - idea_2_humans[[unit_id]]) / all_humans[[unit_id]]
+          idea_1 = idea_1_humans[[unit_id]] / (idea_1_humans[[unit_id]] + idea_2_humans[[unit_id]]),
+          idea_2 = idea_2_humans[[unit_id]] / (idea_1_humans[[unit_id]] + idea_2_humans[[unit_id]])
         ) %>%
           tidyr::gather(
-            "variant", "individuals_with_variant", -.data$timesteps
+            "idea", "proportion", -.data$timestep
           )  %>%
           dplyr::mutate(
             model_id = id,
             multiplier = multiplier,
-            unit = as.integer(names(all_humans)[[unit_id]])
+            region = as.integer(names(all_humans)[[unit_id]])
+          ) %>%
+          dplyr::select(
+            .data$region, .data$timestep, .data$idea, .data$proportion, .data$model_id, .data$multiplier
           )
       }
     ) %>% dplyr::bind_rows()
   } else {
     all_proportions <- tibble::tibble(
-      timesteps = timesteps,
-      idea_1 = idea_1_humans / all_humans,
-      idea_2 = idea_2_humans / all_humans,
-      not_involved = (all_humans - idea_1_humans - idea_2_humans) / all_humans
+      timestep = timesteps,
+      # idea_1 = idea_1_humans / all_humans,
+      # idea_2 = idea_2_humans / all_humans,
+      # not_involved = (all_humans - idea_1_humans - idea_2_humans) / all_humans
+      idea_1 = idea_1_humans / (idea_1_humans + idea_2_humans),
+      idea_2 = idea_2_humans / (idea_1_humans + idea_2_humans)
     ) %>%
       tidyr::gather(
-        "variant", "individuals_with_variant", -.data$timesteps
+        "idea", "proportion", -.data$timestep
       ) %>%
       dplyr::mutate(
         model_id = id,
         multiplier = multiplier
+      ) %>%
+      dplyr::select(
+        .data$timestep, .data$idea, .data$proportion, .data$model_id, .data$multiplier
       )
   }
 
