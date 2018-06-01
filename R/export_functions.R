@@ -11,7 +11,7 @@ write_all_models_to_files <- function(x, dir_path) {
   pbapply::pblapply(
     1:nrow(x), function(y) {
       write_pajek_for_snap(
-        generate_graph(x$relations[[y]]), 
+        x$relations[[y]], 
         x$populations[[y]], 
         file.path(dir_path, paste0(x$model_id[y], "_pajek_graph.paj"))
       )
@@ -35,11 +35,21 @@ write_all_models_to_files <- function(x, dir_path) {
 #' @return TRUE, called for the side effect of writing to the file system
 #'
 #' @export
-write_pajek_for_snap <- function(graph, pop, path) {
+write_pajek_for_snap <- function(rel, pop, path) {
   if (file.exists(path)) {file.remove(path)}
-  igraph::write_graph(graph, path, format = "pajek")
+  
+  rel_small <- rel %>% dplyr::select(.data$from, .data$to, .data$weight)
+  rel_small <- rel_small[stats::complete.cases(rel_small), ]
+  
+  write.table(rel_small, file = path, sep = " ", row.names = F, col.names = F)
+  
   incomplete_pajek <- readLines(path)
-  incomplete_pajek[2] = paste(c(pop$id, "*Edges"), collapse = "\n")
+  
+  incomplete_pajek <- rlang::prepend(
+    incomplete_pajek, 
+    paste(c(paste("*Vertices", length(pop$id), collapse = " "), pop$id, "*Edges"), collapse = "\n")             
+  )
+  
   writeLines(incomplete_pajek, path)
   return(TRUE)
 }
