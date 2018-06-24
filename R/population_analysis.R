@@ -105,9 +105,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
   
   if (by_unit) {
     all_proportions <- lapply(
-      1:length(all_humans), function(unit_id) {
-        
-        unit_name <- as.character(unit_id) 
+      names(all_humans), function(unit_name) {
         
         if (unit_name %in% names(idea_1_humans) & unit_name %in% names(idea_2_humans)) {
           idea_1 = idea_1_humans[[unit_name]] / (idea_1_humans[[unit_name]] + idea_2_humans[[unit_name]])
@@ -124,9 +122,6 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
         
         tibble::tibble(
           timestep = timesteps,
-          # idea_1 = idea_1_humans[[unit_id]] / all_humans[[unit_id]],
-          # idea_2 = idea_2_humans[[unit_id]] / all_humans[[unit_id]],
-          # not_involved = (all_humans[[unit_id]] - idea_1_humans[[unit_id]] - idea_2_humans[[unit_id]]) / all_humans[[unit_id]]
           idea_1 = idea_1,
           idea_2 = idea_2
         ) %>%
@@ -136,7 +131,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
           dplyr::mutate(
             model_id = id,
             multiplier = multiplier,
-            region = as.integer(names(all_humans)[[unit_id]])
+            region = unit_name
           ) %>%
           dplyr::select(
             .data$region, .data$timestep, .data$idea, .data$proportion, .data$model_id, .data$multiplier
@@ -146,9 +141,6 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
   } else {
     all_proportions <- tibble::tibble(
       timestep = timesteps,
-      # idea_1 = idea_1_humans / all_humans,
-      # idea_2 = idea_2_humans / all_humans,
-      # not_involved = (all_humans - idea_1_humans - idea_2_humans) / all_humans
       idea_1 = idea_1_humans / (idea_1_humans + idea_2_humans),
       idea_2 = idea_2_humans / (idea_1_humans + idea_2_humans)
     ) %>%
