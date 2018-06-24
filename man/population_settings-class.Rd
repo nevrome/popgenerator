@@ -12,9 +12,11 @@ class to store values that should be passed to the population generator
 \describe{
 \item{\code{time}}{test}
 
-\item{\code{population_size_function}}{test}
+\item{\code{unit_amount}}{test}
 
-\item{\code{units_amount}}{test}
+\item{\code{unit_names}}{test}
+
+\item{\code{unit_size_functions}}{test}
 
 \item{\code{age_distribution_function}}{test}
 

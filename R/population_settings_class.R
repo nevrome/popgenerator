@@ -3,8 +3,9 @@
 #' class to store values that should be passed to the population generator
 #'
 #' @slot time test
-#' @slot population_size_function test
-#' @slot units_amount test
+#' @slot unit_amount test
+#' @slot unit_names test
+#' @slot unit_size_functions test
 #' @slot age_distribution_function test
 #' @slot age_range test
 #'
@@ -13,8 +14,9 @@ setClass(
   Class = "population_settings",
   slots = c(
     time = "numeric",
-    population_size_function = "function",
-    units_amount = "numeric",
+    unit_amount = "numeric",
+    unit_names = "character",
+    unit_size_functions = "list",
     age_distribution_function = "function",
     age_range = "numeric"
   )
@@ -41,8 +43,9 @@ init_population_settings <- function(x) {
     population_settings[[i]] <- methods::new(
       "population_settings",
       time =                       x$timeframe[[i]],
-      population_size_function =   x$population_size_functions[[i]],
-      units_amount =               x$units_amount[[i]],
+      unit_amount =                x$unit_amount[[i]],
+      unit_names =                 x$unit_names[[i]],
+      unit_size_functions =        x$unit_size_functions[[i]],
       age_distribution_function =  x$age_distribution_functions[[i]],
       age_range =                  x$age_ranges[[i]]
     )
