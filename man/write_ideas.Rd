@@ -4,12 +4,14 @@
 \alias{write_ideas}
 \title{write_ideas}
 \usage{
-write_ideas(settings, path)
+write_ideas(settings, path, start_time)
 }
 \arguments{
 \item{settings}{ideas_settings object}
 
 \item{path}{output file path}
+
+\item{start_time}{moment zero in the model context}
 }
 \value{
 TRUE, called for the side effect of writing to the file system

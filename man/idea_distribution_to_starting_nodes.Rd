@@ -4,10 +4,12 @@
 \alias{idea_distribution_to_starting_nodes}
 \title{idea_distribution_to_starting_nodes}
 \usage{
-idea_distribution_to_starting_nodes(settings)
+idea_distribution_to_starting_nodes(settings, start_time)
 }
 \arguments{
 \item{settings}{ideas_settings object}
+
+\item{start_time}{moment zero in the model context}
 }
 \value{
 a list of numeric vectors

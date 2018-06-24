@@ -51,11 +51,12 @@ init_ideas_settings <- function(x) {
 #' idea_distribution_to_starting_nodes
 #'
 #' @param settings ideas_settings object
+#' @param start_time moment zero in the model context 
 #'
 #' @return a list of numeric vectors
 #' 
 #' @export
-idea_distribution_to_starting_nodes <- function(settings) {
+idea_distribution_to_starting_nodes <- function(settings, start_time) {
   
   number_of_ideas <- length(settings@names)
   
@@ -64,7 +65,7 @@ idea_distribution_to_starting_nodes <- function(settings) {
   humans_at_time_zero_by_unit <- lapply(
     population_by_unit,
     function(population) {
-      population$id[population$birth_time < 0 & population$death_time > 0]
+      population$id[population$birth_time < start_time & population$death_time > start_time]
     }
   )
   

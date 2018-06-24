@@ -17,7 +17,8 @@ write_all_models_to_files <- function(x, dir_path) {
       )
       write_ideas(
         x$ideas_settings[[y]], 
-        file.path(dir_path, paste0(x$model_id[y], "_idea.txt"))
+        file.path(dir_path, paste0(x$model_id[y], "_idea.txt")),
+        start_time = x$timeframe[[y]][1]
       )
     }
   )
@@ -58,15 +59,16 @@ write_pajek_for_snap <- function(rel, pop, path) {
 #'
 #' @param settings ideas_settings object
 #' @param path output file path
+#' @param start_time moment zero in the model context 
 #'
 #' @return TRUE, called for the side effect of writing to the file system
 #'
 #' @export
-write_ideas <- function(settings, path) {
+write_ideas <- function(settings, path, start_time) {
   
   content <- paste(
     settings@names,
-    sapply(idea_distribution_to_starting_nodes(settings), paste, collapse = " "),
+    sapply(idea_distribution_to_starting_nodes(settings, start_time), paste, collapse = " "),
     settings@strength,
     sep = ";",
     collapse = "\n"
