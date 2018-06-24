@@ -122,8 +122,8 @@ generate_humans_per_birth_window <- function(
 generate_all_populations <- function(x) {
   x$populations <- pbapply::pblapply(
     x$population_settings, 
-    generate_population#,
-    #cl = 4
+    generate_population,
+    cl = 4
   )
   return(x)
 }
