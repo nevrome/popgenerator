@@ -5,7 +5,7 @@
 #' @param start integer start time 
 #' @param stop integer stop time 
 #' @param n integer amount of humans to generate
-#' @param settings population_settings object
+#' @param settings unit_settings object
 #' 
 #' @return data.frame with population (one row for each individual)
 #'

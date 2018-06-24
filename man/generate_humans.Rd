@@ -13,7 +13,7 @@ generate_humans(start, stop, n, settings)
 
 \item{n}{integer amount of humans to generate}
 
-\item{settings}{population_settings object}
+\item{settings}{unit_settings object}
 }
 \value{
 data.frame with population (one row for each individual)
