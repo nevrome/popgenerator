@@ -87,7 +87,7 @@ swap_partners <- function(relations, amount, interaction_matrix) {
           relations$to[to_index]
         ))),
         1,
-        prob = interaction_matrix[relations$unit[to_index], ]
+        prob = as.vector(interaction_matrix[, relations$unit[to_index]])
       )
     }, 
     unit_list
