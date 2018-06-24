@@ -20,8 +20,8 @@ generate_all_populations <- function(x) {
 
 #' generate_population
 #'
-#' Generate an initial population based on an populations settings
-#' object.
+#' Generate a population by creating the individual unit populations
+#' and merge them
 #'
 #' @param settings population_settings object
 #'
@@ -29,6 +29,28 @@ generate_all_populations <- function(x) {
 #'
 #' @export
 generate_population <- function(settings) {
+  unit_settings <- init_unit_settings(settings)
+  population <- do.call(rbind, lapply(
+    unit_settings, function(x) {
+      unit <- generate_unit(x)
+      unit$unit <- x@unit_name
+      return(unit)
+    }
+  ))
+  return(population)
+}
+
+#' generate_unit
+#'
+#' Generate an initial population based on an populations settings
+#' object
+#'
+#' @param settings unit_settings object
+#'
+#' @return data.frame with population (one row for each individual)
+#'
+#' @export
+generate_unit <- function(settings) {
   
   # get total amount of humans necessary in every year
   human_year_combinations <- get_number_human_year_combinations(settings)
@@ -67,7 +89,7 @@ generate_population <- function(settings) {
 
 get_number_human_year_combinations <- function(settings) {
   stats::integrate(
-    Vectorize(settings@population_size_function), 
+    Vectorize(settings@unit_size_function), 
     lower = min(settings@time) - 50, 
     upper = max(settings@time) + 50,
     subdivisions = 1000,
@@ -93,7 +115,7 @@ get_number_human_year_combinations_birth_window <- function(birth_windows, setti
   mapply(
     function(x, y) {
       stats::integrate(
-        Vectorize(settings@population_size_function), 
+        Vectorize(settings@unit_size_function), 
         lower = x, 
         upper = y,
         subdivisions = 1000,

@@ -15,7 +15,7 @@ setClass(
   slots = c(
     time = "numeric",
     unit_amount = "numeric",
-    unit_names = "character",
+    unit_names = "list",
     unit_size_functions = "list",
     age_distribution_function = "function",
     age_range = "numeric"

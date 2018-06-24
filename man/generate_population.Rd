@@ -13,6 +13,6 @@ generate_population(settings)
 data.frame with population (one row for each individual)
 }
 \description{
-Generate an initial population based on an populations settings
-object.
+Generate a population by creating the individual unit populations
+and merge them
 }
