@@ -1,3 +1,23 @@
+#' generate_all_relations
+#'
+#' Generate relations in a populations_grid data.frame based on
+#' relations_settings objects in column relations_settings. 
+#'
+#' @param x populations_grid data.frame
+#'
+#' @return populations_grid data.frame with additional column
+#' relations
+#'
+#' @export
+generate_all_relations <- function(x) {
+  x$relations <- pbapply::pblapply(
+    x$relations_settings, 
+    generate_relations,
+    cl = 4
+  )
+  return(x)
+}
+
 #' generate relations
 #'
 #' Generate horizontal and vertical relations for a population
@@ -26,24 +46,4 @@ generate_relations <- function(settings) {
   
   return(all_relations)
 
-}
-
-#' generate_all_relations
-#'
-#' Generate relations in a populations_grid data.frame based on
-#' relations_settings objects in column relations_settings. 
-#'
-#' @param x populations_grid data.frame
-#'
-#' @return populations_grid data.frame with additional column
-#' relations
-#'
-#' @export
-generate_all_relations <- function(x) {
-  x$relations <- pbapply::pblapply(
-    x$relations_settings, 
-    generate_relations,
-    cl = 4
-  )
-  return(x)
 }

@@ -1,3 +1,23 @@
+#' generate_all_populations
+#'
+#' Generate populations in populations_grid data.frame based on
+#' population_settings objects in column population_settings. 
+#'
+#' @param x populations_grid data.frame
+#'
+#' @return populations_grid data.frame with additional column
+#' populations
+#'
+#' @export
+generate_all_populations <- function(x) {
+  x$populations <- pbapply::pblapply(
+    x$population_settings, 
+    generate_population,
+    cl = 4
+  )
+  return(x)
+}
+
 #' generate_population
 #'
 #' Generate an initial population based on an populations settings
@@ -107,23 +127,3 @@ generate_humans_per_birth_window <- function(
 }
 
 #### helper functions end ####
-
-#' generate_all_populations
-#'
-#' Generate populations in populations_grid data.frame based on
-#' population_settings objects in column population_settings. 
-#'
-#' @param x populations_grid data.frame
-#'
-#' @return populations_grid data.frame with additional column
-#' populations
-#'
-#' @export
-generate_all_populations <- function(x) {
-  x$populations <- pbapply::pblapply(
-    x$population_settings, 
-    generate_population,
-    cl = 4
-  )
-  return(x)
-}
