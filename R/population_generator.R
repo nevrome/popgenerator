@@ -94,7 +94,7 @@ get_number_human_year_combinations <- function(settings) {
   stats::integrate(
     Vectorize(settings@unit_size_function), 
     lower = min(settings@time) - 50, 
-    upper = max(settings@time) + 100,
+    upper = max(settings@time) + 150,
     subdivisions = 1000,
     rel.tol = 1
   )$value
@@ -109,8 +109,8 @@ get_human_average_life_span <- function(settings) {
 get_birth_windows <- function(average_life_span, settings) {
   seq(
     min(settings@time) - 50,
-    max(settings@time) + 100,
-    abs((max(settings@time) + 100) - (min(settings@time) - 50)) / average_life_span
+    max(settings@time) + 150,
+    abs((max(settings@time) + 150) - (min(settings@time) - 50)) / average_life_span
   )
 }
 
