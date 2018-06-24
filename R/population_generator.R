@@ -29,7 +29,9 @@ generate_all_populations <- function(x) {
 #'
 #' @export
 generate_population <- function(settings) {
+  
   unit_settings <- init_unit_settings(settings)
+  
   population <- do.call(rbind, lapply(
     unit_settings, function(x) {
       unit <- generate_unit(x)
@@ -37,8 +39,12 @@ generate_population <- function(settings) {
       return(unit)
     }
   ))
+  
+  # order by birth_time
+  population <- population[order(population$birth_time), ]
   # add id column
   rownames(population) <- population$id <- 1:nrow(population)
+  
   return(population)
 }
 
@@ -77,8 +83,6 @@ generate_unit <- function(settings) {
   )
   # merge birth_window wise humans lists into a single data.frame
   generated_humans <- do.call(rbind.data.frame, generated_humans_raw)
-  # order by birth_time
-  generated_humans <- generated_humans[order(generated_humans$birth_time), ]
 
   return(generated_humans)
   
