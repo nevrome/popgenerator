@@ -62,10 +62,10 @@ idea_distribution_to_starting_nodes <- function(settings, start_time) {
   
   population_by_unit <- split(settings@population, settings@population$unit)
   
-  humans_at_time_zero_by_unit <- lapply(
+  humans_at_time_before_zero_by_unit <- lapply(
     population_by_unit,
     function(population) {
-      population$id[population$birth_time < start_time & population$death_time > start_time]
+      population$id[population$birth_time < start_time]
     }
   )
   
@@ -73,15 +73,15 @@ idea_distribution_to_starting_nodes <- function(settings, start_time) {
   idea_1_pot <- c()
   idea_2_pot <- c()
   for (i in 1:number_of_units) {
-    if (length(humans_at_time_zero_by_unit[[i]]) == 0) {
+    if (length(humans_at_time_before_zero_by_unit[[i]]) == 0) {
       next;
     }
     pot_split <- split(
-      humans_at_time_zero_by_unit[[i]], 
+      humans_at_time_before_zero_by_unit[[i]], 
       sample(
         2, 
-        length(humans_at_time_zero_by_unit[[i]]), 
-        prob = settings@start_distribution[1, ], 
+        length(humans_at_time_before_zero_by_unit[[i]]), 
+        prob = settings@start_distribution[i, ], 
         replace = TRUE
       )
     )
