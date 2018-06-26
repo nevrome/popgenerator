@@ -79,6 +79,12 @@ swap_partners <- function(relations, amount, interaction_matrix) {
   # actual swap
   relations$to[selected_for_swap] <- unname(unlist(lapply(
     selected_for_swap, function(to_index, unit_list) {
+      
+      # calculate cross unit interaction based on distance matrix
+      distance <- as.vector(interaction_matrix[, relations$unit[to_index]])
+      distance_accented <- distance^4
+      probability_of_interaction <- ifelse(distance_accented != 0, 1/distance_accented, 0)
+      
       sample(  
         unname(unlist(lapply(
           unit_list, function(x, to) {
@@ -87,7 +93,7 @@ swap_partners <- function(relations, amount, interaction_matrix) {
           relations$to[to_index]
         ))),
         1,
-        prob = as.vector(interaction_matrix[, relations$unit[to_index]])
+        prob = probability_of_interaction
       )
     }, 
     unit_list
