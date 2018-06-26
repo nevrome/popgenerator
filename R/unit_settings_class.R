@@ -13,7 +13,7 @@ setClass(
   Class = "unit_settings",
   slots = c(
     time = "numeric",
-    unit_name = "character",
+    unit_name = "factor",
     unit_size_function = "function",
     age_distribution_function = "function",
     age_range = "numeric"

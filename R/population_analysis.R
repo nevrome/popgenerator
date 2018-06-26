@@ -105,7 +105,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
   
   if (by_unit) {
     all_proportions <- lapply(
-      names(all_humans), function(unit_name) {
+      unique(pop$unit), function(unit_name) {
         
         if (unit_name %in% names(idea_1_humans) & unit_name %in% names(idea_2_humans)) {
           idea_1 = idea_1_humans[[unit_name]] / (idea_1_humans[[unit_name]] + idea_2_humans[[unit_name]])
