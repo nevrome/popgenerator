@@ -64,6 +64,35 @@ modify_relations_cross_unit <- function(relations, settings) {
 
 swap_partners <- function(relations, amount, interaction_matrix) {
   
+  relations$age_segment <- base::cut(
+    relations$birth_time, 
+    breaks = seq(
+      min(relations$birth_time) - 100, 
+      max(relations$birth_time) + 100, 
+      50
+    ),
+    labels = FALSE
+  )
+  
+  y <- relations
+  to_by_unit_and_age_segment <- lapply(
+    base::split(
+      y, 
+      y$age_segment
+    ), 
+    function(x) { 
+      lapply(
+        base::split(
+        x, 
+        x$unit
+      ),
+      function(z) {
+        z$to
+      }
+      )
+    }
+  )
+  
   selected_for_swap <- floor(
     stats::runif(
       amount, 
@@ -72,36 +101,25 @@ swap_partners <- function(relations, amount, interaction_matrix) {
     )
   )
   
-  max_to <- max(relations$to) 
+  probability_of_interaction_matrix <- ifelse(interaction_matrix != 0, 1/interaction_matrix^4, 0)
   
-  unit_list <- split(relations, relations$unit)
+  #selected_relations <- relations[selected_for_swap, ]
   
-  # actual swap
-  relations$to[selected_for_swap] <- unname(unlist(lapply(
-    selected_for_swap, function(to_index, unit_list) {
-      
-      # calculate cross unit interaction based on distance matrix
-      distance <- as.vector(interaction_matrix[, relations$unit[to_index]])
-      distance_accented <- distance^4
-      probability_of_interaction <- ifelse(distance_accented != 0, 1/distance_accented, 0)
-      
-      sample(  
-        unname(unlist(lapply(
-          unit_list, function(x, to) {
-            x$to[x$to > to][1]
-          },
-          relations$to[to_index]
-        ))),
-        1,
-        prob = probability_of_interaction
+  for (i in selected_for_swap) {
+    age_segment <- as.character(relations$age_segment[i])
+    swap_unit <- sample(
+      levels(relations$unit),
+      1,
+      prob = probability_of_interaction_matrix[, relations$unit[i]]
+    )
+    swap_options <- to_by_unit_and_age_segment[[age_segment]][[swap_unit]]
+    if (length(swap_options) > 0) {
+      relations$to[i] <- sample(
+        swap_options,
+        1
       )
-    }, 
-    unit_list
-  )))
-
-  # if incrementation causes the to node of some relations to rise 
-  # above the number of available nodes then remove this relation
-  relations <- relations[!(relations$to > max_to), ]
+    }
+  }
   
   return(relations)
 }
