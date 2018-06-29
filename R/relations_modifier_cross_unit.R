@@ -105,6 +105,8 @@ swap_partners <- function(relations, amount, interaction_matrix) {
   
   #selected_relations <- relations[selected_for_swap, ]
   
+  new_partners <- vector(mode = "integer", length = length(selected_for_swap))
+  counter <- 1
   for (i in selected_for_swap) {
     age_segment <- as.character(relations$age_segment[i])
     swap_unit <- sample(
@@ -114,12 +116,15 @@ swap_partners <- function(relations, amount, interaction_matrix) {
     )
     swap_options <- to_by_unit_and_age_segment[[age_segment]][[swap_unit]]
     if (length(swap_options) > 0) {
-      relations$to[i] <- sample(
+      new_partners[counter] <- sample(
         swap_options,
         1
       )
     }
+    counter <- counter + 1
   }
+  
+  relations$to[selected_for_swap] <- new_partners
   
   return(relations)
 }
