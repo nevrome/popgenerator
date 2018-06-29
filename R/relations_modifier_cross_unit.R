@@ -115,11 +115,13 @@ swap_partners <- function(relations, amount, interaction_matrix) {
       prob = probability_of_interaction_matrix[, relations$unit[i]]
     )
     swap_options <- to_by_unit_and_age_segment[[age_segment]][[swap_unit]]
-    if (length(swap_options) > 0) {
+    if (length(swap_options) > 1) {
       new_partners[counter] <- sample(
         swap_options,
         1
       )
+    } else {
+      new_partners[counter] <- relations$to[i]
     }
     counter <- counter + 1
   }
