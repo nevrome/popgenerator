@@ -4,7 +4,7 @@
 \alias{write_pajek_for_snap}
 \title{write_pajek_for_snap}
 \usage{
-write_pajek_for_snap(rel, pop, path)
+write_pajek_for_snap(rel, pop, path, simple_version_path = NULL)
 }
 \arguments{
 \item{rel}{relations data.frame}
@@ -12,6 +12,8 @@ write_pajek_for_snap(rel, pop, path)
 \item{pop}{population data.frame}
 
 \item{path}{output file path}
+
+\item{simple_version_path}{output file path for reduced outfile file version}
 }
 \value{
 TRUE, called for the side effect of writing to the file system

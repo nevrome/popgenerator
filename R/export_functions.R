@@ -13,7 +13,8 @@ write_all_models_to_files <- function(x, dir_path) {
       write_pajek_for_snap(
         x$relations[[y]], 
         x$populations[[y]], 
-        file.path(dir_path, paste0(x$model_id[y], "_pajek_graph.paj"))
+        file.path(dir_path, paste0(x$model_id[y], "_pajek_graph.paj")),
+        file.path(dir_path, paste0(x$model_id[y], "_pajek_graph_simple_version.paj"))
       )
       write_ideas(
         x$ideas_settings[[y]], 
@@ -32,26 +33,37 @@ write_all_models_to_files <- function(x, dir_path) {
 #' @param rel relations data.frame
 #' @param pop population data.frame
 #' @param path output file path
+#' @param simple_version_path output file path for reduced outfile file version
 #'
 #' @return TRUE, called for the side effect of writing to the file system
 #'
 #' @export
-write_pajek_for_snap <- function(rel, pop, path) {
+write_pajek_for_snap <- function(rel, pop, path, simple_version_path = NULL) {
   if (file.exists(path)) {file.remove(path)}
   
   rel_small <- rel %>% dplyr::select(.data$from, .data$to, .data$weight)
   rel_small <- rel_small[stats::complete.cases(rel_small), ]
   
+  # simple version
+  if (!is.null(simple_version_path)) {
+    utils::write.table(rel_small, file = simple_version_path, sep = " ", row.names = F, col.names = F)
+    incomplete_pajek <- readLines(simple_version_path)
+    incomplete_pajek <- rlang::prepend(
+      incomplete_pajek, 
+      paste(c(paste("*Vertices", length(pop$id), collapse = " "), "*Edges"), collapse = "\n")             
+    )
+    writeLines(incomplete_pajek, simple_version_path)
+  }
+  
+  # normal version
   utils::write.table(rel_small, file = path, sep = " ", row.names = F, col.names = F)
-  
   incomplete_pajek <- readLines(path)
-  
   incomplete_pajek <- rlang::prepend(
     incomplete_pajek, 
     paste(c(paste("*Vertices", length(pop$id), collapse = " "), pop$id, "*Edges"), collapse = "\n")             
   )
-  
   writeLines(incomplete_pajek, path)
+  
   return(TRUE)
 }
 
