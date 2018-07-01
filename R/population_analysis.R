@@ -89,7 +89,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
   
   pop <- x$populations[[id]]
   timesteps <- x$timeframe[[id]]
-  multiplier <- x$multiplier[[id]]
+  model_group <- x$model_group[[id]]
   idea_1_nodes <- x$simulation_results[[id]]$notes_per_idea$idea_1
   idea_2_nodes <- x$simulation_results[[id]]$notes_per_idea$idea_2
 
@@ -130,11 +130,11 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
           )  %>%
           dplyr::mutate(
             model_id = id,
-            multiplier = multiplier,
+            model_group = model_group,
             region = unit_name
           ) %>%
           dplyr::select(
-            .data$region, .data$timestep, .data$idea, .data$proportion, .data$model_id, .data$multiplier
+            .data$region, .data$timestep, .data$idea, .data$proportion, .data$model_id, .data$model_group
           )
       }
     ) %>% dplyr::bind_rows()
@@ -149,10 +149,10 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
       ) %>%
       dplyr::mutate(
         model_id = id,
-        multiplier = multiplier
+        model_group = model_group
       ) %>%
       dplyr::select(
-        .data$timestep, .data$idea, .data$proportion, .data$model_id, .data$multiplier
+        .data$timestep, .data$idea, .data$proportion, .data$model_id, .data$model_group
       )
   }
 
