@@ -1,15 +1,17 @@
 Package: popgenerator
-Title: popgenerator - it's great!
+Title: A population network generator
 Version: 0.0.0.9000
 Author: c(
   person("Clemens", "Schmid", email = "clemens@nevrome.de", role = c("cre", "cph", "aut"))
   )
 Maintainer: Clemens Schmid <clemens@nevrome.de>
-Description: What the package does (one paragraph).
+Description: This package provides functions to create diachronic population networks that 
+             fulfil certain configurable population parameters like size, grouping and degree
+             of interaction.
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Depends: 
     R (>= 3.5.0),
     methods
