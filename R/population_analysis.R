@@ -70,8 +70,8 @@ calculate_all_idea_proportions_over_time <- function(x, by_unit = FALSE) {
   x$idea_proportions <- pbapply::pblapply(
     x$model_id, 
     FUN = calculate_idea_proportions_over_time,
-    x, by_unit#,
-    #cl = 4
+    x, by_unit,
+    cl = 6
   )
   return(x)
 }

@@ -13,7 +13,7 @@ generate_all_relations <- function(x) {
   x$relations <- pbapply::pblapply(
     x$relations_settings, 
     generate_relations,
-    cl = 4
+    cl = 6
   )
   return(x)
 }

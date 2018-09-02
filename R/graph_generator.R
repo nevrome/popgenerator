@@ -10,8 +10,8 @@ generate_all_graphs <- function(x) {
   
   x$graphs <- pbapply::pblapply(
     x$relations, 
-    generate_graph#,
-    #cl = 4
+    generate_graph,
+    cl = 6
   )
   
   return(x)

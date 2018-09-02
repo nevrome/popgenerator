@@ -13,7 +13,7 @@ generate_all_populations <- function(x) {
   x$populations <- pbapply::pblapply(
     x$population_settings, 
     generate_population,
-    cl = 4
+    cl = 6
   )
   return(x)
 }
