@@ -71,7 +71,7 @@ calculate_all_idea_proportions_over_time <- function(x, by_unit = FALSE) {
     x$model_id, 
     FUN = calculate_idea_proportions_over_time,
     x, by_unit,
-    cl = 6
+    cl = parallel::detectCores()
   )
   return(x)
 }

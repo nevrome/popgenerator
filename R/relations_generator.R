@@ -13,7 +13,7 @@ generate_all_relations <- function(x) {
   x$relations <- pbapply::pblapply(
     x$relations_settings, 
     generate_relations,
-    cl = 6
+    cl = parallel::detectCores()
   )
   return(x)
 }
