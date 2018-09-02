@@ -21,7 +21,8 @@ write_all_models_to_files <- function(x, dir_path) {
         file.path(dir_path, paste0(x$model_id[y], "_idea.txt")),
         start_time = x$timeframe[[y]][1]
       )
-    }
+    },
+    cl = parallel::detectCores()
   )
   
   return(TRUE)

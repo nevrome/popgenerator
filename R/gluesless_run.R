@@ -44,7 +44,8 @@ run_gluesless <- function(
         )))
       
       return(result_list)
-    }
+    },
+    cl = parallel::detectCores()
   )
   
 }
