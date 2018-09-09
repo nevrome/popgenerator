@@ -4,12 +4,21 @@
 \alias{write_all_models_to_files}
 \title{write_all_models_to_files}
 \usage{
-write_all_models_to_files(x, dir_path)
+write_all_models_to_files(populations, relations, ideas_settings,
+  timeframe, model_id, dir_path)
 }
 \arguments{
-\item{x}{models_grid data.frame}
+\item{populations}{list of populations}
 
-\item{dir_path}{directory path where to store the files}
+\item{relations}{list of relations}
+
+\item{ideas_settings}{list of ideas_settings}
+
+\item{timeframe}{list of timeframes}
+
+\item{model_id}{vector of model ids}
+
+\item{dir_path}{directory path where to store the output files}
 }
 \value{
 called for side effect writing to file system

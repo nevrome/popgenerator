@@ -1,27 +1,36 @@
 #' write_all_models_to_files
 #'
-#' @param x models_grid data.frame
-#' @param dir_path directory path where to store the files
+#' @param populations list of populations
+#' @param relations list of relations
+#' @param ideas_settings list of ideas_settings
+#' @param timeframe list of timeframes
+#' @param model_id vector of model ids
+#' @param dir_path directory path where to store the output files
 #'
 #' @return called for side effect writing to file system
 #' 
 #' @export
-write_all_models_to_files <- function(x, dir_path) {
+write_all_models_to_files <- function(populations, relations, ideas_settings, timeframe, model_id, dir_path) {
 
+  if (stats::var(c(length(populations), length(relations), length(ideas_settings))) != 0) {
+    stop("length of lists is not equal")
+  }
+  
   pbapply::pblapply(
-    1:nrow(x), function(y) {
+    1:length(populations), function(y) {
       write_pajek_for_snap(
-        x$relations[[y]], 
-        x$populations[[y]], 
-        file.path(dir_path, paste0(x$model_id[y], "_pajek_graph.paj")),
-        file.path(dir_path, paste0(x$model_id[y], "_pajek_graph_simple_version.paj"))
+        relations[[y]], 
+        populations[[y]], 
+        file.path(dir_path, paste0(model_id[[y]], "_pajek_graph.paj")),
+        file.path(dir_path, paste0(model_id[[y]], "_pajek_graph_simple_version.paj"))
       )
       write_ideas(
-        x$ideas_settings[[y]], 
-        file.path(dir_path, paste0(x$model_id[y], "_idea.txt")),
-        start_time = x$timeframe[[y]][1]
+        ideas_settings[[y]], 
+        file.path(dir_path, paste0(model_id[[y]], "_idea.txt")),
+        start_time = timeframe[[y]][1]
       )
     },
+    populations, relations, ideas_settings, timeframe, model_id,
     cl = parallel::detectCores()
   )
   

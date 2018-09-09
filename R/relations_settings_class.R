@@ -31,18 +31,19 @@ setClass(
 #' column.
 #'
 #' @param x populations_grid data.frame
+#' @param populations populations list
 #'
 #' @return populations_grid data.frame with additional column 
 #' relations_settings
 #'
 #' @export
-init_relations_settings <- function(x) { 
+init_relations_settings <- function(x, populations) { 
   
   relations_settings <- list() 
   for (i in 1:nrow(x)) {
     relations_settings[[i]] <- methods::new(
       "relations_settings",
-      population =                     x$populations[[i]],
+      population =                     populations[[i]],
       amount_friends =                 x$amounts_friends[[i]],
       unit_interaction_matrix =        x$unit_interaction_matrix[[i]],
       cross_unit_proportion_child_of = x$cross_unit_proportion_child_of[[i]],
@@ -52,7 +53,5 @@ init_relations_settings <- function(x) {
     )
   }
   
-  x$relations_settings <- relations_settings
-  
-  return(x)
+  return(relations_settings)
 }

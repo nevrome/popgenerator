@@ -10,12 +10,14 @@
 #'
 #' @export
 generate_all_relations <- function(x) {
-  x$relations <- pbapply::pblapply(
-    x$relations_settings, 
+  
+  relations <- pbapply::pblapply(
+    x, 
     generate_relations,
     cl = parallel::detectCores()
   )
-  return(x)
+  
+  return(relations)
 }
 
 #' generate relations

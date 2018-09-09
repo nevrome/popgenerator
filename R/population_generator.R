@@ -10,12 +10,14 @@
 #'
 #' @export
 generate_all_populations <- function(x) {
-  x$populations <- pbapply::pblapply(
-    x$population_settings, 
+  
+  populations <- pbapply::pblapply(
+    x, 
     generate_population,
     cl = parallel::detectCores()
   )
-  return(x)
+  
+  return(populations)
 }
 
 #' generate_population

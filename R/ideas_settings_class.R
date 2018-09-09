@@ -25,27 +25,26 @@ setClass(
 #' column.
 #'
 #' @param x populations_grid data.frame
+#' @param populations populations list
 #'
 #' @return populations_grid data.frame with additional column 
 #' ideas_settings
 #'
 #' @export
-init_ideas_settings <- function(x) { 
+init_ideas_settings <- function(x, populations) { 
   
   ideas_settings <- list() 
   for (i in 1:nrow(x)) {
     ideas_settings[[i]] <- methods::new(
       "ideas_settings",
-      population =         x$populations[[i]],
+      population =         populations[[i]],
       names =              x$names[[i]],
       start_distribution = x$start_distribution[[i]],
       strength =           x$strength[[i]]
     )
   }
   
-  x$ideas_settings <- ideas_settings
-  
-  return(x)
+  return(ideas_settings)
 }
 
 #' idea_distribution_to_starting_nodes

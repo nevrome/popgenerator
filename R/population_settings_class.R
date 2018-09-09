@@ -51,8 +51,5 @@ init_population_settings <- function(x) {
     )
   }
   
-  # add new list column with population_settings objects to the input grid
-  x$population_settings <- population_settings
-  
-  return(x)
+  return(population_settings)
 }
