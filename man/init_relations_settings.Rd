@@ -4,10 +4,12 @@
 \alias{init_relations_settings}
 \title{init_relations_settings}
 \usage{
-init_relations_settings(x)
+init_relations_settings(x, populations)
 }
 \arguments{
 \item{x}{populations_grid data.frame}
+
+\item{populations}{populations list}
 }
 \value{
 populations_grid data.frame with additional column 

@@ -4,10 +4,12 @@
 \alias{init_ideas_settings}
 \title{init_ideas_settings}
 \usage{
-init_ideas_settings(x)
+init_ideas_settings(x, populations)
 }
 \arguments{
 \item{x}{populations_grid data.frame}
+
+\item{populations}{populations list}
 }
 \value{
 populations_grid data.frame with additional column 
