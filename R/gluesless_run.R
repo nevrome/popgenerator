@@ -22,7 +22,7 @@ run_gluesless <- function(
       output_file <- file.path(output_file_dir, paste0(x, "_result.txt"))
       
       message("\n")    
-      system2(app_path, args = c(graph_file, ideas_file, output_file))
+      system2(app_path, args = c("-pi", graph_file, "-ii", ideas_file, "-o", output_file, "-q"))
       message("\n") 
       
       result_list <- list()
