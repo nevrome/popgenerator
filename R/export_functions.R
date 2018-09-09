@@ -12,7 +12,7 @@
 #' @export
 write_all_models_to_files <- function(populations, relations, ideas_settings, timeframe, model_id, dir_path) {
 
-  if (stats::var(c(length(populations), length(relations), length(ideas_settings))) != 0) {
+  if (stats::var(c(length(populations), length(relations), length(ideas_settings), length(model_id))) != 0) {
     stop("length of lists is not equal")
   }
   
@@ -30,7 +30,6 @@ write_all_models_to_files <- function(populations, relations, ideas_settings, ti
         start_time = timeframe[[y]][1]
       )
     },
-    populations, relations, ideas_settings, timeframe, model_id,
     cl = parallel::detectCores()
   )
   

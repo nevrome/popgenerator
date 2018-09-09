@@ -12,8 +12,9 @@ prepare_and_export_landscapes <- function(x, dir_path, cores = parallel::detectC
   x$cutting_points_for_compuation <- rep(seq(1, ceiling(nrow(x)/cores)), each = cores)[1:nrow(x)] 
   x_cut <- split(x, as.factor(x$cutting_points_for_compuation))
   
-  pbapply::pblapply(
+  lapply(
     x_cut, function(y){ 
+      
       population_settings <- init_population_settings(y)
       populations <- generate_all_populations(population_settings)
       
@@ -33,5 +34,5 @@ prepare_and_export_landscapes <- function(x, dir_path, cores = parallel::detectC
     }
   )
   
-  return(x)
+  return(TRUE)
 }
