@@ -4,12 +4,21 @@
 \alias{calculate_idea_proportions_over_time}
 \title{calculate_idea_proportions_over_time}
 \usage{
-calculate_idea_proportions_over_time(id, x, by_unit = FALSE)
+calculate_idea_proportions_over_time(id, model_id, populations, timeframe,
+  model_group, simulation_results, by_unit = FALSE)
 }
 \arguments{
 \item{id}{test}
 
-\item{x}{test}
+\item{model_id}{test}
+
+\item{populations}{test}
+
+\item{timeframe}{test}
+
+\item{model_group}{test}
+
+\item{simulation_results}{test}
 
 \item{by_unit}{test}
 }

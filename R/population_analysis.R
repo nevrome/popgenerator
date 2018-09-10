@@ -60,38 +60,54 @@ count_living_units_over_time <- function(humans, time) {
 
 #' calculate_all_idea_proportions_over_time
 #'
-#' @param x test
+#' @param model_id test
+#' @param populations test
+#' @param timeframe test
+#' @param model_group test
+#' @param simulation_results test
 #' @param by_unit test
 #'
 #' @return test
 #' 
 #' @export
-calculate_all_idea_proportions_over_time <- function(x, by_unit = FALSE) {
-  x$idea_proportions <- pbapply::pblapply(
-    x$model_id, 
-    FUN = calculate_idea_proportions_over_time,
-    x, by_unit,
+calculate_all_idea_proportions_over_time <- function(
+  model_id, populations, timeframe, model_group, simulation_results, by_unit = FALSE
+  ) {
+  idea_proportions <- pbapply::pblapply(
+    1:length(populations), 
+    function(id) {
+      calculate_idea_proportions_over_time(
+        id, model_id, populations, timeframe, model_group, simulation_results, by_unit
+      )
+    },
     cl = parallel::detectCores()
   )
-  return(x)
+  return(idea_proportions)
 }
 
 #' calculate_idea_proportions_over_time
 #'
 #' @param id test
-#' @param x test
+#' @param model_id test
+#' @param populations test
+#' @param timeframe test
+#' @param model_group test
+#' @param simulation_results test
 #' @param by_unit test
 #'
 #' @return test
 #' 
 #' @export
-calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
+calculate_idea_proportions_over_time <- function(
+  id, model_id, populations, timeframe, model_group, simulation_results, by_unit = FALSE
+  ) {
   
-  pop <- x$populations[[id]]
-  timesteps <- x$timeframe[[id]]
-  model_group <- x$model_group[[id]]
-  idea_1_nodes <- x$simulation_results[[id]]$notes_per_idea$idea_1
-  idea_2_nodes <- x$simulation_results[[id]]$notes_per_idea$idea_2
+  model_id <- model_id[[id]]
+  pop <- populations[[id]]
+  timesteps <- timeframe[[id]]
+  model_group <- model_group[[id]]
+  idea_1_nodes <- simulation_results[[id]]$notes_per_idea$idea_1
+  idea_2_nodes <- simulation_results[[id]]$notes_per_idea$idea_2
 
   if (by_unit) {
     all_humans <- count_population_by_living_units_over_time(pop, timesteps)
@@ -129,7 +145,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
             "idea", "proportion", -.data$timestep
           )  %>%
           dplyr::mutate(
-            model_id = id,
+            model_id = model_id,
             model_group = model_group,
             region = unit_name
           ) %>%
@@ -148,7 +164,7 @@ calculate_idea_proportions_over_time <- function(id, x, by_unit = FALSE) {
         "idea", "proportion", -.data$timestep
       ) %>%
       dplyr::mutate(
-        model_id = id,
+        model_id = model_id,
         model_group = model_group
       ) %>%
       dplyr::select(
