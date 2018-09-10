@@ -4,12 +4,15 @@
 \alias{run_simulation}
 \title{run_simulation}
 \usage{
-run_simulation(x, dir_path, cores = parallel::detectCores())
+run_simulation(x, dir_path, only_idea_proportions = TRUE,
+  cores = parallel::detectCores())
 }
 \arguments{
 \item{x}{models_grid data.frame}
 
 \item{dir_path}{directory path where to store the output files}
+
+\item{only_idea_proportions}{should only the final result file be stored permanently}
 
 \item{cores}{how many parallel threads should be used}
 }
