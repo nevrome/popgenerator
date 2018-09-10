@@ -22,20 +22,20 @@ write_models_to_files <- function(model_id, populations, relations, ideas_settin
       # write populations table
       write_population_table(
         populations[[y]],
-        file.path(dir_path, paste0(model_id[[y]], "_population.csv"))
+        file.path(dir_path, paste0(formatC(model_id[[y]], width = 5, format = "d", flag = "0"), "_population.csv"))
       )
       
       # write relations graph 
       write_pajek_for_snap(
         relations[[y]], 
         populations[[y]], 
-        file.path(dir_path, paste0(model_id[[y]], "_pajek_graph.paj")),
-        file.path(dir_path, paste0(model_id[[y]], "_pajek_graph_simple_version.paj"))
+        file.path(dir_path, paste0(formatC(model_id[[y]], width = 5, format = "d", flag = "0"), "_pajek_graph.paj")),
+        file.path(dir_path, paste0(formatC(model_id[[y]], width = 5, format = "d", flag = "0"), "_pajek_graph_simple_version.paj"))
       )
       # write idea file
       write_ideas(
         ideas_settings[[y]], 
-        file.path(dir_path, paste0(model_id[[y]], "_idea.txt")),
+        file.path(dir_path, paste0(formatC(model_id[[y]], width = 5, format = "d", flag = "0"), "_idea.txt")),
         start_time = timeframe[[y]][1]
       )
       
@@ -59,7 +59,7 @@ write_idea_proportions <- function(model_id, idea_proportions, dir_path) {
   
   parallel::mclapply(
     1:length(idea_proportions), function(y) {
-      path <- file.path(dir_path, paste0(model_id[[y]], "_idea_proportions.csv"))
+      path <- file.path(dir_path, paste0(formatC(model_id[[y]], width = 5, format = "d", flag = "0"), "_idea_proportions.csv"))
       if (file.exists(path)) {file.remove(path)}
       utils::write.csv(idea_proportions[[y]], file = path, row.names = FALSE)
     },
