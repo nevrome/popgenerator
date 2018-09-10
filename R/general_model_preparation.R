@@ -27,12 +27,12 @@ run_simulation <- function(x, dir_path, cores = parallel::detectCores()) {
       ideas_settings <- init_ideas_settings(y, populations)
       
       # write prepared data to file system
-      write_all_models_to_files(
+      write_models_to_files(
+        y$model_id,
         populations,
         relations,
         ideas_settings,
         y$timeframe,
-        y$model_id,
         dir_path
       )
       

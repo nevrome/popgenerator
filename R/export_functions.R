@@ -1,16 +1,16 @@
-#' write_all_models_to_files
-#'
+#' write_models_to_files
+#' 
+#' @param model_id vector of model ids
 #' @param populations list of populations
 #' @param relations list of relations
 #' @param ideas_settings list of ideas_settings
 #' @param timeframe list of timeframes
-#' @param model_id vector of model ids
 #' @param dir_path directory path where to store the output files
 #'
 #' @return called for side effect writing to file system
 #' 
 #' @export
-write_all_models_to_files <- function(populations, relations, ideas_settings, timeframe, model_id, dir_path) {
+write_models_to_files <- function(model_id, populations, relations, ideas_settings, timeframe, dir_path) {
 
   if (stats::var(c(length(populations), length(relations), length(ideas_settings), length(model_id))) != 0) {
     stop("length of lists is not equal")
@@ -18,17 +18,27 @@ write_all_models_to_files <- function(populations, relations, ideas_settings, ti
   
   pbapply::pblapply(
     1:length(populations), function(y) {
+      
+      # write populations table
+      write_population_table(
+        populations[[y]],
+        file.path(dir_path, paste0(model_id[[y]], "_population.csv"))
+      )
+      
+      # write relations graph 
       write_pajek_for_snap(
         relations[[y]], 
         populations[[y]], 
         file.path(dir_path, paste0(model_id[[y]], "_pajek_graph.paj")),
         file.path(dir_path, paste0(model_id[[y]], "_pajek_graph_simple_version.paj"))
       )
+      # write idea file
       write_ideas(
         ideas_settings[[y]], 
         file.path(dir_path, paste0(model_id[[y]], "_idea.txt")),
         start_time = timeframe[[y]][1]
       )
+      
     },
     cl = parallel::detectCores()
   )
@@ -36,6 +46,18 @@ write_all_models_to_files <- function(populations, relations, ideas_settings, ti
   return(TRUE)
 }
 
+#' write_pajek_for_snap
+#'
+#' @param pop population data.frame
+#' @param path output file path
+#'
+#' @return TRUE, called for the side effect of writing to the file system
+#'
+#' @export
+write_population_table <- function(pop, path) {
+  if (file.exists(path)) {file.remove(path)}
+  utils::write.csv(pop, path)
+}
 
 #' write_pajek_for_snap
 #'
