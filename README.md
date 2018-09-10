@@ -1,1 +1,4 @@
-# population_generator
+[![Build Status](https://travis-ci.com/nevrome/popgenerator.svg?token=vxsQ9RjxoGASGtX4Q8jc&branch=master)](https://travis-ci.com/nevrome/popgenerator)
+
+# popgenerator
+
