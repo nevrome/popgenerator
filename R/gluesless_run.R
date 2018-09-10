@@ -15,16 +15,14 @@ run_gluesless <- function(
   models_to_run
 ) {
   
-  pbapply::pblapply(
+  parallel::mclapply(
     models_to_run, function(x) {
       graph_file <- file.path(input_file_dir, paste0(x, "_pajek_graph.paj"))
       ideas_file <- file.path(input_file_dir, paste0(x, "_idea.txt"))
       output_file <- file.path(output_file_dir, paste0(x, "_result.txt"))
       
-      message("\n")    
       system2(app_path, args = c("-pi", graph_file, "-ii", ideas_file, "-o", output_file, "-q"))
-      message("\n") 
-      
+
       result_list <- list()
       result <- readLines(output_file)
       
@@ -45,7 +43,7 @@ run_gluesless <- function(
       
       return(result_list)
     },
-    cl = parallel::detectCores()
+    mc.cores = parallel::detectCores()
   )
   
 }

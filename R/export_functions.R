@@ -16,7 +16,7 @@ write_models_to_files <- function(model_id, populations, relations, ideas_settin
     stop("length of lists is not equal")
   }
   
-  pbapply::pblapply(
+  parallel::mclapply(
     1:length(populations), function(y) {
       
       # write populations table
@@ -40,7 +40,7 @@ write_models_to_files <- function(model_id, populations, relations, ideas_settin
       )
       
     },
-    cl = parallel::detectCores()
+    mc.cores = parallel::detectCores()
   )
   
   return(TRUE)
@@ -57,13 +57,13 @@ write_models_to_files <- function(model_id, populations, relations, ideas_settin
 #' @export
 write_idea_proportions <- function(model_id, idea_proportions, dir_path) {
   
-  pbapply::pblapply(
+  parallel::mclapply(
     1:length(idea_proportions), function(y) {
       path <- file.path(dir_path, paste0(model_id[[y]], "_idea_proportions.csv"))
       if (file.exists(path)) {file.remove(path)}
       utils::write.csv(idea_proportions[[y]], file = path, row.names = FALSE)
     },
-    cl = parallel::detectCores()
+    mc.cores = parallel::detectCores()
   )
   
 }

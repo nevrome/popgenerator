@@ -73,15 +73,17 @@ count_living_units_over_time <- function(humans, time) {
 calculate_all_idea_proportions_over_time <- function(
   model_id, populations, timeframe, model_group, simulation_results, by_unit = FALSE
   ) {
-  idea_proportions <- pbapply::pblapply(
+  
+  idea_proportions <- parallel::mclapply(
     1:length(populations), 
     function(id) {
       calculate_idea_proportions_over_time(
         id, model_id, populations, timeframe, model_group, simulation_results, by_unit
       )
     },
-    cl = parallel::detectCores()
+    mc.cores = parallel::detectCores()
   )
+  
   return(idea_proportions)
 }
 

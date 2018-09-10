@@ -17,7 +17,7 @@ run_simulation <- function(x, dir_path, only_idea_proportions = TRUE, cores = pa
   x$cutting_points_for_compuation <- rep(seq(1, ceiling(nrow(x)/cores)), each = cores)[1:nrow(x)] 
   x_cut <- split(x, as.factor(x$cutting_points_for_compuation))
   
-  lapply(
+  pbapply::pblapply(
     x_cut, function(y){ 
       
       # prepare populations
