@@ -46,7 +46,29 @@ write_models_to_files <- function(model_id, populations, relations, ideas_settin
   return(TRUE)
 }
 
-#' write_pajek_for_snap
+#' write_idea_proportions
+#' 
+#' @param model_id model_id 
+#' @param idea_proportions idea_proportions list
+#' @param dir_path output dir path
+#'
+#' @return TRUE, called for the side effect of writing to the file system
+#'
+#' @export
+write_idea_proportions <- function(model_id, idea_proportions, dir_path) {
+  
+  pbapply::pblapply(
+    1:length(idea_proportions), function(y) {
+      path <- file.path(dir_path, paste0(model_id[[y]], "_idea_proportions.csv"))
+      if (file.exists(path)) {file.remove(path)}
+      utils::write.csv(idea_proportions[[y]], file = path, row.names = FALSE)
+    },
+    cl = parallel::detectCores()
+  )
+  
+}
+
+#' write_population_table
 #'
 #' @param pop population data.frame
 #' @param path output file path
@@ -56,7 +78,7 @@ write_models_to_files <- function(model_id, populations, relations, ideas_settin
 #' @export
 write_population_table <- function(pop, path) {
   if (file.exists(path)) {file.remove(path)}
-  utils::write.csv(pop, path)
+  utils::write.csv(pop, file = path, row.names = FALSE)
 }
 
 #' write_pajek_for_snap

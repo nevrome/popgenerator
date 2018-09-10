@@ -12,7 +12,7 @@ run_simulation <- function(x, dir_path, cores = parallel::detectCores()) {
   x$cutting_points_for_compuation <- rep(seq(1, ceiling(nrow(x)/cores)), each = cores)[1:nrow(x)] 
   x_cut <- split(x, as.factor(x$cutting_points_for_compuation))
   
-  idea_proportions <- lapply(
+  lapply(
     x_cut, function(y){ 
       
       # prepare populations
@@ -54,9 +54,15 @@ run_simulation <- function(x, dir_path, cores = parallel::detectCores()) {
         by_unit = TRUE
       )
       
-      return(do.call(rbind, idea_proportions))
+      # write idea proportions
+      write_idea_proportions(
+        y$model_id, 
+        idea_proportions, 
+        dir_path
+      )
+      
     }
   )
   
-  return(do.call(rbind, idea_proportions))
+  return(TRUE)
 }

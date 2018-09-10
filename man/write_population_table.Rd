@@ -2,7 +2,7 @@
 % Please edit documentation in R/export_functions.R
 \name{write_population_table}
 \alias{write_population_table}
-\title{write_pajek_for_snap}
+\title{write_population_table}
 \usage{
 write_population_table(pop, path)
 }
@@ -15,5 +15,5 @@ write_population_table(pop, path)
 TRUE, called for the side effect of writing to the file system
 }
 \description{
-write_pajek_for_snap
+write_population_table
 }
