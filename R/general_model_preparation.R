@@ -76,6 +76,11 @@ run_simulation <- function(x, dir_path, only_idea_proportions = TRUE, cores = pa
         dir_path
       )
       
+      # delete temp files after run
+      if (only_idea_proportions) {
+        unlink(current_dir_path, recursive = TRUE)
+      }
+      
     }
   )
   
