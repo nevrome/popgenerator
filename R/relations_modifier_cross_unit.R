@@ -3,16 +3,18 @@
 #' Replace existing relations within units by relations across units.
 #'
 #' @param relations relations data.frame
-#' @param settings relations_settings object
+#' @param cross_unit_proportion cross_unit_proportion
+#' @param unit_interaction_matrix unit_interaction_matrix
+#' @param population population data.frame
 #'
 #' @return modified relations data.frame
 #' 
 #' @export
-modify_relations_cross_unit <- function(relations, settings) {
+modify_relations_cross_unit <- function(relations, cross_unit_proportion, unit_interaction_matrix, population) {
   
   relations_with_to_info <- dplyr::left_join(
     relations,
-    settings@population[, !(colnames(settings@population) %in% c("unit"))],
+    population[, !(colnames(population) %in% c("unit"))],
     by = c("to" = "id")
   )
   
@@ -20,45 +22,24 @@ modify_relations_cross_unit <- function(relations, settings) {
     order(relations_with_to_info$birth_time),
   ]
   
-  # select different relations by type
-  child_of_relations <- relations_with_to_info[
-    relations_with_to_info$type == "child_of", 
-  ]
-  friend_relations <- relations_with_to_info[
-    relations_with_to_info$type == "friend", 
-  ]
-  
   # apply swap partner function with relevant proportion setting
-  child_of_relations <- swap_partners(
-    relations = child_of_relations,
+  new_relations <- swap_partners(
+    relations = relations_with_to_info,
     amount = calculate_amount_to_replace(
-      child_of_relations, 
-      settings@cross_unit_proportion_child_of
+      relations_with_to_info, 
+      cross_unit_proportion
     ),
-    interaction_matrix = settings@unit_interaction_matrix
-  )
-  friend_relations <- swap_partners(
-    relations = friend_relations,
-    amount = calculate_amount_to_replace(
-      friend_relations, 
-      settings@cross_unit_proportion_friend
-    ),
-    interaction_matrix = settings@unit_interaction_matrix
+    interaction_matrix = unit_interaction_matrix
   )
   
-  # combine different relationship types again
-  all_relations <- rbind(
-    child_of_relations,
-    friend_relations
-  )
-  
-  all_relations <- all_relations[
-    , !(colnames(all_relations) %in% c("age", "birth_time", "death_time"))
+  new_relations <- new_relations[
+    , !(colnames(new_relations) %in% c("age", "birth_time", "death_time"))
   ]
 
-  return(all_relations)
-  
+  return(new_relations)
 }
+
+
 
 #### helper functions ####
 

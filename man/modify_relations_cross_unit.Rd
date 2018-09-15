@@ -4,12 +4,17 @@
 \alias{modify_relations_cross_unit}
 \title{modify_relations_cross_unit}
 \usage{
-modify_relations_cross_unit(relations, settings)
+modify_relations_cross_unit(relations, cross_unit_proportion,
+  unit_interaction_matrix, population)
 }
 \arguments{
 \item{relations}{relations data.frame}
 
-\item{settings}{relations_settings object}
+\item{cross_unit_proportion}{cross_unit_proportion}
+
+\item{unit_interaction_matrix}{unit_interaction_matrix}
+
+\item{population}{population data.frame}
 }
 \value{
 modified relations data.frame

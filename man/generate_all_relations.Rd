@@ -7,7 +7,7 @@
 generate_all_relations(x)
 }
 \arguments{
-\item{x}{populations_grid data.frame}
+\item{x}{relations_settings list}
 }
 \value{
 populations_grid data.frame with additional column
