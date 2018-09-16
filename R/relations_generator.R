@@ -50,7 +50,7 @@ generate_relations <- function(settings) {
   if (settings@amount_friends > 0) {
     horizontal_relations <- generate_horizontal_relations(settings)
     horizontal_relations <- modify_relations_cross_unit(
-      vertical_relations, 
+      horizontal_relations, 
       settings@cross_unit_proportion_friend,
       settings@unit_interaction_matrix,
       settings@population
