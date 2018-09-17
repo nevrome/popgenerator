@@ -2,4 +2,4 @@
 
 # popgenerator
 
-A population network generator
+popgenerator is a population network generator.
