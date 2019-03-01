@@ -21,10 +21,10 @@ distance_matrix_equal <- distance_matrix_random %>% `[<-`(1) %>% `diag<-`(0)
 
 #### setup settings grid ####
 
-models_grid <- expand.grid(
+populations_grid <- expand.grid(
   # general settings
   timeframe = list(
-    -2200:-800
+    0:200
   ),
   # population settings  
   unit_amount = c(
@@ -56,14 +56,13 @@ models_grid <- expand.grid(
     10
   ),
   unit_interaction_matrix = list(
-    distance_matrix_equal,
-    distance_matrix_random
+    distance_matrix_equal
   ),
   cross_unit_proportion_child_of = c(
-    0.002, 0.02
+    0.002
   ),
   cross_unit_proportion_friend = c(
-    0.01, 0.1
+    0.01
   ),
   weight_child_of = list(
     50
@@ -71,34 +70,7 @@ models_grid <- expand.grid(
   weight_friend = list(
     10
   ),
-  # ideas settings
-  names = list(
-    c("idea_1", "idea_2")
-  ),
-  start_distribution = list(
-    start_proportion_5050
-  ), 
-  strength = list(
-    c(1, 1) 
-  ),
   stringsAsFactors = FALSE
-) %>% tibble::as_tibble() %>%
-  # remove unnecessary repetition
-  dplyr::filter(
-    5 * cross_unit_proportion_child_of == cross_unit_proportion_friend
-  ) %>%
-  # add relevant model ids
-  dplyr::mutate(
-    model_group = c(
-      "low equal interaction",
-      "low spatial interaction",
-      "high equal interaction",
-      "high spatial interaction"
-    )
-  ) %>%
-  tidyr::uncount(100) %>%
-  dplyr::mutate(
-    model_id = 1:nrow(.)
-  )
+) %>% tibble::as_tibble()
 
-save(models_grid, file = "playground/test_models_grid.RData")
+save(populations_grid, file = "playground/test_populations_grid.RData")
