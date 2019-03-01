@@ -19,58 +19,31 @@ start_proportion_5050 <- structure(
 distance_matrix_random <- matrix(runif(64, 0, 1), 8, 8) %>% `diag<-`(0)
 distance_matrix_equal <- distance_matrix_random %>% `[<-`(1) %>% `diag<-`(0)
 
-#### setup settings grid ####
+#### call popgenerator function #####
 
-populations_grid <- expand.grid(
+popgenerator(
   # general settings
-  timeframe = list(
-    0:200
-  ),
+  timeframe = 0:200,
   # population settings  
-  unit_amount = c(
-    8
-  ),
-  unit_names = list(
-    groups
-  ),
+  unit_amount = 8,
+  unit_names = groups,
   unit_size_functions = list(
-    list(
-      "1" = function(t) {10},
-      "2" = function(t) {10},
-      "3" = function(t) {10},
-      "4" = function(t) {10},
-      "5" = function(t) {10},
-      "6" = function(t) {10},
-      "7" = function(t) {10},
-      "8" = function(t) {10}
-    )
+    "1" = function(t) {10},
+    "2" = function(t) {10},
+    "3" = function(t) {10},
+    "4" = function(t) {10},
+    "5" = function(t) {10},
+    "6" = function(t) {10},
+    "7" = function(t) {10},
+    "8" = function(t) {10}
   ),
-  age_distribution_functions = c(
-    function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}
-  ),
-  age_ranges = list(
-    1:90
-  ),
+  age_distribution_function = function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))},
+  age_range = 1:90,
   # relations settings
-  amounts_friends = c(
-    10
-  ),
-  unit_interaction_matrix = list(
-    distance_matrix_equal
-  ),
-  cross_unit_proportion_child_of = c(
-    0.002
-  ),
-  cross_unit_proportion_friend = c(
-    0.01
-  ),
-  weight_child_of = list(
-    50
-  ),
-  weight_friend = list(
-    10
-  ),
-  stringsAsFactors = FALSE
-) %>% tibble::as_tibble()
-
-save(populations_grid, file = "playground/test_populations_grid.RData")
+  amounts_friends = 10,
+  unit_interaction_matrix = distance_matrix_equal,
+  cross_unit_proportion_child_of = 0.002,
+  cross_unit_proportion_friend = 0.01,
+  weight_child_of = 50,
+  weight_friend = 10
+)
