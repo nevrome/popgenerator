@@ -4,12 +4,24 @@
 \alias{init_relations_settings}
 \title{init_relations_settings}
 \usage{
-init_relations_settings(x, populations)
+init_relations_settings(population, amount_friends,
+  unit_interaction_matrix, cross_unit_proportion_child_of,
+  cross_unit_proportion_friend, weight_child_of, weight_friend)
 }
 \arguments{
-\item{x}{populations_grid data.frame}
+\item{population}{test}
 
-\item{populations}{populations list}
+\item{amount_friends}{test}
+
+\item{unit_interaction_matrix}{test}
+
+\item{cross_unit_proportion_child_of}{test}
+
+\item{cross_unit_proportion_friend}{test}
+
+\item{weight_child_of}{test}
+
+\item{weight_friend}{test}
 }
 \value{
 populations_grid data.frame with additional column 

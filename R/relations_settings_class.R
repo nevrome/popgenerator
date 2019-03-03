@@ -30,28 +30,38 @@ setClass(
 #' populations_grid data.frame and add it in an additional
 #' column.
 #'
-#' @param x populations_grid data.frame
-#' @param populations populations list
+#' @param population test
+#' @param amount_friends test
+#' @param unit_interaction_matrix test
+#' @param cross_unit_proportion_child_of test
+#' @param cross_unit_proportion_friend test
+#' @param weight_child_of test
+#' @param weight_friend test
 #'
 #' @return populations_grid data.frame with additional column 
 #' relations_settings
 #'
 #' @export
-init_relations_settings <- function(x, populations) { 
+init_relations_settings <- function(    
+  population,
+  amount_friends,
+  unit_interaction_matrix,
+  cross_unit_proportion_child_of,
+  cross_unit_proportion_friend,
+  weight_child_of,
+  weight_friend
+) { 
   
-  relations_settings <- list() 
-  for (i in 1:nrow(x)) {
-    relations_settings[[i]] <- methods::new(
-      "relations_settings",
-      population =                     populations[[i]],
-      amount_friends =                 x$amounts_friends[[i]],
-      unit_interaction_matrix =        x$unit_interaction_matrix[[i]],
-      cross_unit_proportion_child_of = x$cross_unit_proportion_child_of[[i]],
-      cross_unit_proportion_friend =   x$cross_unit_proportion_friend[[i]],
-      weight_child_of =                x$weight_child_of[[i]],
-      weight_friend =                  x$weight_friend[[i]]
-    )
-  }
-  
+  relations_settings <- methods::new(
+    "relations_settings",
+    population =                     population,
+    amount_friends =                 amount_friends,
+    unit_interaction_matrix =        unit_interaction_matrix,
+    cross_unit_proportion_child_of = cross_unit_proportion_child_of,
+    cross_unit_proportion_friend =   cross_unit_proportion_friend,
+    weight_child_of =                weight_child_of,
+    weight_friend =                  weight_friend
+  )
+
   return(relations_settings)
 }

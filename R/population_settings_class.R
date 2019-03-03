@@ -28,14 +28,19 @@ setClass(
 #' populations_grid data.frame and add it in an additional
 #' column.
 #'
-#' @param x populations_grid data.frame
+#' @param time test
+#' @param unit_amount test
+#' @param unit_names test
+#' @param unit_size_functions test
+#' @param age_distribution_function test
+#' @param age_range test
 #'
 #' @return populations_grid data.frame with additional column 
 #' population_settings
 #'
 #' @export
 init_population_settings <- function(
-  timeframe,
+  time,
   unit_amount,
   unit_names,
   unit_size_functions,
@@ -46,7 +51,7 @@ init_population_settings <- function(
   # create population_settings object
   population_settings <- methods::new(
     "population_settings",
-    time =                       timeframe,
+    time =                       time,
     unit_amount =                unit_amount,
     unit_names =                 unit_names,
     unit_size_functions =        unit_size_functions,
