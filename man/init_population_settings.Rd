@@ -4,7 +4,8 @@
 \alias{init_population_settings}
 \title{init_population_settings}
 \usage{
-init_population_settings(x)
+init_population_settings(timeframe, unit_amount, unit_names,
+  unit_size_functions, age_distribution_function, age_range)
 }
 \arguments{
 \item{x}{populations_grid data.frame}

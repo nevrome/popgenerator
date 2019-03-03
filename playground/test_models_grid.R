@@ -26,7 +26,7 @@ popgenerator(
   timeframe = 0:200,
   # population settings  
   unit_amount = 8,
-  unit_names = groups,
+  unit_names = as.factor(groups),
   unit_size_functions = list(
     "1" = function(t) {10},
     "2" = function(t) {10},

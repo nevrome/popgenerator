@@ -1,25 +1,3 @@
-#' generate_all_populations
-#'
-#' Generate populations in populations_grid data.frame based on
-#' population_settings objects in column population_settings. 
-#'
-#' @param x populations_grid data.frame
-#'
-#' @return populations_grid data.frame with additional column
-#' populations
-#'
-#' @export
-generate_all_populations <- function(x) {
-  
-  populations <- parallel::mclapply(
-    x, 
-    generate_population,
-    mc.cores = parallel::detectCores()
-  )
-  
-  return(populations)
-}
-
 #' generate_population
 #'
 #' Generate a population by creating the individual unit populations
