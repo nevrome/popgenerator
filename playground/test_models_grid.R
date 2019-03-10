@@ -21,7 +21,7 @@ distance_matrix_equal <- distance_matrix_random %>% `[<-`(1) %>% `diag<-`(0)
 
 #### create population and relations #####
 
-population <- init_population_settings(  
+settings <- init_population_settings(  
   time = 0:200,
   unit_amount = 8,
   unit_names = as.factor(groups),
@@ -37,10 +37,10 @@ population <- init_population_settings(
   ),
   age_distribution_function = function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))},
   age_range = 1:90
-) %>%
-  generate_population()
+)
+population <- generate_population(settings)
 
-relations <- population %>%
+settings <- population %>%
   init_relations_settings(
     amount_friends = 10,
     unit_interaction_matrix = distance_matrix_equal,
@@ -48,10 +48,9 @@ relations <- population %>%
     cross_unit_proportion_friend = 0.01,
     weight_child_of = 50,
     weight_friend = 10
-  ) %>%
-  generate_relations()
+  ) 
+relations <- generate_relations(settings)
   
-relations_graph <- relations %>%
-  generate_graph()
+relations_graph <- generate_graph(relations)
 
 #igraph::plot.igraph(relations_graph)
