@@ -41,7 +41,6 @@ setClass(
 #' @export
 init_population_settings <- function(
   time,
-  unit_amount,
   unit_names,
   unit_size_functions,
   age_distribution_function,
@@ -52,7 +51,7 @@ init_population_settings <- function(
   population_settings <- methods::new(
     "population_settings",
     time =                       time,
-    unit_amount =                unit_amount,
+    unit_amount =                length(unit_names),
     unit_names =                 unit_names,
     unit_size_functions =        unit_size_functions,
     age_distribution_function =  age_distribution_function,

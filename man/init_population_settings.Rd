@@ -4,13 +4,11 @@
 \alias{init_population_settings}
 \title{init_population_settings}
 \usage{
-init_population_settings(time, unit_amount, unit_names,
-  unit_size_functions, age_distribution_function, age_range)
+init_population_settings(time, unit_names, unit_size_functions,
+  age_distribution_function, age_range)
 }
 \arguments{
 \item{time}{test}
-
-\item{unit_amount}{test}
 
 \item{unit_names}{test}
 
@@ -19,6 +17,8 @@ init_population_settings(time, unit_amount, unit_names,
 \item{age_distribution_function}{test}
 
 \item{age_range}{test}
+
+\item{unit_amount}{test}
 }
 \value{
 populations_grid data.frame with additional column 
