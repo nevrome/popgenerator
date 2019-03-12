@@ -53,10 +53,27 @@ init_population_settings <- function(
     time =                       time,
     unit_amount =                length(unit_names),
     unit_names =                 unit_names,
-    unit_size_functions =        unit_size_functions,
+    unit_size_functions =        fence_unit_size_functions(unit_size_functions, time),
     age_distribution_function =  age_distribution_function,
     age_range =                  age_range
   )
 
   return(population_settings)
+}
+
+fence_unit_size_functions <- function(unit_size_functions, time) {
+  lapply(
+    unit_size_functions, function(x) {
+      res_function <- function(t) {
+        if (t < min(time)) {
+          x(min(time))
+        } else if (t > max(time)) {
+          x(max(time))
+        } else {
+          x(t)
+        }
+      }
+      return(res_function)
+    }
+  )
 }
