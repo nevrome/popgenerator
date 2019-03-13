@@ -29,7 +29,6 @@ setClass(
 #' column.
 #'
 #' @param time test
-#' @param unit_amount test
 #' @param unit_names test
 #' @param unit_size_functions test
 #' @param age_distribution_function test

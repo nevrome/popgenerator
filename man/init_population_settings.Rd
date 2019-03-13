@@ -17,8 +17,6 @@ init_population_settings(time, unit_names, unit_size_functions,
 \item{age_distribution_function}{test}
 
 \item{age_range}{test}
-
-\item{unit_amount}{test}
 }
 \value{
 populations_grid data.frame with additional column 
