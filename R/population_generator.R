@@ -1,25 +1,3 @@
-#' generate_all_populations
-#'
-#' Generate populations in populations_grid data.frame based on
-#' population_settings objects in column population_settings. 
-#'
-#' @param x populations_grid data.frame
-#'
-#' @return populations_grid data.frame with additional column
-#' populations
-#'
-#' @export
-generate_all_populations <- function(x) {
-  
-  populations <- parallel::mclapply(
-    x, 
-    generate_population,
-    mc.cores = parallel::detectCores()
-  )
-  
-  return(populations)
-}
-
 #' generate_population
 #'
 #' Generate a population by creating the individual unit populations
@@ -62,7 +40,7 @@ generate_population <- function(settings) {
 #' @export
 generate_unit <- function(settings) {
   
-  # get total amount of humans necessary in every year
+  # get total amount of human-year combinations necessary
   human_year_combinations <- get_number_human_year_combinations(settings)
   # get average life span based on age_distribution_function
   average_life_span <- get_human_average_life_span(settings)
@@ -95,8 +73,8 @@ generate_unit <- function(settings) {
 get_number_human_year_combinations <- function(settings) {
   stats::integrate(
     Vectorize(settings@unit_size_function), 
-    lower = min(settings@time) - 50, 
-    upper = max(settings@time) + 150,
+    lower = min(settings@time) - max(settings@age_range), 
+    upper = max(settings@time) + max(settings@age_range),
     subdivisions = 1000,
     rel.tol = 1
   )$value
@@ -110,9 +88,12 @@ get_human_average_life_span <- function(settings) {
 
 get_birth_windows <- function(average_life_span, settings) {
   seq(
-    min(settings@time) - 50,
-    max(settings@time) + 150,
-    abs((max(settings@time) + 150) - (min(settings@time) - 50)) / average_life_span
+    min(settings@time) - max(settings@age_range),
+    max(settings@time) + max(settings@age_range),
+    abs(
+      (max(settings@time) + max(settings@age_range)) - 
+        (min(settings@time) - max(settings@age_range))
+    ) / average_life_span
   )
 }
 

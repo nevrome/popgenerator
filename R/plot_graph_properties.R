@@ -67,20 +67,3 @@ plot_relations_development <- function(pop, rel, time = c()) {
   
   return(relations_development_plot)
 }
-
-
-# population_expected <- tibble::tibble(
-#   time = time,
-#   n = test$population_settings[[1]]@population_size_function(time)
-# )
-
-# units_real <- pop %>% count_living_units_over_time(time)
-
-
-
-# unit_development_plot <- ggplot() +
-#   geom_line(
-#     data = units_real,
-#     aes(x = time, y = n),
-#     color = "red"
-#   )

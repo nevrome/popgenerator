@@ -15,7 +15,7 @@ setClass(
   slots = c(
     time = "numeric",
     unit_amount = "numeric",
-    unit_names = "list",
+    unit_names = "factor",
     unit_size_functions = "list",
     age_distribution_function = "function",
     age_range = "numeric"
@@ -28,28 +28,51 @@ setClass(
 #' populations_grid data.frame and add it in an additional
 #' column.
 #'
-#' @param x populations_grid data.frame
+#' @param time test
+#' @param unit_names test
+#' @param unit_size_functions test
+#' @param age_distribution_function test
+#' @param age_range test
 #'
 #' @return populations_grid data.frame with additional column 
 #' population_settings
 #'
 #' @export
-init_population_settings <- function(x) { 
+init_population_settings <- function(
+  time,
+  unit_names,
+  unit_size_functions,
+  age_distribution_function,
+  age_range
+) { 
   
-  # create list of population_settings objects for each row of 
-  # the input populations_grid data.frame
-  population_settings <- list() 
-  for (i in 1:nrow(x)) {
-    population_settings[[i]] <- methods::new(
-      "population_settings",
-      time =                       x$timeframe[[i]],
-      unit_amount =                x$unit_amount[[i]],
-      unit_names =                 x$unit_names[[i]],
-      unit_size_functions =        x$unit_size_functions[[i]],
-      age_distribution_function =  x$age_distribution_functions[[i]],
-      age_range =                  x$age_ranges[[i]]
-    )
-  }
-  
+  # create population_settings object
+  population_settings <- methods::new(
+    "population_settings",
+    time =                       time,
+    unit_amount =                length(unit_names),
+    unit_names =                 unit_names,
+    unit_size_functions =        fence_unit_size_functions(unit_size_functions, time),
+    age_distribution_function =  age_distribution_function,
+    age_range =                  age_range
+  )
+
   return(population_settings)
+}
+
+fence_unit_size_functions <- function(unit_size_functions, time) {
+  lapply(
+    unit_size_functions, function(x) {
+      res_function <- function(t) {
+        if (t < min(time)) {
+          x(min(time))
+        } else if (t > max(time)) {
+          x(max(time))
+        } else {
+          x(t)
+        }
+      }
+      return(res_function)
+    }
+  )
 }

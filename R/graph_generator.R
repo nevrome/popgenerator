@@ -1,22 +1,3 @@
-
-#' prepare_graphs
-#'
-#' @param x models_grid data.frame
-#'
-#' @return igraph graph object
-#' 
-#' @export
-generate_all_graphs <- function(x) {
-  
-  x$graphs <- pbapply::pblapply(
-    x$relations, 
-    generate_graph,
-    cl = parallel::detectCores()
-  )
-  
-  return(x)
-}
-
 #' construct_graph
 #'
 #' @param rel relations data.frame

@@ -4,10 +4,19 @@
 \alias{init_population_settings}
 \title{init_population_settings}
 \usage{
-init_population_settings(x)
+init_population_settings(time, unit_names, unit_size_functions,
+  age_distribution_function, age_range)
 }
 \arguments{
-\item{x}{populations_grid data.frame}
+\item{time}{test}
+
+\item{unit_names}{test}
+
+\item{unit_size_functions}{test}
+
+\item{age_distribution_function}{test}
+
+\item{age_range}{test}
 }
 \value{
 populations_grid data.frame with additional column 

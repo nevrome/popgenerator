@@ -1,25 +1,3 @@
-#' generate_all_relations
-#'
-#' Generate relations in a populations_grid data.frame based on
-#' relations_settings objects in column relations_settings. 
-#'
-#' @param x relations_settings list
-#'
-#' @return populations_grid data.frame with additional column
-#' relations
-#'
-#' @export
-generate_all_relations <- function(x) {
-  
-  relations <- parallel::mclapply(
-    x, 
-    generate_relations,
-    mc.cores = parallel::detectCores()
-  )
-  
-  return(relations)
-}
-
 #' generate relations
 #'
 #' Generate horizontal and vertical relations for a population
