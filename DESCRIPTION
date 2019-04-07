@@ -1,13 +1,13 @@
 Package: popgenerator
 Title: A population network generator
-Version: 1.0.0.9000
+Version: 2.0.0
 Authors@R: c(
   person("Clemens", "Schmid", email = "clemens@nevrome.de", role = c("aut", "cre", "cph"))
   )
 URL: https://github.com/nevrome/popgenerator
 Date: 2018-09-17
 Description: This package provides functions to create diachronic population networks that 
-  fulfil certain configurable population parameters like size, grouping and degree
+  fulfill certain configurable population parameters like size, grouping and degree
   of interaction.
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
