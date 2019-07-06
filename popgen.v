@@ -6,20 +6,23 @@ fn main() {
 	
 	// #### paramters ####
 	end_time := 100
-	entity_life_length := 50
+	generation_length := 25
 
 	// #### logic ####
+	
+	// calculate population development
 	cumsum_of_popsize_array := cum_popsize_distribution(end_time)
-
 	total_popsize := cumsum_of_popsize_array[end_time]
-	total_number_of_entities := total_popsize / entity_life_length
+	total_number_of_entities := total_popsize / generation_length
 
-	mut entity_counter := 1
 	mut entities_collector := []Entity
-	for entity_counter <= total_number_of_entities {
+	for entity_counter := 1; entity_counter <= total_number_of_entities; entity_counter++ {
+		// temporal distribution
 		entity_time := where_in_cum_array(random_integer(total_popsize), cumsum_of_popsize_array)
+		// social distribution
+		//TODO
+		// construct entities		
 		entities_collector << Entity{time: entity_time, social: 000}
-		entity_counter++
 	}
 
 	for entity in entities_collector {
@@ -28,10 +31,12 @@ fn main() {
 
 }
 
+// #### SocialWorld ####
 struct SocialWorld {
 	entities []Entity
 }
 
+// #### Entity ####
 struct Entity {
 	time int
 	social int
@@ -41,8 +46,9 @@ fn (e Entity) print() {
 	println(e.time.str() + ' ' + e.social.str()) 
 } 
 
+// #### population size along temporal space ####
 fn popsize_distribution(time int) int {
-  return 2 * time + 20
+  return 1 * time + 20
 }
 
 fn cum_popsize_distribution(end_time int) []int {
@@ -56,6 +62,11 @@ fn cum_popsize_distribution(end_time int) []int {
 	return(cum_sum)
 }
 
+// #### social structure along the social space ####
+
+// TODO
+
+// #### helper functions ####
 fn random_integer(max int) int {
 	return rand.next(max)
 }
