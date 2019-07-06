@@ -1,5 +1,6 @@
 import rand
 import math
+import os
 
 fn main() {
 
@@ -27,13 +28,20 @@ fn main() {
 		entity_time := where_in_cum_array(f64(random_integer(int(total_popsize))), cumsum_of_popsize_array)
 		// social distribution
 		entity_social := where_in_cum_array(f64(random_integer(int(total_social))), cumsum_of_social_array)
-		// construct entities		
+		// construct entities
 		entities_collector << Entity{time: entity_time, social: entity_social}
 	}
 
-	for entity in entities_collector {
-		entity.print()
+	// #### save result ####
+	output_file := os.create('./test.csv') or {
+		println(error)
+    return
 	}
+	output_file.write('time' + ',' + 'social' + '\n')
+	for entity in entities_collector {
+		output_file.write(entity.print())
+	}
+	output_file.close()
 
 }
 
@@ -48,8 +56,8 @@ struct Entity {
 	social int
 }
 
-fn (e Entity) print() {
-	println(e.time.str() + ' ' + e.social.str()) 
+fn (e Entity) print() string {
+	return e.time.str() + ',' + e.social.str() + '\n'
 } 
 
 // #### population size along temporal space ####
