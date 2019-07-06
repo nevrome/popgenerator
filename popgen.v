@@ -4,6 +4,7 @@ fn main() {
 	
 	//start_time := 0
 	//end_time := 1000
+	//entity_life_length := 50
 
 	huhu := entity_generator(1, 2)
 	
@@ -11,6 +12,10 @@ fn main() {
 	
 	println(cum_popsize_distribution(3, 10).str())
 
+}
+
+struct SocialWorld {
+	entities []Entity
 }
 
 struct Entity {
@@ -35,7 +40,7 @@ fn popsize_distribution(time int) int {
 }
 
 fn cum_popsize_distribution(start_time int, end_time int) int {
-	mut time := start_time	
+	mut time := start_time
 	mut cum_sum := 0
 	for time <= end_time {
 		cum_sum += popsize_distribution(time)
