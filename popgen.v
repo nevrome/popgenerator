@@ -18,15 +18,14 @@ fn main() {
 	total_number_of_entities := int(math.round(total_popsize / generation_length))
 
 	// calculate social structure
-	cumsum_of_social_array := cum_social_distribution(end_social)
-	total_social := cumsum_of_social_array[end_social]
+	total_social := integral_social_distribution(end_social)
 	
 	mut entities_collector := []Entity
 	for entity_counter := 1; entity_counter <= total_number_of_entities; entity_counter++ {
 		// temporal distribution
 		entity_time := inverse_integral_popsize_distribution(f64(random_integer(int(total_popsize))))
 		// social distribution
-		entity_social := where_in_cum_array(f64(random_integer(int(total_social))), cumsum_of_social_array)
+		entity_social := inverse_integral_social_distribution(f64(random_integer(int(total_social))))
 		// construct entities
 		entities_collector << Entity{time: entity_time, social: entity_social}
 	}
@@ -52,7 +51,7 @@ struct SocialWorld {
 // #### Entity ####
 struct Entity {
 	time f64
-	social int
+	social f64
 }
 
 fn (e Entity) print() string {
@@ -60,43 +59,29 @@ fn (e Entity) print() string {
 } 
 
 // #### population size along temporal space ####
-fn popsize_distribution(time int) f64 {
-  return 2 * time
+fn popsize_distribution(x int) f64 {
+  return 2 * x
 }
 
-fn integral_popsize_distribution(time int) f64 {
-	return 2 * time * time + 20 * time
+fn integral_popsize_distribution(x int) f64 {
+	return 2 * x * x
 }
 
-fn inverse_integral_popsize_distribution(random_number f64) f64 {
-	return math.sqrt(random_number / 2)
-}
-
-fn cum_popsize_distribution(end_time int) []f64 {
-	mut time := 1
-	mut cum_sum := []f64
-	cum_sum << 0
-	for time <= end_time {
-		cum_sum << cum_sum[time - 1] + popsize_distribution(time)
-		time++
-	}
-	return(cum_sum)
+fn inverse_integral_popsize_distribution(y f64) f64 {
+	return math.sqrt(y / 2)
 }
 
 // #### social structure along the social space ####
-fn social_distribution(social int) f64 {
-  return 0.5 * math.cos(0.314 * social + 3.14) + 0.5
+fn social_distribution(x int) f64 {
+  return 2 * x
 }
 
-fn cum_social_distribution(end_social int) []f64 {
-	mut social := 1
-	mut cum_sum := []f64
-	cum_sum << 0.0
-	for social <= end_social {
-		cum_sum << cum_sum[social - 1] + social_distribution(social)
-		social++
-	}
-	return(cum_sum)
+fn integral_social_distribution(x int) f64 {
+	return 2 * x * x
+}
+
+fn inverse_integral_social_distribution(y f64) f64 {
+	return math.sqrt(y / 2)
 }
 
 // #### helper functions ####
