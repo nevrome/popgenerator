@@ -14,18 +14,17 @@ fn main() {
 	// #### logic ####
 	
 	// calculate population development
-	cumsum_of_popsize_array := cum_popsize_distribution(end_social)
-	total_popsize := cumsum_of_popsize_array[end_time]
+	total_popsize := integral_popsize_distribution(end_time)
 	total_number_of_entities := int(math.round(total_popsize / generation_length))
 
 	// calculate social structure
-	cumsum_of_social_array := cum_social_distribution(end_time)
+	cumsum_of_social_array := cum_social_distribution(end_social)
 	total_social := cumsum_of_social_array[end_social]
 	
 	mut entities_collector := []Entity
 	for entity_counter := 1; entity_counter <= total_number_of_entities; entity_counter++ {
 		// temporal distribution
-		entity_time := where_in_cum_array(f64(random_integer(int(total_popsize))), cumsum_of_popsize_array)
+		entity_time := inverse_integral_popsize_distribution(f64(random_integer(int(total_popsize))))
 		// social distribution
 		entity_social := where_in_cum_array(f64(random_integer(int(total_social))), cumsum_of_social_array)
 		// construct entities
@@ -52,7 +51,7 @@ struct SocialWorld {
 
 // #### Entity ####
 struct Entity {
-	time int
+	time f64
 	social int
 }
 
@@ -62,7 +61,15 @@ fn (e Entity) print() string {
 
 // #### population size along temporal space ####
 fn popsize_distribution(time int) f64 {
-  return 1.25 * time + 20
+  return 2 * time
+}
+
+fn integral_popsize_distribution(time int) f64 {
+	return 2 * time * time + 20 * time
+}
+
+fn inverse_integral_popsize_distribution(random_number f64) f64 {
+	return math.sqrt(random_number / 2)
 }
 
 fn cum_popsize_distribution(end_time int) []f64 {
