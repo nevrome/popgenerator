@@ -4,22 +4,22 @@ import os
 
 fn main() {
 
-	rand.seed()
-	
+	rand.seed(123)
+
 	// #### paramters ####
 	end_time := 100
 	end_social := 100
 	generation_length := 25.0
 
 	// #### logic ####
-	
+
 	// calculate population development
 	total_popsize := integral_popsize_distribution(end_time)
 	total_number_of_entities := int(math.round(total_popsize / generation_length))
 
 	// calculate social structure
 	total_social := integral_social_distribution(end_social)
-	
+
 	mut entities_collector := []Entity
 	for entity_counter := 1; entity_counter <= total_number_of_entities; entity_counter++ {
 		// temporal distribution
@@ -56,7 +56,7 @@ struct Entity {
 
 fn (e Entity) print() string {
 	return e.time.str() + ',' + e.social.str() + '\n'
-} 
+}
 
 // #### population size along temporal space ####
 fn popsize_distribution(x int) f64 {
@@ -102,6 +102,3 @@ fn where_in_cum_array(x f64, numbers []f64) int {
 	}
 	return i
 }
-
-
-
