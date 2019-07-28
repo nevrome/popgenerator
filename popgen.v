@@ -10,6 +10,7 @@ fn main() {
 	end_time := 1000
 	end_social := 1000
 	number_of_entities := 1000
+	neighbours_distance := 25
 
 	// #### create sequences####
 	mut time_arr := [0; end_time]
@@ -31,43 +32,79 @@ fn main() {
 		social_freq[s] = social_distribution(s)
 	}
 
-	// #### logic ####
-	mut entities_collector := []Entity
-	for entity_counter := 1; entity_counter <= number_of_entities; entity_counter++ {
+	// #### create entities ####
+	mut entities := []Entity
+	for entity_counter := 0; entity_counter < number_of_entities; entity_counter++ {
 		// draw temporal coordinate
 		entity_time := random_integer_distribution(time_arr, time_freq, end_time)
 		// draw social coordinate
 		entity_social := random_integer_distribution(social_arr, social_freq, end_social)
 		// construct entities
-		entities_collector << Entity{time: entity_time, social: entity_social}
+		entities << Entity{
+			id: entity_counter,
+			time: entity_time,
+			social: entity_social
+		}
+	}
+
+	// #### determine relations ####
+	mut relations := []Relation
+	for entity_a in entities {
+		for entity_b in entities {
+			if (entity_b.time <= entity_a.time + neighbours_distance) &&
+				 (entity_b.time >= entity_a.time - neighbours_distance) &&
+				 (entity_b.social <= entity_a.social + neighbours_distance) &&
+				 (entity_b.social >= entity_a.social - neighbours_distance) {
+				relations << Relation{
+					id_a: entity_a.id,
+					id_b: entity_b.id
+				}
+			}
+		}
 	}
 
 	// #### save result ####
-	output_file := os.create('./test.csv') or {
+	entities_output_file := os.create('./entities_output.csv') or {
 		println(error)
     return
 	}
-	output_file.write('time' + ',' + 'social' + '\n')
-	for entity in entities_collector {
-		output_file.write(entity.print())
+	entities_output_file.write('id' + ',' + 'time' + ',' + 'social' + '\n')
+	for entity in entities {
+		entities_output_file.write(entity.print())
 	}
-	output_file.close()
+	entities_output_file.close()
 
-}
+	relations_output_file := os.create('./relations_output.csv') or {
+		println(error)
+		return
+	}
+	relations_output_file.write('id_a' + ',' + 'id_b' + '\n')
+	for relation in relations {
+		relations_output_file.write(relation.print())
+	}
+	relations_output_file.close()
 
-// #### SocialWorld ####
-struct SocialWorld {
-	entities []Entity
 }
 
 // #### Entity ####
 struct Entity {
+	id int
 	time int
 	social int
 }
 
 fn (e Entity) print() string {
-	return e.time.str() + ',' + e.social.str() + '\n'
+	return e.id.str() + ',' + e.time.str() + ',' + e.social.str() + '\n'
+}
+
+// #### Relation ####
+struct Relation {
+	id_a int
+	id_b int
+}
+
+fn (r Relation) print() string {
+	return r.id_a.str() + ',' + r.id_b.str() + '\n'
 }
 
 // #### population size along temporal space ####
