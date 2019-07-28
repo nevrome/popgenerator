@@ -1,0 +1,10 @@
+language: minimal
+
+before_install:
+  - wget https://github.com/vlang/v/archive/master.zip
+  - unzip master.zip
+  - rm master.zip
+  - make v-master
+
+script:
+  - v-master/v run popgen.v
