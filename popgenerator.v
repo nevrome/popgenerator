@@ -7,9 +7,9 @@ fn main() {
 	rand.seed(1463233)
 
 	// #### read input args ####
-	mut config_file_path := os.args[1]
-	mut entities_output_file_path := os.args[2]
-	mut relations_output_file_path := os.args[3]
+	config_file_path := os.args[1]
+	entities_output_file_path := os.args[2]
+	relations_output_file_path := os.args[3]
 
 	// #### default parameters ####
 	mut end_time := 200
@@ -100,7 +100,7 @@ fn main() {
 	}
 
 	// #### save result ####
-	entities_output_file := os.create('entities_output_file_path') or {
+	entities_output_file := os.create(entities_output_file_path) or {
 		println(error)
     return
 	}
@@ -110,7 +110,7 @@ fn main() {
 	}
 	entities_output_file.close()
 
-	relations_output_file := os.create('relations_output_file_path') or {
+	relations_output_file := os.create(relations_output_file_path) or {
 		println(error)
 		return
 	}
