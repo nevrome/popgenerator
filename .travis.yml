@@ -8,4 +8,4 @@ before_install:
   - cd ..
 
 script:
-  - v-master/v run popgen.v
+  - v-master/v popgenerator.v
