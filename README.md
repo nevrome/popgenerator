@@ -11,7 +11,13 @@ popgenerator <path_to_config_file> <output_path_entities_list_file> <output_path
 ## Installation
 
 ```
-...
+git clone git@github.com:nevrome/popgenerator.git
+wget https://github.com/vlang/v/archive/master.zip
+unzip master.zip
+cd v-master
+make
+cd ..
+v-master/v popgenerator.v
 ```
 
 ## Citation
