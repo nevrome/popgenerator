@@ -6,11 +6,45 @@ fn main() {
 
 	rand.seed(1463233)
 
-	// #### parameters ####
-	end_time := 1000
-	end_social := 1000
-	number_of_entities := 1000
-	neighbours_distance := 25
+	// #### read input args ####
+	mut config_file_path := os.args[1]
+
+	// #### default parameters ####
+	mut end_time := 200
+	mut	end_social := 200
+	mut number_of_entities := 200
+	mut neighbours_distance := 10
+
+  // #### read config file ####
+	config_file_content := os.read_file(config_file_path.trim_space()) or {
+		println('failed to open $config_file_path')
+		return
+	}
+
+	config_file_lines := config_file_content.split(';')
+	config_number_lines := config_file_lines.len - 1
+
+	for i := 0; i < config_number_lines; i++ {
+		mut config_file_line := config_file_lines[i]
+		mut config_values_array := config_file_line.split('=')
+		mut name := config_values_array[0].trim_space()
+		mut value := config_values_array[1].trim_space()
+
+		println('$name = $value')
+
+		if name == 'end_time' {
+			end_time = value.int()
+		}
+		if name == 'end_social' {
+			end_social = value.int()
+		}
+		if name == 'number_of_entities' {
+			number_of_entities = value.int()
+		}
+		if name == 'neighbours_distance' {
+			neighbours_distance = value.int()
+		}
+	}
 
 	// #### create sequences####
 	mut time_arr := [0; end_time]
