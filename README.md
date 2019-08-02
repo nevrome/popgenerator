@@ -17,6 +17,8 @@ unzip master.zip
 cd v-master
 make
 cd ..
+chmod +x merge.sh
+./merge.sh
 v-master/v popgenerator.v
 ```
 
