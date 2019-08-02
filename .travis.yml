@@ -6,8 +6,8 @@ before_install:
   - cd v-master
   - make
   - cd ..
-  - alias v=’v-master/v’
   - chmod +x compile.sh
 
 script:
+  - alias v=’v-master/v’
   - ./compile.sh
