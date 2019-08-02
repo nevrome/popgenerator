@@ -6,8 +6,8 @@ before_install:
   - cd v-master
   - make
   - cd ..
-  - chmod +x compile.sh
+  - chmod +x merge.sh
+  - ./merge.sh
 
 script:
-  - alias v=’v-master/v’
-  - ./compile.sh
+  - v-master/v popgenerator.v
