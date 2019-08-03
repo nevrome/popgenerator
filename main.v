@@ -103,6 +103,7 @@ fn main() {
 		println(error)
     return
 	}
+	output_pajek_file.write('*Network popgenerator_network \n')
 	output_pajek_file.write('*Vertices $number_of_entities \n')
 	for entity in entities {
 		output_pajek_file.write(entity.print())
