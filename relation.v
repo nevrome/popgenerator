@@ -1,7 +1,7 @@
 struct Relation {
 	id_a int
 	id_b int
-	distance f64
+	distance int
 }
 
 fn (r Relation) print() string {
