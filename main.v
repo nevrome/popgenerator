@@ -7,28 +7,27 @@ fn main() {
 	rand.seed(1463233)
 
 	// #### read input args ####
-	config_file_path := os.args[1]
-	entities_output_file_path := os.args[2]
-	relations_output_file_path := os.args[3]
+	input_config_file_path := os.args[1]
+	output_pajek_file_path := os.args[2]
 
-	// #### default parameters ####
-	mut end_time := 200
-	mut	end_social := 200
-	mut number_of_entities := 200
-	mut neighbours_distance := 10
+	// #### create parameter variables ####
+	mut end_time := 0
+	mut	end_social := 0
+	mut number_of_entities := 0
+	mut neighbours_distance := 0
 
   // #### read config file ####
-	config_file_content := os.read_file(config_file_path.trim_space()) or {
-		println('failed to open $config_file_path')
+	input_config_file_content := os.read_file(input_config_file_path.trim_space()) or {
+		println('failed to open $input_config_file_path')
 		return
 	}
 
-	config_file_lines := config_file_content.split(';')
-	config_number_lines := config_file_lines.len - 1
+	input_config_file_lines := input_config_file_content.split(';')
+	config_number_lines := input_config_file_lines.len - 1
 
 	for i := 0; i < config_number_lines; i++ {
-		mut config_file_line := config_file_lines[i]
-		mut config_values_array := config_file_line.split('=')
+		mut input_config_file_line := input_config_file_lines[i]
+		mut config_values_array := input_config_file_line.split('=')
 		mut name := config_values_array[0].trim_space()
 		mut value := config_values_array[1].trim_space()
 
@@ -100,24 +99,18 @@ fn main() {
 	}
 
 	// #### save result ####
-	entities_output_file := os.create(entities_output_file_path) or {
+	output_pajek_file := os.create(output_pajek_file_path) or {
 		println(error)
     return
 	}
-	entities_output_file.write('id' + ',' + 'time' + ',' + 'social' + '\n')
+	output_pajek_file.write('*Vertices $number_of_entities \n')
 	for entity in entities {
-		entities_output_file.write(entity.print())
+		output_pajek_file.write(entity.print())
 	}
-	entities_output_file.close()
-
-	relations_output_file := os.create(relations_output_file_path) or {
-		println(error)
-		return
-	}
-	relations_output_file.write('id_a' + ',' + 'id_b' + '\n')
+	output_pajek_file.write('*Edges \n')
 	for relation in relations {
-		relations_output_file.write(relation.print())
+		output_pajek_file.write(relation.print())
 	}
-	relations_output_file.close()
+	output_pajek_file.close()
 
 }

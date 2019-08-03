@@ -4,5 +4,5 @@ struct Relation {
 }
 
 fn (r Relation) print() string {
-	return r.id_a.str() + ',' + r.id_b.str() + '\n'
+	return r.id_a.str() + ' ' + r.id_b.str() + '\n'
 }
