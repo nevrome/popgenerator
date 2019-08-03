@@ -86,13 +86,19 @@ fn main() {
 	mut relations := []Relation
 	for entity_a in entities {
 		for entity_b in entities {
-			if (entity_b.time <= entity_a.time + neighbours_distance) &&
+			if (entity_a.id != entity_b.id) &&
+				 (entity_b.time <= entity_a.time + neighbours_distance) &&
 				 (entity_b.time >= entity_a.time - neighbours_distance) &&
 				 (entity_b.social <= entity_a.social + neighbours_distance) &&
 				 (entity_b.social >= entity_a.social - neighbours_distance) {
+				distance := math.sqrt(
+					math.pow(f64(entity_a.time - entity_b.time), 2.0) +
+						math.pow(f64(entity_a.social - entity_b.social), 2.0)
+				)
 				relations << Relation{
 					id_a: entity_a.id,
-					id_b: entity_b.id
+					id_b: entity_b.id,
+					distance: distance
 				}
 			}
 		}
