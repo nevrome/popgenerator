@@ -96,10 +96,13 @@ fn main() {
 		}
 	}
 
+	// create endless world
+	entities_cube := cubify_entities(entities, end_time, end_x, end_y)
+
 	// #### determine relations ####
 	mut relations := []Relation
 	for entity_a in entities {
-		for entity_b in entities {
+		for entity_b in entities_cube {
 			if (entity_a.id != entity_b.id) &&
 				 (entity_b.time <= entity_a.time + neighbours_distance) &&
 				 (entity_b.time >= entity_a.time - neighbours_distance) &&
