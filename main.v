@@ -12,7 +12,8 @@ fn main() {
 
 	// #### create parameter variables ####
 	mut end_time := 0
-	mut	end_social := 0
+	mut	end_x := 0
+	mut	end_y := 0
 	mut number_of_entities := 0
 	mut neighbours_distance := 0
 
@@ -36,8 +37,11 @@ fn main() {
 		if name == 'end_time' {
 			end_time = value.int()
 		}
-		if name == 'end_social' {
-			end_social = value.int()
+		if name == 'end_x' {
+			end_x = value.int()
+		}
+		if name == 'end_y' {
+			end_y = value.int()
 		}
 		if name == 'number_of_entities' {
 			number_of_entities = value.int()
@@ -49,22 +53,30 @@ fn main() {
 
 	// #### create sequences####
 	mut time_arr := [0; end_time]
-	for t := 0; t < end_time; t++ {
-		time_arr[t] = t
+	for i := 0; i < end_time; i++ {
+		time_arr[i] = i
 	}
-	mut social_arr := [0; end_social]
-	for s := 0; s < end_social; s++ {
-		social_arr[s] = s
+	mut x_arr := [0; end_x]
+	for i := 0; i < end_x; i++ {
+		x_arr[i] = i
+	}
+	mut y_arr := [0; end_y]
+	for i := 0; i < end_y; i++ {
+		y_arr[i] = i
 	}
 
 	// #### calculate frequencies ####
 	mut time_freq := [0; end_time]
-	for t := 0; t < end_time; t++ {
-		time_freq[t] = temporal_distribution(t)
+	for i := 0; i < end_time; i++ {
+		time_freq[i] = temporal_distribution(i)
 	}
-	mut social_freq := [0; end_social]
-	for s := 0; s < end_social; s++ {
-		social_freq[s] = social_distribution(s)
+	mut x_freq := [0; end_x]
+	for i := 0; i < end_x; i++ {
+		x_freq[i] = x_distribution(i)
+	}
+	mut y_freq := [0; end_y]
+	for i := 0; i < end_y; i++ {
+		y_freq[i] = y_distribution(i)
 	}
 
 	// #### create entities ####
@@ -72,13 +84,15 @@ fn main() {
 	for entity_counter := 0; entity_counter < number_of_entities; entity_counter++ {
 		// draw temporal coordinate
 		entity_time := random_integer_distribution(time_arr, time_freq, end_time)
-		// draw social coordinate
-		entity_social := random_integer_distribution(social_arr, social_freq, end_social)
+		// draw social coordinates
+		entity_x := random_integer_distribution(x_arr, x_freq, end_x)
+		entity_y := random_integer_distribution(y_arr, y_freq, end_y)
 		// construct entities
 		entities << Entity{
 			id: entity_counter,
 			time: entity_time,
-			social: entity_social
+			x: entity_x,
+			y: entity_y
 		}
 	}
 
@@ -89,11 +103,14 @@ fn main() {
 			if (entity_a.id != entity_b.id) &&
 				 (entity_b.time <= entity_a.time + neighbours_distance) &&
 				 (entity_b.time >= entity_a.time - neighbours_distance) &&
-				 (entity_b.social <= entity_a.social + neighbours_distance) &&
-				 (entity_b.social >= entity_a.social - neighbours_distance) {
+				 (entity_b.x <= entity_a.x + neighbours_distance) &&
+				 (entity_b.x >= entity_a.x - neighbours_distance) &&
+				 (entity_b.y <= entity_a.y + neighbours_distance) &&
+				 (entity_b.y >= entity_a.y - neighbours_distance) {
 				distance := int(math.sqrt(
 					math.pow(f64(entity_a.time - entity_b.time), 2.0) +
-						math.pow(f64(entity_a.social - entity_b.social), 2.0)
+					math.pow(f64(entity_a.x - entity_b.x), 2.0) +
+					math.pow(f64(entity_a.y - entity_b.y), 2.0)
 				))
 				relations << Relation{
 					id_a: entity_a.id,
