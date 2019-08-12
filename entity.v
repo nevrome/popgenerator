@@ -15,6 +15,7 @@ fn cubify_entities(entities []Entity, end_time int, end_x int, end_y int) []Enti
 	for entity in entities {
 
 		// top
+		/*
 		cubified_entities << Entity{
 			id: entity.id,
 			time: entity.time + end_time,
@@ -69,6 +70,7 @@ fn cubify_entities(entities []Entity, end_time int, end_x int, end_y int) []Enti
 			x: entity.x - end_x,
 			y: entity.y + end_y
 		}
+		*/
 
 		// middle
 		cubified_entities << Entity{
@@ -127,6 +129,7 @@ fn cubify_entities(entities []Entity, end_time int, end_x int, end_y int) []Enti
 		}
 
 		// bottom
+		/*
 		cubified_entities << Entity{
 			id: entity.id,
 			time: entity.time - end_time,
@@ -181,6 +184,8 @@ fn cubify_entities(entities []Entity, end_time int, end_x int, end_y int) []Enti
 			x: entity.x - end_x,
 			y: entity.y + end_y
 		}
+		*/
+
 	}
 	return cubified_entities
 }
