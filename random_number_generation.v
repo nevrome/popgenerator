@@ -23,12 +23,14 @@ fn random_integer_distribution(arr[] int, freq[] int, n int) int {
 // Utility function to find ceiling of r in arr[l..h]
 fn find_ceil(arr[] int, r int, l int, h int) int {
 		mut mid := 0
+		mut le := l
+		mut he := l
 		for {
-			mid = (l + h) / 2
-			if r > arr[mid] { l = mid + 1 }  else { h = mid }
-			if !(l < h) { break }
+			mid = (le + he) / 2
+			if r > arr[mid] { le = mid + 1 }  else { he = mid }
+			if !(le < he) { break }
 		}
 		mut res := 0
-		if arr[l] >= r { res = l } else { res = -1 }
+		if arr[le] >= r { res = le } else { res = -1 }
     return res
 }
