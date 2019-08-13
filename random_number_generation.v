@@ -24,7 +24,7 @@ fn random_integer_distribution(arr[] int, freq[] int, n int) int {
 fn find_ceil(arr[] int, r int, l int, h int) int {
 		mut mid := 0
 		mut le := l
-		mut he := l
+		mut he := h
 		for {
 			mid = (le + he) / 2
 			if r > arr[mid] { le = mid + 1 }  else { he = mid }
