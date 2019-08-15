@@ -4,7 +4,7 @@ import os
 
 fn main() {
 
-	rand.seed(1463233)
+	//rand.seed(1463233)
 
 	// #### read input args ####
 	input_config_file_path := os.args[1]
