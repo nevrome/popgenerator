@@ -1,10 +1,11 @@
 import rand
 import math
 import os
+import time
 
 fn main() {
 
-	//rand.seed(1463233)
+	rand.seed(time.now().uni)
 
 	// #### read input args ####
 	input_config_file_path := os.args[1]
