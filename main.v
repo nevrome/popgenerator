@@ -96,8 +96,11 @@ fn main() {
 		}
 	}
 
-	// create endless world
-	entities_cube := cubify_entities(entities, end_time, end_x, end_y)
+	// endless social world
+	//entities_cube := cubify_entities(entities, end_time, end_x, end_y)
+
+	// social world with boundaries
+	entities_cube := entities
 
 	// #### determine relations ####
 	mut relations := []Relation
